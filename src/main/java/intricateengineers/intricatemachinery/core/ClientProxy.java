@@ -1,4 +1,4 @@
-package com.topisani.armourstands.core;
+package intricateengineers.intricatemachinery.core;
 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
