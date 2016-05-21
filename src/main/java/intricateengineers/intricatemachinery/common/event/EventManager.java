@@ -1,4 +1,4 @@
-package intricateengineers.intricatemachinery.event;
+package intricateengineers.intricatemachinery.common.event;
 
 /**
  * @author topisani

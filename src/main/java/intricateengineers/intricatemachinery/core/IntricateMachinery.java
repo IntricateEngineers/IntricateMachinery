@@ -1,6 +1,7 @@
 package intricateengineers.intricatemachinery.core;
 
-import intricateengineers.intricatemachinery.event.EventManager;
+import intricateengineers.intricatemachinery.common.event.EventManager;
+import intricateengineers.intricatemachinery.common.init.ModBlocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -28,11 +29,12 @@ public class IntricateMachinery {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         instance = this;
-
         config = new Configuration(new File(event.getModConfigurationDirectory(), ModInfo.MOD_ID + ".cfg"));
+        ModBlocks.init();
         eventManager = new EventManager();
 
         MinecraftForge.EVENT_BUS.register(eventManager);
+        MinecraftForge.EVENT_BUS.register(proxy);
     }
 
     @EventHandler
