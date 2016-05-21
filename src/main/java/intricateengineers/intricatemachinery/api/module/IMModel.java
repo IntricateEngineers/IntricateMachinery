@@ -25,6 +25,14 @@ public abstract class IMModel {
     @SideOnly(Side.CLIENT)
     protected IMBakedModel bakedModel;
 
+    protected static final Vector3f vec(double x, double y, double z) {
+        return new Vector3f((float) x, (float) y, (float) z);
+    }
+
+    protected static final BlockFaceUV uv(double x1, double y1, double x2, double y2) {
+        return new BlockFaceUV(new float[] {(float) x1, (float) y1, (float) x2, (float) y2}, 0);
+    }
+
     @SideOnly(Side.CLIENT)
     public IMBakedModel getBakedModel() {
         if (this.bakedModel == null) {
@@ -37,8 +45,8 @@ public abstract class IMModel {
         return boxes;
     }
 
-    public Box addBox(float[] from, float[] to) {
-        Box box = new Box(new Vector3f(from[0], from[1], from[2]), new Vector3f(to[0], to[1], to[2]), null);
+    public Box addBox(Vector3f from, Vector3f to) {
+        Box box = new Box(from, to, null);
         boxes.add(box);
         return box;
     }
@@ -55,8 +63,8 @@ public abstract class IMModel {
             this.faces = faces;
         }
 
-        public Box setFace(EnumFacing face, ResourceLocation texture, float[] uv) {
-            this.faces.put(face, new Pair<>(texture, new BlockFaceUV(uv, 0)));
+        public Box setFace(EnumFacing face, ResourceLocation texture, BlockFaceUV uv) {
+            this.faces.put(face, new Pair<>(texture, uv));
             return this;
         }
 

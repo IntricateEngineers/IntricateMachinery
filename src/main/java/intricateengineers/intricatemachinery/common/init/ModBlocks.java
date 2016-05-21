@@ -1,6 +1,5 @@
 package intricateengineers.intricatemachinery.common.init;
 
-import intricateengineers.intricatemachinery.common.block.CableMultipart;
 import intricateengineers.intricatemachinery.common.util.gui.IMCreativeTab;
 import mcmultipart.item.ItemMultiPart;
 import mcmultipart.multipart.IMultipart;
@@ -16,15 +15,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import static intricateengineers.intricatemachinery.api.IMBlocks.CABLE_ITEMS;
-
 /**
  * @author topisani
  */
 public final class ModBlocks {
 
     public static void init() {
-        CABLE_ITEMS = registerMultipart(new CableMultipart(), CableMultipart.partType);
     }
 
     private static Multipart registerMultipart(Multipart multipart, ResourceLocation name) {

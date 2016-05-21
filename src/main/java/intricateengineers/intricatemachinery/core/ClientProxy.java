@@ -1,6 +1,5 @@
 package intricateengineers.intricatemachinery.core;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -19,17 +18,11 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onPostBake(ModelBakeEvent event) {
-        rendererPipeStatic = new ModelPipe();
-
-        event.getModelRegistry().putObject(new ModelResourceLocation("charsetpipes:pipe", "multipart"), rendererPipeStatic);
-        event.getModelRegistry().putObject(new ModelResourceLocation("charsetpipes:pipe", "inventory"), rendererPipeStatic);
     }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onTextureStitch(TextureStitchEvent.Pre event) {
-        event.getMap().registerSprite(ModelPipe.PIPE_TEXTURE_LOC);
-        rendererPipe.clearCache();
     }
 
     @Override
