@@ -9,10 +9,10 @@ import net.minecraft.item.Item;
  */
 public class IMCreativeTab extends CreativeTabs {
 
-    public static final IMCreativeTab INSTANCE = new IMCreativeTab();
+    public static final IMCreativeTab INSTANCE = new IMCreativeTab(CreativeTabs.getNextID(), "tabIntricateMachinery");
 
-    public IMCreativeTab() {
-        super("Intricate Machinery");
+    public IMCreativeTab(int index, String label) {
+        super(index, label);
     }
 
     @Override
