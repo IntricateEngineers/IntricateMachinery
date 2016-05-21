@@ -12,7 +12,7 @@ import java.util.List;
  * @author topisani
  */
 public class IMModule extends Multipart {
-    public static ResourceLocation partType = new ResourceLocation(ModInfo.MOD_ID, "machinery_frame");
+    public static ResourceLocation partType = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "machinery_frame");
 
     public IMModule(String name, IMModel model) {
 

@@ -12,10 +12,10 @@ import static net.minecraft.util.EnumFacing.*;
 public class FurnaceModule extends IMModule {
 
     public FurnaceModule() {
-        super("furnace", new Model());
+        super("furnace", new ModelFurnace());
     }
 
-    public static class Model extends IMModel {
+    public static class ModelFurnace extends IMModel {
         ResourceLocation topTexture;
         ResourceLocation sideTexture;
         ResourceLocation frontTexture;
