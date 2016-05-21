@@ -21,7 +21,7 @@ public class IMModule extends Multipart {
     private final IMModel model;
 
     public IMModule(String name, IMModel model) {
-        this.name = new ResourceLocation(ModInfo.MOD_ID, name);
+        this.name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), name);
         this.model = model;
     }
     @Override
