@@ -30,7 +30,7 @@ public abstract class IMModel {
     }
 
     protected static final BlockFaceUV uv(double x1, double y1, double x2, double y2) {
-        return new BlockFaceUV(new float[] {(float) x1, (float) y1, (float) x2, (float) y2}, 0);
+        return new BlockFaceUV(new float[] {(float) x1 / 16f, (float) y1 / 16f, (float) x2 / 16f, (float) y2 / 16f}, 0);
     }
 
     @SideOnly(Side.CLIENT)
