@@ -10,6 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,21 +20,22 @@ public class IMBakedModel implements IBakedModel {
 
     private final ResourceLocation particle;
     private IMModel model;
-    private final FaceBakery  faceBakery = new FaceBakery();
+    public static final FaceBakery  faceBakery = new FaceBakery();
+    public final List<BakedQuad> quads = new ArrayList<>();
 
-    public IMBakedModel() {
+    public IMBakedModel(IMModel model) {
+        this.model = model;
         this.particle = TextureMap.LOCATION_MISSING_TEXTURE;
-    }
-
-    public IMBakedModel(ResourceLocation particle) {
-        this.particle = particle;
+        for (IMModel.Box box : model.getBoxes()) {
+            for (BakedQuad quad : box.toQuads(faceBakery)) {
+                quads.add(quad);
+            }
+        }
     }
 
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-        for (IMModel.Box box : model.getBoxes()) {
-            box.toQuad(faceBakery);
-        }
+        return quads;
     }
 
     @Override
