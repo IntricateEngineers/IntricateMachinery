@@ -41,8 +41,8 @@ public class IMModule extends Multipart {
 
     @Override
     public void addCollisionBoxes(AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
-        for(IMModel.Box box : model.getBoxes()) {
-            list.add(box.toAABB());
-        }
+        //for(IMModel.Box box : model.getBoxes()) {
+        //    list.add(box.toAABB());
+        //}
     }
 }
