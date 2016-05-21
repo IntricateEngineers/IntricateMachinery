@@ -6,7 +6,12 @@ buildscript {
             url = "http://files.minecraftforge.net/maven"
         }
         maven {
-            url 'http://maven.rubbix.net'
+            // Tesla
+            url = 'http://maven.rubbix.net'
+        }
+        maven {
+            // MCMultipart
+            url = "http://maven.amadornes.com"
         }
     }
     dependencies {
@@ -34,7 +39,7 @@ version = (System.getenv("TRAVIS") ? "1.9-DEV-" + System.getenv('TRAVIS_BUILD_NU
 def versionName = (System.getenv("TRAVIS") ? "1.9-" + ref.mod_version + "-DEV-" +  System.getenv('TRAVIS_BUILD_NUMBER') : version)
 
 minecraft {
-    version = ref.mcf_version // + "-1.9.4"
+    version = ref.mcf_version + "-1.9.4"
     runDir = ref.run_dir
     mappings = ref.mappings
     replace '@MOD_NAME@', ref.mod_name
@@ -47,7 +52,8 @@ minecraft {
 }
 
 dependencies {
-    compile "net.darkhax.tesla:Tesla:1.9-1.0.2.23"
+    compile "net.darkhax.tesla:Tesla:1.9.4-1.1.0.24"
+    //compile "MCMultiPart:MCMultiPart:1.2.0_77:universal"
 }
 
 processResources {
