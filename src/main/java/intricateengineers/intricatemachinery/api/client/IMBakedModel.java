@@ -8,6 +8,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.List;
 /**
  * @author topisani
  */
+@SideOnly(Side.CLIENT)
 public class IMBakedModel implements IBakedModel {
 
     private final ResourceLocation particle;
@@ -59,6 +62,7 @@ public class IMBakedModel implements IBakedModel {
     }
 
     @Override
+    @Deprecated
     public ItemCameraTransforms getItemCameraTransforms() {
         return ItemCameraTransforms.DEFAULT;
     }

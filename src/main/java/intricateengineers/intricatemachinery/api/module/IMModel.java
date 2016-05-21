@@ -1,5 +1,6 @@
 package intricateengineers.intricatemachinery.api.module;
 
+import intricateengineers.intricatemachinery.api.client.IMBakedModel;
 import javafx.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
@@ -7,6 +8,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
@@ -18,11 +21,21 @@ import java.util.List;
  */
 public abstract class IMModel {
 
+    protected final List<Box> boxes = new ArrayList<>();
+    @SideOnly(Side.CLIENT)
+    protected IMBakedModel bakedModel;
+
+    @SideOnly(Side.CLIENT)
+    public IMBakedModel getBakedModel() {
+        if (this.bakedModel == null) {
+            this.bakedModel = new IMBakedModel(this);
+        }
+        return this.bakedModel;
+    }
+
     public List<Box> getBoxes() {
         return boxes;
     }
-
-    protected final List<Box> boxes = new ArrayList<>();
 
     public Box addBox(float[] from, float[] to) {
         Box box = new Box(new Vector3f(from[0], from[1], from[2]), new Vector3f(to[0], to[1], to[2]), null);
@@ -47,6 +60,25 @@ public abstract class IMModel {
             return this;
         }
 
+        public AxisAlignedBB toAABB() {
+            return new AxisAlignedBB(boxFrom.getX(), boxFrom.getY(), boxFrom.getZ(), boxTo.getX(), boxTo.getY(), boxTo.getZ());
+        }
+
+        public BakedQuad[] toQuads(FaceBakery faceBakery) {
+            BakedQuad[] quads = new BakedQuad[6];
+            for (EnumFacing face : EnumFacing.values()) {
+                Pair<Vector3f, Vector3f> vecs = this.getFace(face);
+
+                BlockFaceUV uv = faces.get(face).getValue();
+                String textureName = faces.get(face).getKey().toString();
+                BlockPartFace partFace = new BlockPartFace(face, 0, textureName, uv);
+                TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(textureName);
+                ModelRotation mr = ModelRotation.X0_Y0;
+                quads[face.getIndex()] = faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, null, true, true);
+            }
+            return quads;
+        }
+
         public Pair<Vector3f, Vector3f> getFace(EnumFacing face) {
             Vector3f from;
             Vector3f to;
@@ -69,34 +101,15 @@ public abstract class IMModel {
                     break;
                 case WEST:
                     from = new Vector3f(Math.min(boxFrom.getX(), boxTo.getX()), boxFrom.getY(), boxFrom.getZ());
-                    to = new Vector3f(Math.min(boxFrom.getX(), boxTo.getX()), boxTo.getY(),  boxTo.getZ());
+                    to = new Vector3f(Math.min(boxFrom.getX(), boxTo.getX()), boxTo.getY(), boxTo.getZ());
                     break;
                 case EAST:
                 default:
                     from = new Vector3f(Math.max(boxFrom.getX(), boxTo.getX()), boxFrom.getY(), boxFrom.getZ());
-                    to = new Vector3f(Math.max(boxFrom.getX(), boxTo.getX()), boxTo.getY(),  boxTo.getZ());
+                    to = new Vector3f(Math.max(boxFrom.getX(), boxTo.getX()), boxTo.getY(), boxTo.getZ());
                     break;
             }
             return new Pair<>(from, to);
-        }
-
-        public AxisAlignedBB toAABB() {
-            return new AxisAlignedBB(boxFrom.getX(), boxFrom.getY(), boxFrom.getZ(), boxTo.getX(), boxTo.getY(), boxTo.getZ());
-        }
-
-        public BakedQuad[] toQuads(FaceBakery faceBakery) {
-            BakedQuad[] quads = new BakedQuad[6];
-            for (EnumFacing face : EnumFacing.values()) {
-                Pair<Vector3f, Vector3f> vecs = this.getFace(face);
-
-                BlockFaceUV uv = faces.get(face).getValue();
-                String textureName = faces.get(face).getKey().toString();
-                BlockPartFace partFace = new BlockPartFace(face, 0, textureName, uv );
-                TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(textureName);
-                ModelRotation mr = ModelRotation.X0_Y0;
-                quads[face.getIndex()] = faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, null, true, true);
-            }
-            return quads;
         }
     }
 }
