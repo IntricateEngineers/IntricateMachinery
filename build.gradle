@@ -5,14 +5,6 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        maven {
-            // Tesla
-            url = 'http://maven.rubbix.net'
-        }
-        maven {
-            // MCMultipart
-            url = "http://maven.amadornes.com"
-        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
@@ -51,9 +43,20 @@ minecraft {
     replaceIn 'ModInfo.java'
 }
 
+repositories {
+    maven {
+        // Tesla
+        url 'http://maven.rubbix.net'
+    }
+    maven {
+        // MCMultipart
+        url "http://maven.amadornes.com"
+    }
+}
+
 dependencies {
     compile "net.darkhax.tesla:Tesla:1.9.4-1.1.0.24"
-    //compile "MCMultiPart:MCMultiPart:1.2.0_77:universal"
+    compile "MCMultiPart:MCMultiPart-experimental:1.2.0_71:deobf"
 }
 
 processResources {
