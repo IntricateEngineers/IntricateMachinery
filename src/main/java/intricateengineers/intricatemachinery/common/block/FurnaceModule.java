@@ -1,4 +1,4 @@
-package intricateengineers.intricatemachinery.common.blocks;
+package intricateengineers.intricatemachinery.common.block;
 
 import intricateengineers.intricatemachinery.api.module.IMModel;
 import intricateengineers.intricatemachinery.api.module.IMModule;
@@ -16,9 +16,9 @@ public class FurnaceModule extends IMModule {
     }
 
     public static class Model extends IMModel {
-        ResourceLocation topTexture;
-        ResourceLocation sideTexture;
-        ResourceLocation frontTexture;
+        ResourceLocation topTexture = new ResourceLocation("minecraft", "blocks/furnace_top");
+        ResourceLocation sideTexture = new ResourceLocation("minecraft", "blocks/furnace_top");
+        ResourceLocation frontTexture = new ResourceLocation("minecraft", "blocks/furnace_front_on");
 
         {
             addBox(vec(0.5, 0.5, 0.5), vec(3.5, 3.5, 3.5))

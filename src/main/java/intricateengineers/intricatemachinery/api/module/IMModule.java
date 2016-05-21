@@ -12,15 +12,21 @@ import java.util.List;
  * @author topisani
  */
 public class IMModule extends Multipart {
-    public static ResourceLocation partType = new ResourceLocation(ModInfo.MOD_ID, "machinery_frame");
+    private final ResourceLocation name;
+
+    public IMModel getModel() {
+        return model;
+    }
+
+    private final IMModel model;
 
     public IMModule(String name, IMModel model) {
-
+        this.name = new ResourceLocation(ModInfo.MOD_ID, name);
+        this.model = model;
     }
     @Override
     public ResourceLocation getType() {
-
-        return partType;
+        return name;
     }
 
     /**
@@ -28,11 +34,15 @@ public class IMModule extends Multipart {
      */
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
-        list.add(new AxisAlignedBB(0, 0, 0, 1, 1, 1));
+        for(IMModel.Box box : model.getBoxes()) {
+            list.add(box.toAABB());
+        }
     }
 
     @Override
     public void addCollisionBoxes(AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
-        list.add(new AxisAlignedBB(0, 0, 0, 1, 1, 1));
+        for(IMModel.Box box : model.getBoxes()) {
+            list.add(box.toAABB());
+        }
     }
 }

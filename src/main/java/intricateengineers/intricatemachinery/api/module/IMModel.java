@@ -46,7 +46,7 @@ public abstract class IMModel {
     }
 
     public Box addBox(Vector3f from, Vector3f to) {
-        Box box = new Box(from, to, null);
+        Box box = new Box(from, to);
         boxes.add(box);
         return box;
     }
@@ -55,12 +55,11 @@ public abstract class IMModel {
 
         private final Vector3f boxFrom;
         private final Vector3f boxTo;
-        private final HashMap<EnumFacing, Pair<ResourceLocation, BlockFaceUV>> faces;
+        private final HashMap<EnumFacing, Pair<ResourceLocation, BlockFaceUV>> faces = new HashMap<>();
 
-        public Box(Vector3f boxFrom, Vector3f boxTo, HashMap<EnumFacing, Pair<ResourceLocation, BlockFaceUV>> faces) {
+        public Box(Vector3f boxFrom, Vector3f boxTo) {
             this.boxFrom = boxFrom;
             this.boxTo = boxTo;
-            this.faces = faces;
         }
 
         public Box setFace(EnumFacing face, ResourceLocation texture, BlockFaceUV uv) {
@@ -69,7 +68,7 @@ public abstract class IMModel {
         }
 
         public AxisAlignedBB toAABB() {
-            return new AxisAlignedBB(boxFrom.getX(), boxFrom.getY(), boxFrom.getZ(), boxTo.getX(), boxTo.getY(), boxTo.getZ());
+            return new AxisAlignedBB(boxFrom.getX() / 16, boxFrom.getY() / 16, boxFrom.getZ() / 16, boxTo.getX() / 16, boxTo.getY() / 16, boxTo.getZ() / 16);
         }
 
         public BakedQuad[] toQuads(FaceBakery faceBakery) {
@@ -82,7 +81,8 @@ public abstract class IMModel {
                 BlockPartFace partFace = new BlockPartFace(face, 0, textureName, uv);
                 TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(textureName);
                 ModelRotation mr = ModelRotation.X0_Y0;
-                quads[face.getIndex()] = faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, null, true, true);
+                BlockPartRotation rotation =  new BlockPartRotation(vecs.getKey(), EnumFacing.Axis.X, 0, true);
+                quads[face.getIndex()] = faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, rotation, true, true);
             }
             return quads;
         }

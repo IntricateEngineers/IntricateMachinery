@@ -1,5 +1,7 @@
 package intricateengineers.intricatemachinery.core;
 
+import intricateengineers.intricatemachinery.api.IMModules;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -18,6 +20,8 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onPostBake(ModelBakeEvent event) {
+        event.getModelRegistry().putObject(new ModelResourceLocation(IMModules.FURNACE.getType(), "inventory"), IMModules.FURNACE.getModel().getBakedModel());
+        event.getModelRegistry().putObject(new ModelResourceLocation(IMModules.FURNACE.getType(), "multipart"), IMModules.FURNACE.getModel().getBakedModel());
     }
 
     @SubscribeEvent
