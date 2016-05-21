@@ -24,16 +24,27 @@ public abstract class IMModel {
 
     protected final List<Box> boxes = new ArrayList<>();
 
+    public Box addBox(float[] from, float[] to) {
+        Box box = new Box(new Vector3f(from[0], from[1], from[2]), new Vector3f(to[0], to[1], to[2]), null);
+        boxes.add(box);
+        return box;
+    }
+
     public static class Box {
 
         private final Vector3f boxFrom;
         private final Vector3f boxTo;
         private final HashMap<EnumFacing, Pair<ResourceLocation, BlockFaceUV>> faces;
 
-        public Box(String name, Vector3f boxFrom, Vector3f boxTo, HashMap<EnumFacing, Pair<ResourceLocation, BlockFaceUV>> faces) {
+        public Box(Vector3f boxFrom, Vector3f boxTo, HashMap<EnumFacing, Pair<ResourceLocation, BlockFaceUV>> faces) {
             this.boxFrom = boxFrom;
             this.boxTo = boxTo;
             this.faces = faces;
+        }
+
+        public Box setFace(EnumFacing face, ResourceLocation texture, float[] uv) {
+            this.faces.put(face, new Pair<>(texture, new BlockFaceUV(uv, 0)));
+            return this;
         }
 
         public Pair<Vector3f, Vector3f> getFace(EnumFacing face) {
