@@ -2,8 +2,7 @@ package intricateengineers.intricatemachinery.common.block;
 
 import intricateengineers.intricatemachinery.api.module.IMModel;
 import intricateengineers.intricatemachinery.api.module.IMModule;
-import intricateengineers.intricatemachinery.core.ModInfo;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 import static net.minecraft.util.EnumFacing.*;
 
@@ -17,9 +16,9 @@ public class FurnaceModule extends IMModule {
     }
 
     public static class ModelFurnace extends IMModel {
-        ResourceLocation topTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_top");
-        ResourceLocation sideTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_top");
-        ResourceLocation frontTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_front_on");
+        public static TextureAtlasSprite topTexture;
+        public static TextureAtlasSprite sideTexture;
+        public static TextureAtlasSprite frontTexture;
 
         {
             addBox(vec(1, 1, 1), vec(4, 4, 4))

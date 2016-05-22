@@ -1,11 +1,9 @@
 package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.api.client.IMBakedModel;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,14 +53,14 @@ public abstract class IMModel {
 
         private final Vector3f boxFrom;
         private final Vector3f boxTo;
-        private final HashMap<EnumFacing, Pair<ResourceLocation, BlockFaceUV>> faces = new HashMap<>();
+        private final HashMap<EnumFacing, Pair<TextureAtlasSprite, BlockFaceUV>> faces = new HashMap<>();
 
         public Box(Vector3f boxFrom, Vector3f boxTo) {
             this.boxFrom = boxFrom;
             this.boxTo = boxTo;
         }
 
-        public Box setFace(EnumFacing face, ResourceLocation texture, BlockFaceUV uv) {
+        public Box setFace(EnumFacing face, TextureAtlasSprite texture, BlockFaceUV uv) {
             this.faces.put(face, Pair.of(texture, uv));
             return this;
         }
@@ -79,8 +77,7 @@ public abstract class IMModel {
                     continue;
                 }
 
-                String textureName = faces.get(face).getKey().toString();
-                TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureName);
+                TextureAtlasSprite texture = faces.get(face).getKey();
                 BlockPartFace partFace = new BlockPartFace(null, 0, "", new BlockFaceUV(new float[]{0f, 0f, 16f, 16f}, 0));
                 ModelRotation mr = ModelRotation.X0_Y0;
                 BlockPartRotation rotation =  null;
