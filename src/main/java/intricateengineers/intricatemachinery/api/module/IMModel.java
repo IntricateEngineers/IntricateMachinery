@@ -71,18 +71,21 @@ public abstract class IMModel {
             return new AxisAlignedBB(boxFrom.getX() / 16, boxFrom.getY() / 16, boxFrom.getZ() / 16, boxTo.getX() / 16, boxTo.getY() / 16, boxTo.getZ() / 16);
         }
 
-        public BakedQuad[] toQuads(FaceBakery faceBakery) {
-            BakedQuad[] quads = new BakedQuad[6];
+        public List<BakedQuad> toQuads(FaceBakery faceBakery) {
+            List<BakedQuad> quads = new ArrayList<>();
             for (EnumFacing face : EnumFacing.values()) {
                 Pair<Vector3f, Vector3f> vecs = this.getFace(face);
+                if (vecs.getKey() == null) {
+                    continue;
+                }
 
                 BlockFaceUV uv = faces.get(face).getValue();
                 String textureName = faces.get(face).getKey().toString();
                 BlockPartFace partFace = new BlockPartFace(face, 0, textureName, uv);
                 TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(textureName);
                 ModelRotation mr = ModelRotation.X0_Y0;
-                BlockPartRotation rotation =  new BlockPartRotation(vecs.getKey(), EnumFacing.Axis.X, 0, true);
-                quads[face.getIndex()] = faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, rotation, true, true);
+                BlockPartRotation rotation =  new BlockPartRotation(vecs.getKey(), EnumFacing.Axis.X, 0, false);
+                quads.add(faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, rotation, true, true));
             }
             return quads;
         }
@@ -112,10 +115,12 @@ public abstract class IMModel {
                     to = new Vector3f(Math.min(boxFrom.getX(), boxTo.getX()), boxTo.getY(), boxTo.getZ());
                     break;
                 case EAST:
-                default:
                     from = new Vector3f(Math.max(boxFrom.getX(), boxTo.getX()), boxFrom.getY(), boxFrom.getZ());
                     to = new Vector3f(Math.max(boxFrom.getX(), boxTo.getX()), boxTo.getY(), boxTo.getZ());
                     break;
+                default:
+                    from = null;
+                    to = null;
             }
             return new Pair<>(from, to);
         }

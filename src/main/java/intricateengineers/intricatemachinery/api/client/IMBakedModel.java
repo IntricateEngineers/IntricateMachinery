@@ -30,9 +30,7 @@ public class IMBakedModel implements IBakedModel {
         this.model = model;
         this.particle = TextureMap.LOCATION_MISSING_TEXTURE;
         for (IMModel.Box box : model.getBoxes()) {
-            for (BakedQuad quad : box.toQuads(faceBakery)) {
-                quads.add(quad);
-            }
+            quads.addAll(box.toQuads(faceBakery));
         }
     }
 
