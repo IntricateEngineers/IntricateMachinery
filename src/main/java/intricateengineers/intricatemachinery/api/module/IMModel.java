@@ -1,9 +1,12 @@
 package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.api.client.IMBakedModel;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,12 +17,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static mod.chiselsandbits.render.helpers.ModelUtil.findQuadTexture;
+
 /**
  * @author topisani
  */
 public abstract class IMModel {
 
     protected final List<Box> boxes = new ArrayList<>();
+    protected static VertexFormat format = new VertexFormat();
     @SideOnly(Side.CLIENT)
     protected IMBakedModel bakedModel;
 
@@ -53,14 +59,14 @@ public abstract class IMModel {
 
         private final Vector3f boxFrom;
         private final Vector3f boxTo;
-        private final HashMap<EnumFacing, Pair<TextureAtlasSprite, BlockFaceUV>> faces = new HashMap<>();
+        private final HashMap<EnumFacing, Pair<ResourceLocation, BlockFaceUV>> faces = new HashMap<>();
 
         public Box(Vector3f boxFrom, Vector3f boxTo) {
             this.boxFrom = boxFrom;
             this.boxTo = boxTo;
         }
 
-        public Box setFace(EnumFacing face, TextureAtlasSprite texture, BlockFaceUV uv) {
+        public Box setFace(EnumFacing face, ResourceLocation texture, BlockFaceUV uv) {
             this.faces.put(face, Pair.of(texture, uv));
             return this;
         }
@@ -69,6 +75,7 @@ public abstract class IMModel {
             return new AxisAlignedBB(boxFrom.getX() / 16, boxFrom.getY() / 16, boxFrom.getZ() / 16, boxTo.getX() / 16, boxTo.getY() / 16, boxTo.getZ() / 16);
         }
 
+        @SideOnly(Side.CLIENT)
         public List<BakedQuad> toQuads(FaceBakery faceBakery) {
             List<BakedQuad> quads = new ArrayList<>();
             for (EnumFacing face : EnumFacing.values()) {
@@ -77,11 +84,11 @@ public abstract class IMModel {
                     continue;
                 }
 
-                TextureAtlasSprite texture = faces.get(face).getKey();
-                BlockPartFace partFace = new BlockPartFace(null, 0, "", new BlockFaceUV(new float[]{0f, 0f, 16f, 16f}, 0));
+                TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(this.faces.get(face).getLeft().toString());
+                BlockPartFace partFace = new BlockPartFace(null, 0, "", this.faces.get(face).getRight());
                 ModelRotation mr = ModelRotation.X0_Y0;
                 BlockPartRotation rotation =  null;
-                quads.add(faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, rotation, true, true));
+                quads.add(faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, rotation, false, true));
             }
             return quads;
         }
@@ -119,6 +126,21 @@ public abstract class IMModel {
                     to = null;
             }
             return Pair.of(from, to);
+        }
+        private static TextureAtlasSprite findTexture(
+            TextureAtlasSprite texture,
+            final List<BakedQuad> faceQuads,
+            final EnumFacing myFace ) throws IllegalArgumentException, IllegalAccessException, NullPointerException
+        {
+            for ( final BakedQuad q : faceQuads )
+            {
+                if ( q.getFace() == myFace )
+                {
+                    texture = findQuadTexture( q );
+                }
+            }
+
+            return texture;
         }
     }
 }
