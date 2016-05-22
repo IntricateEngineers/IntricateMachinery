@@ -79,10 +79,11 @@ public abstract class IMModel {
                     continue;
                 }
 
-                BlockFaceUV uv = faces.get(face).getValue();
                 String textureName = faces.get(face).getKey().toString();
+                TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureName);
+                BlockFaceUV uv = faces.get(face).getValue();
+                uv = new BlockFaceUV(new float[] {texture.getMinU() + uv.uvs[0], texture.getMinV() + uv.uvs[1], texture.getMinU() + uv.uvs[2], texture.getMinV() + uv.uvs[3]}, uv.rotation);
                 BlockPartFace partFace = new BlockPartFace(face, 0, textureName, uv);
-                TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(textureName);
                 ModelRotation mr = ModelRotation.X0_Y0;
                 BlockPartRotation rotation =  new BlockPartRotation(vecs.getKey(), EnumFacing.Axis.X, 0, false);
                 quads.add(faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, rotation, true, true));
