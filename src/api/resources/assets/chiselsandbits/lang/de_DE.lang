@@ -1,0 +1,110 @@
+
+itemGroup.chiselsandbits=Chisels and Bits
+
+tile.mod.chiselsandbits.chiseled_wood.name=Gemeißeltes Holz
+tile.mod.chiselsandbits.chiseled_rock.name=Gemeißelter Stein
+tile.mod.chiselsandbits.chiseled_iron.name=Gemeißeltes Metall
+tile.mod.chiselsandbits.chiseled_cloth.name=Gemeißelter Stoff
+tile.mod.chiselsandbits.chiseled_glass.name=Gemeißeltes Glas
+tile.mod.chiselsandbits.chiseled_ice.name=Gemeißeltes Eis
+tile.mod.chiselsandbits.chiseled_packedIce.name=Gemeißeltes Packeis
+tile.mod.chiselsandbits.chiseled_clay.name=Gemeißelter Lehm
+
+item.mod.chiselsandbits.block_bit.name=Gemeißeltes Stückchen
+item.mod.chiselsandbits.bit_bag.name=Beutel für gemeißelte Stückchen
+item.mod.chiselsandbits.wrench_wood.name=Hölzerner Schraubenschlüssel
+
+item.mod.chiselsandbits.positiveprint.name=Positives Meißeldesign
+item.mod.chiselsandbits.positiveprint_written.name=Positives Meißeldesign - Beschrieben
+item.mod.chiselsandbits.negativeprint.name=Negatives Meißeldesign
+item.mod.chiselsandbits.negativeprint_written.name=Negatives Meißeldesign - Beschrieben
+item.mod.chiselsandbits.mirrorprint.name=Spiegel-Meißeldesign
+item.mod.chiselsandbits.mirrorprint_written.name=Spiegel-Meißeldesign - Beschrieben
+
+item.mod.chiselsandbits.chisel_stone.name=Steinmeißel
+item.mod.chiselsandbits.chisel_iron.name=Eisenmeißel
+item.mod.chiselsandbits.chisel_gold.name=Goldmeißel
+item.mod.chiselsandbits.chisel_diamond.name=Diamantmeißel
+
+mod.chiselsandbits.chiselmode.single=Einzelnes Stückchen
+mod.chiselsandbits.chiselmode.snap2=Gitterausgerichteter 1/8-großer Würfel
+mod.chiselsandbits.chiselmode.snap4=Gitterausgerichteter 1/4-großer Würfel
+mod.chiselsandbits.chiselmode.snap8=Gitterausgerichteter 1/2-großer Würfel
+mod.chiselsandbits.chiselmode.line=Linie
+mod.chiselsandbits.chiselmode.plane=Ebene
+mod.chiselsandbits.chiselmode.connected_plane=Verbundene Ebene
+mod.chiselsandbits.chiselmode.cube_small=Kleiner Würfel
+mod.chiselsandbits.chiselmode.cube_large=Großer Würfel
+mod.chiselsandbits.chiselmode.cube_huge=Riesiger Würfel
+mod.chiselsandbits.chiselmode.drawn_region=Gemalte Region
+
+mod.chiselsandbits.other.rotate.ccw=Rotiere Gehaltenes linksherum
+mod.chiselsandbits.other.rotate.cw=Rotiere Gehaltenes rechtsherum
+
+mod.chiselsandbits.help.shiftdetails=<Halte Shift für Details>
+mod.chiselsandbits.help.empty=Leer
+mod.chiselsandbits.help.solid=Festkörper
+
+mod.chiselsandbits.help.chiseled_block=Linksklick zum Platzieren;Schleichen, um Blockgitter zu ignorieren.
+mod.chiselsandbits.help.bit_bag=Speichert und füllt Stückchen automatisch nach.
+mod.chiselsandbits.help.bit_bag=Lagert Stückchen und füllt sie nach, vollautomatisch!
+mod.chiselsandbits.help.wrench=Rechtsklicke Blöcke, um sie zu rotieren.
+mod.chiselsandbits.help.bit=Linksklick zum Meißeln;Rechtsklick zum Platzieren.
+mod.chiselsandbits.help.positiveprint=Rechtsklick zum Beschreiben;Rechtsklick zum Meißeln/Platizeren/Werkeln mit Stückchen/Beuteln.
+mod.chiselsandbits.help.negativeprint=Rechtsklick zum Beschreiben;Rechtsklick zum Meißeln.
+mod.chiselsandbits.help.mirrorprint=Right click the face on wish to mirror from;Craft with positive/negative design to transfer.
+mod.chiselsandbits.help.chisel=Linksklick zum Meißeln;Rechtsklick, um Modus zu wechseln.
+
+mod.chiselsandbits.config.ShowBitsInJEI=Zeige Stückchen in JEI
+mod.chiselsandbits.config.showUsage=Zeige Hilfetext in Item-Beschreibungen
+mod.chiselsandbits.config.invertBitBagFullness=Invertiere Schaden auf Stückchenbeuteln
+mod.chiselsandbits.config.enableChiselMode_Plane=Aktiviere Ebenenmodus
+mod.chiselsandbits.config.enableChiselMode_ConnectedPlane=Aktiviere Verbundene Ebenenmodus
+mod.chiselsandbits.config.enableChiselMode_Line=Aktiviere Linienmodus
+mod.chiselsandbits.config.enableChiselMode_SmallCube=Aktiviere Kleiner Würfelmodus
+mod.chiselsandbits.config.enableChiselMode_LargeCube=Aktiviere Großer Würfelmodus
+mod.chiselsandbits.config.enableChiselMode_HugeCube=Aktiviere Riesiger Würfelmodus
+mod.chiselsandbits.config.enableChiselMode_DrawnRegion=Aktiviere Gemalte Regionmodus
+mod.chiselsandbits.config.enableChiselMode_Snap2=Aktiviere Gitterausgerichteter 1/8-großer Würfelmodus
+mod.chiselsandbits.config.enableChiselMode_Snap4=Aktiviere Gitterausgerichteter 1/4-großer Würfelmodus
+mod.chiselsandbits.config.enableChiselMode_Snap8=Aktiviere Gitterausgerichteter 1/2-großer Würfelmodus
+mod.chiselsandbits.config.enableToolbarIcons=Zeige Modus-Icon für Meißel in der Toolbar
+mod.chiselsandbits.config.perChiselMode=Speichere ausgewählten Modus pro Werkzeug
+mod.chiselsandbits.config.chatModeNotification=Benachrichtige Modusänderungen im Chat
+mod.chiselsandbits.config.itemNameModeDisplay=Benachrichtige Modusänderungen durch Hervorhebung des Werkzeugs
+mod.chiselsandbits.config.dynamicModelFaceCount=Max. Anzahl an Flächen für statisches Rendering
+mod.chiselsandbits.config.dynamicModelFaceCount.tooltip=Modelle, die komplizierter sind, werden dynamisch gerendert.
+mod.chiselsandbits.config.dynamicModelRange=Max. Entfernung für dynamisches Rendering.
+mod.chiselsandbits.config.dynamicModelRange.tooltip=Dynamisch gerenderte Blöcke außerhalb der Entfernung werden überhaupt nicht dargestellt.
+mod.chiselsandbits.config.dynamicModelMinimizeLatancy=Minimiere Latenz für dynamische Rendering
+mod.chiselsandbits.config.dynamicModelMinimizeLatancy.tooltip=Das Deaktivieren kann Performance auf Kosten von Ansprechbarkeit verbessern.
+mod.chiselsandbits.config.dynamicMaxConcurrentTessalators=Max. Anzahl an gleichzeitigen Updates
+mod.chiselsandbits.config.dynamicMaxConcurrentTessalators.tooltip=When dies Zahl überstiegen wird, werden Updates übersprungen, um Speicherauslastung zu verhindern.
+mod.chiselsandbits.config.damageTools=Werkzeuge nehmen Schaden
+mod.chiselsandbits.config.availableUsesMultiplier=Verfügbare Benutzungsmultiplikatoren
+mod.chiselsandbits.config.availableUsesMultiplier.tooltip=0.5 = Halb so viele Benutzungen, 2 = Doppelt so viele Benutzungen.
+mod.chiselsandbits.config.enablePositivePrintCrafting=Fertige mit Positivem Meißeldesign
+mod.chiselsandbits.config.enablePositivePrintCrafting.tooltip=Fertige ein Positives Meißeldesign mit Stückchen/Beutel mit Stückchen lassen dich Blöcke fertigen.
+mod.chiselsandbits.config.enableStackableCrafting=Fertige Gemeißelte Blöcke, um Rotation zu entfernen
+mod.chiselsandbits.config.enableStackableCrafting.tooltip=Dies erlaubt dir das gleiche Design zu stapeln durch das Entfernen der Rotationsinformationen.
+mod.chiselsandbits.config.enableNegativePrintInversionCrafting=Invertiere Negative Meißeldesigns
+mod.chiselsandbits.config.enableNegativePrintInversionCrafting.tooltip=Fertige ein gefülltes Negativdesign mit einem Leeren Negativdesign.
+mod.chiselsandbits.config.enableBitBag=Erlaube Beutel mit Stückchen
+mod.chiselsandbits.config.enableNegativePrint=Erlaube Negatives Meißeldesign
+mod.chiselsandbits.config.enablePositivePrint=Erlaube Positives Meißeldesign
+mod.chiselsandbits.config.enableMirrorPrint=Erlaube Spiegelmeißeldesign
+mod.chiselsandbits.config.enableChisledBits=Erlaube Stückchen
+mod.chiselsandbits.config.enableStoneChisel=Erlaube Steinmeißel
+mod.chiselsandbits.config.enableIronChisel=Erlaube Eisenmeißel
+mod.chiselsandbits.config.enableGoldChisel=Erlaube Goldmeißel
+mod.chiselsandbits.config.enableDiamondChisel=Erlaube Diamantmeißel
+mod.chiselsandbits.config.enableWoodenWrench=Erlaube Hölzernen Schraubenschlüssel
+mod.chiselsandbits.config.enableChiselToolHarvestCheck=Überprüfe Abbau-Level für Meißel
+mod.chiselsandbits.config.enableChiselToolHarvestCheck.tooltip=Obsidianstückchen benötigen einen Diamantmeißel
+mod.chiselsandbits.config.enableChiselToolHarvestCheckTools=Werkzeugtypen emuliert durch Meißel
+mod.chiselsandbits.config.enableToolHarvestLevels=Überprüfe Abbau-Level beim Brechen von Blocks
+mod.chiselsandbits.config.enableToolHarvestLevels.tooltip=Brechen eines vorwiegend Obsidiangemeißelten Blocks benötigt einen Diamantmeißel
+mod.chiselsandbits.config.enableBitLightSource=Gemeißelte Blöcke können Lich abgeben
+mod.chiselsandbits.config.enableBitLightSource.tooltip=Wenn deaktiviert werden licht-angebende Stückchen einfach glühen und der Block wird kein Lichtlevel abgeben.
+mod.chiselsandbits.config.bitLightPercentage=Prozent des Blockes für maximales Lichtlevel.
+mod.chiselsandbits.config.compatabilityMode=Verbessere Modkompatibilität

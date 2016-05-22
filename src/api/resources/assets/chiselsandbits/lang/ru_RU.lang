@@ -1,0 +1,44 @@
+
+itemGroup.chiselsandbits=Chisels and Bits
+
+tile.mod.chiselsandbits.chiseled_wood.name=Резная древесина
+tile.mod.chiselsandbits.chiseled_rock.name=Резной камень
+tile.mod.chiselsandbits.chiseled_iron.name=Резной металл
+tile.mod.chiselsandbits.chiseled_cloth.name=Резная ткань
+tile.mod.chiselsandbits.chiseled_glass.name=Резное стекло
+tile.mod.chiselsandbits.chiseled_ice.name=Резной лёд
+tile.mod.chiselsandbits.chiseled_packedIce.name=Резной плотный лёд
+tile.mod.chiselsandbits.chiseled_clay.name=Резная глина
+
+item.mod.chiselsandbits.block_bit.name=Резной кусочек
+item.mod.chiselsandbits.bit_bag.name=Мешочек резных кусочков
+item.mod.chiselsandbits.wrench_wood.name=Деревянный ключ
+
+item.mod.chiselsandbits.positiveprint.name=Положительный отпечаток для обработки
+item.mod.chiselsandbits.positiveprint_written.name=Положительный отпечаток для обработки - написанный
+item.mod.chiselsandbits.negativeprint.name=Отрицательный отпечаток для обработки
+item.mod.chiselsandbits.negativeprint_written.name=Отрицательный отпечаток для обработки - написанный
+
+item.mod.chiselsandbits.chisel_stone.name=Каменная стамеска
+item.mod.chiselsandbits.chisel_iron.name=Железная стамеска
+item.mod.chiselsandbits.chisel_gold.name=Золотая стамеска
+item.mod.chiselsandbits.chisel_diamond.name=Алмазная стамеска
+
+mod.chiselsandbits.chiselmode.single=Одиночный кусочек
+mod.chiselsandbits.chiselmode.line=Полоса
+mod.chiselsandbits.chiselmode.plane=Плоскость
+mod.chiselsandbits.chiselmode.connected_plane=Соединённая плоскость
+mod.chiselsandbits.chiselmode.cube_small=Маленький куб
+mod.chiselsandbits.chiselmode.cube_large=Большой куб
+mod.chiselsandbits.chiselmode.cube_huge=Огромный куб
+
+mod.chiselsandbits.help.shiftdetails=<Зажмите Shift для деталей>
+mod.chiselsandbits.help.empty=Пусто
+
+mod.chiselsandbits.help.chiseled_block=ЛКМ, чтобы поставить;сидя, чтобы проигнорировать сетку блоков.
+mod.chiselsandbits.help.bit_bag=Автоматически восполняет и хранит кусочки.
+mod.chiselsandbits.help.wrench=ПКМ по блокам, чтобы повернуть их.
+mod.chiselsandbits.help.bit=ЛКМ, чтобы обработать;ПКМ, чтобы поставить
+mod.chiselsandbits.help.positiveprint=ПКМ, чтобы написать;ПКМ, чтобы обработать/поставить или создать с кусочками/мешочками.
+mod.chiselsandbits.help.negativeprint=ПКМ, чтобы написать;ПКМ, чтобы обработать.
+mod.chiselsandbits.help.chisel=ЛКМ, чтобы обработать;ПКМ, чтобы изменить режим.
