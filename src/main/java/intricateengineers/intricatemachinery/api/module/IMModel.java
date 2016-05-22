@@ -1,7 +1,6 @@
 package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.api.client.IMBakedModel;
-import javafx.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -10,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public abstract class IMModel {
         }
 
         public Box setFace(EnumFacing face, ResourceLocation texture, BlockFaceUV uv) {
-            this.faces.put(face, new Pair<>(texture, uv));
+            this.faces.put(face, Pair.of(texture, uv));
             return this;
         }
 
@@ -122,7 +122,7 @@ public abstract class IMModel {
                     from = null;
                     to = null;
             }
-            return new Pair<>(from, to);
+            return Pair.of(from, to);
         }
     }
 }
