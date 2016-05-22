@@ -22,12 +22,12 @@ public class FurnaceModule extends IMModule {
 
         {
             addBox(vec(0.5, 0.5, 0.5), vec(3.5, 3.5, 3.5))
-                .setFace(NORTH, sideTexture, uv(0.0, 0.0, 16.0, 16.0))
-                .setFace(EAST, sideTexture, uv(0.0, 0.0, 16.0, 16.0))
-                .setFace(SOUTH, frontTexture, uv(0.0, 0.0, 16.0, 16.0))
-                .setFace(WEST, sideTexture, uv(0.0, 0.0, 16.0, 16.0))
-                .setFace(UP, topTexture, uv(0.0, 0.0, 16.0, 16.0))
-                .setFace(DOWN, topTexture, uv(0.0, 0.0, 16.0, 16.0));
+                .setFace(NORTH, sideTexture, uvRandom(0.0, 0.0, 16.0, 16.0))
+                .setFace(EAST, sideTexture, uvRandom(0.0, 0.0, 16.0, 16.0))
+                .setFace(SOUTH, frontTexture, uvRandom(0.0, 0.0, 16.0, 16.0))
+                .setFace(WEST, sideTexture, uvRandom(0.0, 0.0, 16.0, 16.0))
+                .setFace(UP, topTexture, uvRandom(0.0, 0.0, 16.0, 16.0))
+                .setFace(DOWN, topTexture, uvRandom(0.0, 0.0, 16.0, 16.0));
 
         }
     }
