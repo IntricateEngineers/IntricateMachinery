@@ -3,23 +3,18 @@ package intricateengineers.intricatemachinery.api.module;
 import intricateengineers.intricatemachinery.api.client.IMBakedModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.util.vector.Vector3f;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author topisani
@@ -35,22 +30,7 @@ public abstract class IMModel {
     }
 
     protected static final BlockFaceUV uv(double x1, double y1, double x2, double y2) {
-        return new BlockFaceUV(new float[] {(float) x1 / 16f, (float) y1 / 16f, (float) x2 / 16f - 8f, (float) y2 / 16f - 8f}, 0);
-    }
-
-    protected static final BlockFaceUV uvRandom(double x1, double y1, double x2, double y2) {
-        return uvRandom();
-    }
-
-    protected static final BlockFaceUV uvRandom() {
-        double x1, y1, x2, y2;
-        x1 = new Random().nextInt(8) * 16;
-        y1 = new Random().nextInt(8) * 16;
-
-        x2 = x1 + 8;
-        y2 = y1 + 16;
-
-        return new BlockFaceUV(new float[] {(float) x1 / 32f, (float) y1 / 32f, (float) x2 / 32f, (float) y2 / 32f}, 0);
+        return new BlockFaceUV(new float[] {(float) x1, (float) y1, (float) x2, (float) y2}, 0);
     }
 
     @SideOnly(Side.CLIENT)
@@ -99,15 +79,11 @@ public abstract class IMModel {
                     continue;
                 }
 
-                //ITextureObject furn_tex = Minecraft.getMinecraft().renderEngine.getTexture(new ResourceLocation("minecraft", "blocks/furnace_top"));
-
                 String textureName = faces.get(face).getKey().toString();
                 TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureName);
-                BlockFaceUV uv = faces.get(face).getValue();
-                uv = new BlockFaceUV(new float[] {texture.getMinU() + uv.uvs[0], texture.getMinV() + uv.uvs[1], texture.getMinU() + uv.uvs[2], texture.getMinV() + uv.uvs[3]}, uv.rotation);
-                BlockPartFace partFace = new BlockPartFace(face, 0, textureName, uv);
+                BlockPartFace partFace = new BlockPartFace(null, 0, "", new BlockFaceUV(new float[]{0f, 0f, 16f, 16f}, 0));
                 ModelRotation mr = ModelRotation.X0_Y0;
-                BlockPartRotation rotation =  new BlockPartRotation(vecs.getKey(), EnumFacing.Axis.X, 0, false);
+                BlockPartRotation rotation =  null;
                 quads.add(faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, rotation, true, true));
             }
             return quads;
