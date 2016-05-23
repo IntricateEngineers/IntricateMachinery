@@ -3,42 +3,41 @@ package intricateengineers.intricatemachinery.api.module;
 import intricateengineers.intricatemachinery.core.ModInfo;
 import mcmultipart.MCMultiPartMod;
 import mcmultipart.multipart.Multipart;
-import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
+
 import java.util.List;
 
 /**
  * @author topisani
  */
-public class IMModule extends Multipart {
+public abstract class IMModule extends Multipart {
+    public static final Property PROPERTY = new Property();
     private final ResourceLocation name;
-
-    public Vec3d localPos;
-
-    public static final PropertyInteger PROPERTYX = PropertyInteger.create("local_x", 0 , 15);
-    public static final PropertyInteger PROPERTYY = PropertyInteger.create("local_y", 0 , 15);
-    public static final PropertyInteger PROPERTYZ = PropertyInteger.create("local_z", 0 , 15);
-
-    public IMModel getModel() {
-        return model;
-    }
-
     private final IMModel model;
+    public byte posX, posY, posZ;
 
     public IMModule(String name, IMModel model) {
         this.name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), name);
         this.model = model;
     }
 
-    public void setLocalPos(Vec3d localPos)
-    {
-        this.localPos = localPos;
+    public IMModel getModel() {
+        return model;
+    }
 
+    public void setLocalPos(Vec3d localPos) {
+        this.posX = (byte) (localPos.xCoord * 16f);
+        this.posY = (byte) (localPos.yCoord * 16f);
+        this.posZ = (byte) (localPos.zCoord * 16f);
     }
 
     @Override
@@ -64,19 +63,42 @@ public class IMModule extends Multipart {
     }
 
     @Override
+    public BlockStateContainer createBlockState() {
+
+        return new ExtendedBlockState(MCMultiPartMod.multipart, new IProperty[0], new IUnlistedProperty[] {PROPERTY});
+    }
+
+    @Override
     public IBlockState getActualState(IBlockState state) {
 
         return state;
     }
 
     @Override
-    public BlockStateContainer createBlockState() {
-
-        return new BlockStateContainer(MCMultiPartMod.multipart, PROPERTYX, PROPERTYY, PROPERTYZ);
+    public IBlockState getExtendedState(IBlockState state) {
+        return ((IExtendedBlockState) state).withProperty(PROPERTY, this);
     }
 
-    @Override
-    public IBlockState getExtendedState(IBlockState state) {
-        return state.withProperty(PROPERTYX,5).withProperty(PROPERTYY,2).withProperty(PROPERTYZ,3); // Hardcoded values for testing
+    private static class Property implements IUnlistedProperty<IMModule> {
+
+        @Override
+        public String getName() {
+            return "position";
+        }
+
+        @Override
+        public boolean isValid(IMModule value) {
+            return true;
+        }
+
+        @Override
+        public Class<IMModule> getType() {
+            return IMModule.class;
+        }
+
+        @Override
+        public String valueToString(IMModule value) {
+            return value.toString();
+        }
     }
 }

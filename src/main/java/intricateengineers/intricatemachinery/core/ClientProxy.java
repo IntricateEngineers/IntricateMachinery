@@ -1,6 +1,6 @@
 package intricateengineers.intricatemachinery.core;
 
-import intricateengineers.intricatemachinery.api.IMModules;
+import intricateengineers.intricatemachinery.common.block.FurnaceModule;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -14,27 +14,29 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author topisani
  */
+@SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
 
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onPostBake(ModelBakeEvent event) {
-        event.getModelRegistry().putObject(new ModelResourceLocation(IMModules.FURNACE.getType(), "inventory"), IMModules.FURNACE.getModel().getBakedModel());
-        event.getModelRegistry().putObject(new ModelResourceLocation(IMModules.FURNACE.getType(), "multipart"), IMModules.FURNACE.getModel().getBakedModel());
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":furnace", "inventory"), FurnaceModule.MODEL.getBakedModel());
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":furnace", "multipart"), FurnaceModule.MODEL.getBakedModel());
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":furnace", null), FurnaceModule.MODEL.getBakedModel());
     }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onTextureStitch(TextureStitchEvent.Pre event) {
-        IMModules.FURNACE.getModel().getBakedModel().initTextures();
-        IMModules.FURNACE.getModel().init();
+        FurnaceModule.MODEL.getBakedModel().initTextures();
+        FurnaceModule.MODEL.init();
     }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onTextureStitch(TextureStitchEvent.Post event) {
-        IMModules.FURNACE.getModel().getBakedModel().initQuads();
+        FurnaceModule.MODEL.getBakedModel().initQuads();
     }
 
     @Override

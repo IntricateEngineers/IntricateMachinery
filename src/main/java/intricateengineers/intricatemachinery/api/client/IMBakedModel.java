@@ -1,13 +1,16 @@
 package intricateengineers.intricatemachinery.api.client;
 
 import intricateengineers.intricatemachinery.api.module.IMModel;
+import intricateengineers.intricatemachinery.api.module.IMModule;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
@@ -61,20 +64,29 @@ public class IMBakedModel implements IBakedModel {
 
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-
+        IMModule module = null;
+        if (state instanceof IExtendedBlockState) {
+            module = ((IExtendedBlockState) state).getValue(IMModule.PROPERTY);
+        }
+        if (module == null) {
+            return this.quads;
+        }
         int[] vertexData;
+        List<BakedQuad> quads1 = new ArrayList<>();
 
         for (BakedQuad quad : quads) {
-            vertexData = quad.getVertexData();
+            vertexData = quad.getVertexData().clone();
             for (int i = 0; i < 4; ++i)
             {
-                //vertexData[i*7] +=
-                //vertexData[i*7+1] +=
-                //vertexData[i*7+2] +=
+                vertexData[i*7] += module.posX;
+                vertexData[i*7+1] += module.posY;
+                vertexData[i*7+2] += module.posZ;
             }
+            BakedQuad quad1 = new BakedQuad(vertexData, quad.getTintIndex(), quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), DefaultVertexFormats.ITEM);
+            quads1.add(quad1);
         }
 
-        return quads;
+        return quads1;
     }
 
     @Override
