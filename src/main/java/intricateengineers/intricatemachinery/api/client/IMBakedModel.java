@@ -61,6 +61,19 @@ public class IMBakedModel implements IBakedModel {
 
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+
+        int[] vertexData;
+
+        for (BakedQuad quad : quads) {
+            vertexData = quad.getVertexData();
+            for (int i = 0; i < 4; ++i)
+            {
+                //vertexData[i*7] +=
+                //vertexData[i*7+1] +=
+                //vertexData[i*7+2] +=
+            }
+        }
+
         return quads;
     }
 
