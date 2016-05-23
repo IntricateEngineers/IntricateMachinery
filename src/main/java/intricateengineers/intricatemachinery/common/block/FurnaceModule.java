@@ -61,7 +61,7 @@ public class FurnaceModule extends IMModule {
                 .setFace(WEST,  topTexture,     UV.auto(6))
                 .setFace(UP,    topTexture,     UV.auto(6))
                 .setFace(DOWN,  topTexture,     UV.auto(6));
-            // Horisontals
+            // Horizontals
             addBox(vec(1, 0, 0), vec(5, 1, 1))
                 .setFace(NORTH, topTexture,     UV.auto(6))
                 .setFace(EAST,  topTexture,     UV.auto(6))
