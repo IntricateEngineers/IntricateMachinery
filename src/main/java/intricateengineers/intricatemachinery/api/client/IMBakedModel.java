@@ -10,6 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.util.vector.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -29,9 +30,12 @@ public class IMBakedModel implements IBakedModel {
     public IMBakedModel(IMModel model) {
         this.model = model;
         this.particle = TextureMap.LOCATION_MISSING_TEXTURE;
-        for (IMModel.Box box : model.getBoxes()) {
-            quads.addAll(box.toQuads(faceBakery));
-        }
+        String textureName = "minecraft:blocks/stone";
+        TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureName);
+        BlockPartFace partFace = new BlockPartFace(null, 0, textureName, new BlockFaceUV(new float[]{0f, 0f, 16f, 16f}, 0));
+        ModelRotation mr = ModelRotation.X0_Y0;
+        BlockPartRotation rotation =  null;
+        quads.add(faceBakery.makeBakedQuad(new Vector3f(0f, 16f, 0f), new Vector3f(16f, 16f, 16f), partFace, texture, EnumFacing.UP, mr, rotation, true, true));
     }
 
     @Override
