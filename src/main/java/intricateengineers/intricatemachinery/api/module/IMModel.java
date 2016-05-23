@@ -83,12 +83,12 @@ public abstract class IMModel {
                 if (vecs.getKey() == null) {
                     continue;
                 }
-
-                TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(this.faces.get(face).getLeft().toString());
-                BlockPartFace partFace = new BlockPartFace(null, 0, "", this.faces.get(face).getRight());
+                ResourceLocation textureName = this.faces.get(face).getLeft();
+                TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureName.toString());
+                BlockPartFace partFace = new BlockPartFace(null, 0, textureName.toString(), this.faces.get(face).getRight());
                 ModelRotation mr = ModelRotation.X0_Y0;
                 BlockPartRotation rotation =  null;
-                quads.add(faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, rotation, false, true));
+                quads.add(faceBakery.makeBakedQuad(vecs.getKey(), vecs.getValue(), partFace, texture, face, mr, rotation, false, false));
             }
             return quads;
         }

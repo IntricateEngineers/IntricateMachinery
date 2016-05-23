@@ -17,9 +17,9 @@ public class FurnaceModule extends IMModule {
     }
 
     public static class ModelFurnace extends IMModel {
-        public static ResourceLocation topTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "furnace_top");
-        public static ResourceLocation sideTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "furnace_side");
-        public static ResourceLocation frontTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "furnace_front_on");
+        public static ResourceLocation topTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_top");
+        public static ResourceLocation sideTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_side");
+        public static ResourceLocation frontTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_front_on");
 
         {
             addBox(vec(0, 0, 0), vec(16, 16, 16))
