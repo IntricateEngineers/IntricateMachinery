@@ -5,6 +5,7 @@ import mcmultipart.multipart.Multipart;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ import java.util.List;
  */
 public class IMModule extends Multipart {
     private final ResourceLocation name;
+
+    public Vec3d localPos;
 
     public IMModel getModel() {
         return model;
@@ -24,6 +27,13 @@ public class IMModule extends Multipart {
         this.name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), name);
         this.model = model;
     }
+
+    public void setLocalPos(Vec3d localPos)
+    {
+        this.localPos = localPos;
+
+    }
+
     @Override
     public ResourceLocation getType() {
         return name;
