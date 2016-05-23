@@ -3,7 +3,6 @@ package intricateengineers.intricatemachinery.api.module;
 import intricateengineers.intricatemachinery.api.client.IMBakedModel;
 import intricateengineers.intricatemachinery.api.client.util.UV;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
-import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -21,7 +20,6 @@ import java.util.List;
  */
 public abstract class IMModel {
 
-    protected static VertexFormat format = new VertexFormat();
     protected final List<Box> boxes = new ArrayList<>();
     @SideOnly(Side.CLIENT)
     protected IMBakedModel bakedModel;
