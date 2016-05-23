@@ -13,17 +13,17 @@ import java.util.List;
  */
 public class IMModule extends Multipart {
     private final ResourceLocation name;
-
-    public IMModel getModel() {
-        return model;
-    }
-
     private final IMModel model;
 
     public IMModule(String name, IMModel model) {
         this.name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), name);
         this.model = model;
     }
+
+    public IMModel getModel() {
+        return model;
+    }
+
     @Override
     public ResourceLocation getType() {
         return name;
@@ -34,7 +34,7 @@ public class IMModule extends Multipart {
      */
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
-        for(IMModel.Box box : model.getBoxes()) {
+        for (IMModel.Box box : model.getBoxes()) {
             list.add(box.toAABB());
         }
     }

@@ -45,7 +45,8 @@ public class IMBakedModel implements IBakedModel {
                 BlockPartFace partFace = new BlockPartFace(null, 0, "", box.faces.get(face).getRight());
                 ModelRotation mr = ModelRotation.X0_Y0;
                 BlockPartRotation rotation =  null;
-                quads.add(faceBakery.makeBakedQuad(vecs.getLeft(), vecs.getRight(), partFace, texture, face, mr, rotation, false, false));
+                BakedQuad quad = faceBakery.makeBakedQuad(vecs.getLeft(), vecs.getRight(), partFace, texture, face, mr, rotation, true, true);
+                quads.add(quad);
             }
         }
     }
