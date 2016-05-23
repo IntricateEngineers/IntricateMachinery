@@ -13,22 +13,22 @@ import static net.minecraft.util.EnumFacing.*;
 public class FurnaceModule extends IMModule {
 
     public FurnaceModule() {
-        super("furnace", new ModelFurnace());
+        super("furnace", new Model());
     }
 
-    public static class ModelFurnace extends IMModel {
-        public static ResourceLocation topTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_top");
-        public static ResourceLocation sideTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_side");
-        public static ResourceLocation frontTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_front_on");
+    private static class Model extends IMModel {
+        private static ResourceLocation topTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_top");
+        private static ResourceLocation sideTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_side");
+        private static ResourceLocation frontTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_front_on");
 
         {
             addBox(vec(0, 0, 0), vec(16, 16, 16))
-                .setFace(NORTH, sideTexture, uv(0.0, 0.0, 16.0, 16.0))
-                .setFace(EAST, sideTexture, uv(0.0, 0.0, 16.0, 16.0))
-                .setFace(SOUTH, frontTexture, uv(0.0, 0.0, 16.0, 16.0))
-                .setFace(WEST, sideTexture, uv(0.0, 0.0, 16.0, 16.0))
-                .setFace(UP, topTexture, uv(0.0, 0.0, 16.0, 16.0))
-                .setFace(DOWN, topTexture, uv(0.0, 0.0, 16.0, 16.0));
+                .setFace(NORTH, sideTexture,    uv(0, 0, 16, 16))
+                .setFace(EAST,  sideTexture,    uv(0, 0, 16, 16))
+                .setFace(SOUTH, frontTexture,   uv(0, 0, 16, 16))
+                .setFace(WEST,  sideTexture,    uv(0, 0, 16, 16))
+                .setFace(UP,    topTexture,     uv(0, 0, 16, 16))
+                .setFace(DOWN,  topTexture,     uv(0, 0, 16, 16));
         }
     }
 }

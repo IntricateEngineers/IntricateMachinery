@@ -2,7 +2,6 @@ package intricateengineers.intricatemachinery.core;
 
 import intricateengineers.intricatemachinery.api.IMModules;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -28,9 +27,13 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onTextureStitch(TextureStitchEvent.Pre event) {
-        event.getMap().registerSprite(new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_top"));
-        event.getMap().registerSprite(new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_side"));
-        event.getMap().registerSprite(new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_front_on"));
+        IMModules.FURNACE.getModel().getBakedModel().initTextures();
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void onTextureStitch(TextureStitchEvent.Post event) {
+        IMModules.FURNACE.getModel().getBakedModel().initQuads();
     }
 
     @Override

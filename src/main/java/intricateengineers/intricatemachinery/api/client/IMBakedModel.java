@@ -10,6 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.util.vector.Vector3f;
 
 import javax.annotation.Nullable;
@@ -30,12 +31,31 @@ public class IMBakedModel implements IBakedModel {
     public IMBakedModel(IMModel model) {
         this.model = model;
         this.particle = TextureMap.LOCATION_MISSING_TEXTURE;
-        String textureName = "minecraft:blocks/stone";
-        TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureName);
-        BlockPartFace partFace = new BlockPartFace(null, 0, textureName, new BlockFaceUV(new float[]{0f, 0f, 16f, 16f}, 0));
-        ModelRotation mr = ModelRotation.X0_Y0;
-        BlockPartRotation rotation =  null;
-        quads.add(faceBakery.makeBakedQuad(new Vector3f(0f, 16f, 0f), new Vector3f(16f, 16f, 16f), partFace, texture, EnumFacing.UP, mr, rotation, true, true));
+    }
+
+    public void initQuads() {
+        quads.clear();
+        for (IMModel.Box box : model.getBoxes()) {
+            for (EnumFacing face : EnumFacing.values()) {
+                Pair<Vector3f, Vector3f> vecs = box.getFace(face);
+                if (vecs.getLeft() == null) {
+                    continue;
+                }
+                TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(box.faces.get(face).getLeft().toString());
+                BlockPartFace partFace = new BlockPartFace(null, 0, "", box.faces.get(face).getRight());
+                ModelRotation mr = ModelRotation.X0_Y0;
+                BlockPartRotation rotation =  null;
+                quads.add(faceBakery.makeBakedQuad(vecs.getLeft(), vecs.getRight(), partFace, texture, face, mr, rotation, false, false));
+            }
+        }
+    }
+
+    public void initTextures() {
+        for (IMModel.Box box : model.getBoxes()) {
+            for (EnumFacing face : EnumFacing.values()) {
+                Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(box.faces.get(face).getLeft());
+            }
+        }
     }
 
     @Override
