@@ -28,6 +28,7 @@ public class ClientProxy extends CommonProxy {
     @SideOnly(Side.CLIENT)
     public void onTextureStitch(TextureStitchEvent.Pre event) {
         IMModules.FURNACE.getModel().getBakedModel().initTextures();
+        IMModules.FURNACE.getModel().init();
     }
 
     @SubscribeEvent

@@ -44,7 +44,7 @@ public class IMModule extends Multipart {
      */
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
-        for(IMModel.Box box : model.getBoxes()) {
+        for (IMModel.Box box : model.getBoxes()) {
             list.add(box.toAABB());
         }
     }
