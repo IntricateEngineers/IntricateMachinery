@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2016 IntricateEngineers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package intricateengineers.intricatemachinery.api.client.util;
 
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
@@ -35,9 +51,33 @@ public class UV {
         this.reset = reset;
     }
 
+    public static UV uv(double u1, double v1, double u2, double v2) {
+        return new UV(u1, v1, u2, v2);
+    }
+
+    public static UV auto(double scale) {
+        return new UV(false, scale);
+    }
+
+    public static UV auto() {
+        return new UV(false, 16);
+    }
+
+    public static UV reset(double scale) {
+        return new UV(true, scale);
+    }
+
+    public static UV reset() {
+        return new UV(true, 16);
+    }
+
+    public static UV fill() {
+        return new UV(0, 0, 16, 16);
+    }
+
     public BlockFaceUV toBFUV(EnumFacing face, Pair<Vector3f, Vector3f> vecs) {
         if (!this.auto) {
-            return new BlockFaceUV(new float[]{(float) u1, (float) v1, (float) u2, (float) v2}, 0);
+            return new BlockFaceUV(new float[] {(float) u1, (float) v1, (float) u2, (float) v2}, 0);
         } else {
             float x1, y1, x2, y2;
             switch (face) {
@@ -90,29 +130,5 @@ public class UV {
             float[] floats = {x1 * factor, y1 * factor, x2 * factor, y2 * factor};
             return new BlockFaceUV(floats, 0);
         }
-    }
-
-    public static UV uv(double u1, double v1, double u2, double v2) {
-        return new UV(u1, v1, u2, v2);
-    }
-
-    public static UV auto(double scale) {
-        return new UV(false, scale);
-    }
-
-    public static UV auto() {
-        return new UV(false, 16);
-    }
-
-    public static UV reset(double scale) {
-        return new UV(true, scale);
-    }
-
-    public static UV reset() {
-        return new UV(true, 16);
-    }
-
-    public static UV fill() {
-        return new UV(0, 0, 16, 16);
     }
 }
