@@ -3,10 +3,10 @@ package intricateengineers.intricatemachinery.api.module;
 import intricateengineers.intricatemachinery.core.ModInfo;
 import mcmultipart.MCMultiPartMod;
 import mcmultipart.multipart.Multipart;
+import mcmultipart.raytrace.RayTraceUtils;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -15,6 +15,7 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public abstract class IMModule extends Multipart {
     private final ResourceLocation name;
     private final IMModel model;
     public byte posX, posY, posZ;
+    private List<AxisAlignedBB> selectionBoxes = new ArrayList<>();
 
     public IMModule(String name, IMModel model) {
         this.name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), name);
@@ -46,17 +48,22 @@ public abstract class IMModule extends Multipart {
         return name;
     }
 
-    /**
-     * Adds the selection boxes used to ray trace this part.
-     */
     @Override
-    public void addSelectionBoxes(List<AxisAlignedBB> list) {
-            list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
+    public RayTraceUtils.AdvancedRayTraceResultPart collisionRayTrace(Vec3d start, Vec3d end) {
+        if (selectionBoxes.isEmpty())
+        {
+            addSelectionBoxes(selectionBoxes);
+        }
+        RayTraceUtils.AdvancedRayTraceResult result = RayTraceUtils.collisionRayTrace(getWorld(), getPos(), start, end, selectionBoxes);
+        return result == null ? null : new RayTraceUtils.AdvancedRayTraceResultPart(result, this);
     }
 
-    @Override
-    public void addCollisionBoxes(AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
-
+    /**
+     * Adds the selection boxes used to ray trace this part.
+     * Called only once when module is placed
+     */
+    public void addSelectionBoxes(List<AxisAlignedBB> list) {
+        list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
     }
 
     @Override

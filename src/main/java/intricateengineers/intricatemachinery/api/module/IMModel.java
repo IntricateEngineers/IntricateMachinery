@@ -135,13 +135,6 @@ public abstract class IMModel {
             return Pair.of(from, to);
         }
 
-        public AxisAlignedBB toAABB() {
-            if (aabb != null) {
-                return aabb;
-            }
-            return aabb = new AxisAlignedBB(boxFrom.getX() / 16, boxFrom.getY() / 16, boxFrom.getZ() / 16, boxTo.getX() / 16, boxTo.getY() / 16, boxTo.getZ() / 16);
-        }
-
         public AxisAlignedBB toAABB(double x, double y, double z) {
             return new AxisAlignedBB(
                 (boxFrom.getX() + x) / 16,
