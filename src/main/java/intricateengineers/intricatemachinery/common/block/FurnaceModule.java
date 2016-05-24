@@ -25,6 +25,7 @@ public class FurnaceModule extends IMModule {
         private static ResourceLocation frontTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_front_on");
         private static ResourceLocation frameTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/modular_components/empty_frame");
 
+        @Override
         public void init() {
             this.boxes.clear();
             //Middle
