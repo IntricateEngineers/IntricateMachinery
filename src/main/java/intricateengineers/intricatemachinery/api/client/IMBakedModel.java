@@ -7,6 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -18,6 +20,7 @@ import org.lwjgl.util.vector.Vector3f;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author topisani
@@ -77,11 +80,15 @@ public class IMBakedModel implements IBakedModel {
             vertexData = quad.getVertexData().clone();
             for (int i = 0; i < 4; ++i)
             {
-                vertexData[i*7] += module.posX;
-                vertexData[i*7+1] += module.posY;
-                vertexData[i*7+2] += module.posZ;
+                float xFloat = Float.intBitsToFloat(vertexData[i*7]);
+                float yFloat = Float.intBitsToFloat(vertexData[i*7+1]);
+                float zFloat = Float.intBitsToFloat(vertexData[i*7+2]);
+
+                vertexData[i*7] = Float.floatToRawIntBits((xFloat)+(5/16f));
+                //vertexData[(i*7)+1] = Float.floatToRawIntBits((yFloat)+(6f/16f));
+                vertexData[(i*7)+2] = Float.floatToRawIntBits((zFloat)+(5f/16f));
             }
-            BakedQuad quad1 = new BakedQuad(vertexData, quad.getTintIndex(), quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), quad.getFormat());
+            BakedQuad quad1 = new BakedQuad(vertexData, quad.getTintIndex(), quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), DefaultVertexFormats.ITEM);
             quads1.add(quad1);
         }
 
