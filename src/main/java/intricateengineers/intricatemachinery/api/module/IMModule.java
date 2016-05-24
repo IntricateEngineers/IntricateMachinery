@@ -7,6 +7,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -100,5 +101,27 @@ public abstract class IMModule extends Multipart {
         public String valueToString(IMModule value) {
             return value.toString();
         }
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        NBTTagCompound pos = tag.getCompoundTag("module_pos");
+        this.posX = pos.getByte("x");
+        this.posY = pos.getByte("y");
+        this.posZ = pos.getByte("z");
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+
+        NBTTagCompound pos = new NBTTagCompound();
+        pos.setByte("x", posX);
+        pos.setByte("y", posY);
+        pos.setByte("z", posZ);
+        tag.setTag("module_pos", pos);
+
+        return tag;
     }
 }
