@@ -51,16 +51,12 @@ public abstract class IMModule extends Multipart {
      */
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
-        for (IMModel.Box box : model.getBoxes()) {
-            list.add(box.toAABB());
-        }
+            list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
     }
 
     @Override
     public void addCollisionBoxes(AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
-        //for(IMModel.Box box : model.getBoxes()) {
-        //    list.add(box.toAABB());
-        //}
+
     }
 
     @Override

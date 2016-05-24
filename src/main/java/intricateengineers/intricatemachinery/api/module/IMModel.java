@@ -2,6 +2,7 @@ package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.api.client.IMBakedModel;
 import intricateengineers.intricatemachinery.api.client.util.UV;
+import intricateengineers.intricatemachinery.api.util.VectorUtils;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -21,15 +22,32 @@ import java.util.List;
 public abstract class IMModel {
 
     protected final List<Box> boxes = new ArrayList<>();
+    protected final Box mainBox;
     @SideOnly(Side.CLIENT)
     protected IMBakedModel bakedModel;
-
     public IMModel() {
         this.init();
+        this.mainBox = this.initMainBox();
+    }
+
+    public abstract void init();
+
+    protected Box initMainBox() {
+        Vector3f min = new Vector3f(32, 32, 32);
+        Vector3f max = new Vector3f(-16, -16, -16);
+        for (Box box : this.boxes) {
+            min = VectorUtils.smallest(min, box.getFrom());
+            max = VectorUtils.greatest(max, box.getTo());
+        }
+        return new Box(min, max);
     }
 
     protected static final Vector3f vec(double x, double y, double z) {
         return new Vector3f((float) x, (float) y, (float) z);
+    }
+
+    public Box getMainBox() {
+        return mainBox;
     }
 
     @SideOnly(Side.CLIENT)
@@ -39,8 +57,6 @@ public abstract class IMModel {
         }
         return this.bakedModel;
     }
-
-    public abstract void init();
 
     public List<Box> getBoxes() {
         return boxes;
@@ -57,10 +73,19 @@ public abstract class IMModel {
         public final HashMap<EnumFacing, Pair<ResourceLocation, BlockFaceUV>> faces = new HashMap<>();
         private final Vector3f boxFrom;
         private final Vector3f boxTo;
+        private AxisAlignedBB aabb = null;
 
         public Box(Vector3f boxFrom, Vector3f boxTo) {
             this.boxFrom = boxFrom;
             this.boxTo = boxTo;
+        }
+
+        public Vector3f getFrom() {
+            return boxFrom;
+        }
+
+        public Vector3f getTo() {
+            return boxTo;
         }
 
         public Box setFace(EnumFacing face, ResourceLocation texture, UV uv) {
@@ -111,7 +136,20 @@ public abstract class IMModel {
         }
 
         public AxisAlignedBB toAABB() {
-            return new AxisAlignedBB(boxFrom.getX() / 16, boxFrom.getY() / 16, boxFrom.getZ() / 16, boxTo.getX() / 16, boxTo.getY() / 16, boxTo.getZ() / 16);
+            if (aabb != null) {
+                return aabb;
+            }
+            return aabb = new AxisAlignedBB(boxFrom.getX() / 16, boxFrom.getY() / 16, boxFrom.getZ() / 16, boxTo.getX() / 16, boxTo.getY() / 16, boxTo.getZ() / 16);
+        }
+
+        public AxisAlignedBB toAABB(double x, double y, double z) {
+            return new AxisAlignedBB(
+                (boxFrom.getX() + x) / 16,
+                (boxFrom.getY() + y) / 16,
+                (boxFrom.getZ() + z) / 16,
+                (boxTo.getX() + x) / 16,
+                (boxTo.getY() + y) / 16,
+                (boxTo.getZ() + z) / 16);
         }
     }
 }
