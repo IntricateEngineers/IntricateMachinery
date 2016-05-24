@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2016 IntricateEngineers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.core.ModInfo;
@@ -51,12 +67,34 @@ public abstract class IMModule extends Multipart {
      */
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
-            list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
+        list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
     }
 
     @Override
     public void addCollisionBoxes(AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
 
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+
+        NBTTagCompound pos = new NBTTagCompound();
+        pos.setByte("x", posX);
+        pos.setByte("y", posY);
+        pos.setByte("z", posZ);
+        tag.setTag("module_pos", pos);
+
+        return tag;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        NBTTagCompound pos = tag.getCompoundTag("module_pos");
+        this.posX = pos.getByte("x");
+        this.posY = pos.getByte("y");
+        this.posZ = pos.getByte("z");
     }
 
     @Override
@@ -97,27 +135,5 @@ public abstract class IMModule extends Multipart {
         public String valueToString(IMModule value) {
             return value.toString();
         }
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
-        NBTTagCompound pos = tag.getCompoundTag("module_pos");
-        this.posX = pos.getByte("x");
-        this.posY = pos.getByte("y");
-        this.posZ = pos.getByte("z");
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
-
-        NBTTagCompound pos = new NBTTagCompound();
-        pos.setByte("x", posX);
-        pos.setByte("y", posY);
-        pos.setByte("z", posZ);
-        tag.setTag("module_pos", pos);
-
-        return tag;
     }
 }
