@@ -15,8 +15,7 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author topisani
@@ -81,6 +80,26 @@ public abstract class IMModule extends Multipart {
     @Override
     public IBlockState getExtendedState(IBlockState state) {
         return ((IExtendedBlockState) state).withProperty(PROPERTY, this);
+    }
+
+    // TODO: Use SortedMap for correct ordering
+    public Set<HashMap<String, ?>> getDebugInfo()
+    {
+        // Name of the module
+        HashMap<String, String> hashMapName = new HashMap<>(1);
+        hashMapName.put("Name", name.getResourcePath());
+
+        // Position in pixels in relation to current block
+        HashMap<String, Byte> hashMapLocalPos = new HashMap<>(3);
+        hashMapLocalPos.put("posX", this.posX);
+        hashMapLocalPos.put("posY", this.posY);
+        hashMapLocalPos.put("posZ", this.posZ);
+
+        Set<HashMap<String, ?>> setHashMaps = new HashSet<>();
+        setHashMaps.add(hashMapLocalPos);
+        setHashMaps.add(hashMapName);
+
+        return setHashMaps;
     }
 
     private static class Property implements IUnlistedProperty<IMModule> {
