@@ -1,5 +1,6 @@
 package intricateengineers.intricatemachinery.common.init;
 
+import intricateengineers.intricatemachinery.api.module.IMModule;
 import intricateengineers.intricatemachinery.api.module.IMModuleItem;
 import intricateengineers.intricatemachinery.common.block.FurnaceModule;
 import intricateengineers.intricatemachinery.common.util.gui.IMCreativeTab;
@@ -19,7 +20,7 @@ public final class ModBlocks {
         registerModule("furnace", FurnaceModule.class);
     }
 
-    private static void registerModule(String name, Class<? extends FurnaceModule> module) {
+    private static void registerModule(String name, Class<? extends IMModule> module) {
         ItemMultiPart item = new IMModuleItem(module);
         item.setUnlocalizedName(name);
         item.setCreativeTab(IMCreativeTab.INSTANCE);
