@@ -1,16 +1,29 @@
+/*
+ * Copyright (c) 2016 IntricateEngineers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package intricateengineers.intricatemachinery.api.client;
 
 import intricateengineers.intricatemachinery.api.module.IMModel;
-import intricateengineers.intricatemachinery.api.module.IMModule;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
@@ -64,33 +77,7 @@ public class IMBakedModel implements IBakedModel {
 
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-        IMModule module = null;
-        if (state instanceof IExtendedBlockState) {
-            module = ((IExtendedBlockState) state).getValue(IMModule.PROPERTY);
-        }
-        if (module == null) {
-            return this.quads;
-        }
-        int[] vertexData;
-        List<BakedQuad> quads1 = new ArrayList<>();
-
-        for (BakedQuad quad : quads) {
-            vertexData = quad.getVertexData().clone();
-            for (int i = 0; i < 4; ++i)
-            {
-                float xFloat = Float.intBitsToFloat(vertexData[i*7]);
-                float yFloat = Float.intBitsToFloat(vertexData[i*7+1]);
-                float zFloat = Float.intBitsToFloat(vertexData[i*7+2]);
-
-                vertexData[i*7] = Float.floatToRawIntBits((xFloat)+( module.posX / 16f));
-                vertexData[(i*7)+1] = Float.floatToRawIntBits((yFloat)+(module.posY / 16f));
-                vertexData[(i*7)+2] = Float.floatToRawIntBits((zFloat)+(module.posZ /16f));
-            }
-            BakedQuad quad1 = new BakedQuad(vertexData, quad.getTintIndex(), quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), DefaultVertexFormats.ITEM);
-            quads1.add(quad1);
-        }
-
-        return quads1;
+        return quads;
     }
 
     @Override

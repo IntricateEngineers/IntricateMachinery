@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2016 IntricateEngineers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.core.ModInfo;
@@ -24,7 +40,7 @@ public abstract class IMModule extends Multipart {
     public static final Property PROPERTY = new Property();
     private final ResourceLocation name;
     private final IMModel model;
-    public byte posX, posY, posZ;
+    public byte posX, posY, posZ, rotation;
     private List<AxisAlignedBB> selectionBoxes = new ArrayList<>();
 
     public IMModule(String name, IMModel model) {
@@ -36,10 +52,11 @@ public abstract class IMModule extends Multipart {
         return model;
     }
 
-    public void setLocalPos(Vec3d localPos) {
+    public void setLocalPos(Vec3d localPos, byte rotation) {
         this.posX = (byte) (localPos.xCoord * 16f);
         this.posY = (byte) (localPos.yCoord * 16f);
         this.posZ = (byte) (localPos.zCoord * 16f);
+        this.rotation = rotation;
     }
 
     @Override
@@ -63,6 +80,28 @@ public abstract class IMModule extends Multipart {
      */
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
         list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+
+        NBTTagCompound pos = new NBTTagCompound();
+        pos.setByte("x", posX);
+        pos.setByte("y", posY);
+        pos.setByte("z", posZ);
+        tag.setTag("module_pos", pos);
+
+        return tag;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        NBTTagCompound pos = tag.getCompoundTag("module_pos");
+        this.posX = pos.getByte("x");
+        this.posY = pos.getByte("y");
+        this.posZ = pos.getByte("z");
     }
 
     @Override
@@ -94,6 +133,7 @@ public abstract class IMModule extends Multipart {
         hashMapLocalPos.put("posX", this.posX);
         hashMapLocalPos.put("posY", this.posY);
         hashMapLocalPos.put("posZ", this.posZ);
+        hashMapLocalPos.put("rotation", this.rotation);
 
         Set<HashMap<String, ?>> setHashMaps = new HashSet<>();
         setHashMaps.add(hashMapLocalPos);
@@ -106,7 +146,7 @@ public abstract class IMModule extends Multipart {
 
         @Override
         public String getName() {
-            return "position";
+            return "im_module";
         }
 
         @Override
@@ -123,27 +163,5 @@ public abstract class IMModule extends Multipart {
         public String valueToString(IMModule value) {
             return value.toString();
         }
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
-        NBTTagCompound pos = tag.getCompoundTag("module_pos");
-        this.posX = pos.getByte("x");
-        this.posY = pos.getByte("y");
-        this.posZ = pos.getByte("z");
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
-
-        NBTTagCompound pos = new NBTTagCompound();
-        pos.setByte("x", posX);
-        pos.setByte("y", posY);
-        pos.setByte("z", posZ);
-        tag.setTag("module_pos", pos);
-
-        return tag;
     }
 }
