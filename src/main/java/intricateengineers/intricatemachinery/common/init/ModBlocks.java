@@ -18,7 +18,7 @@ package intricateengineers.intricatemachinery.common.init;
 
 import intricateengineers.intricatemachinery.api.module.IMModule;
 import intricateengineers.intricatemachinery.api.module.IMModuleItem;
-import intricateengineers.intricatemachinery.api.module.MachinaryFrame;
+import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.common.module.FurnaceModule;
 import intricateengineers.intricatemachinery.common.util.gui.IMCreativeTab;
 import intricateengineers.intricatemachinery.core.ModInfo;
@@ -44,13 +44,13 @@ public final class ModBlocks {
         ItemMultiPart item = new ItemMultiPart() {
             @Override
             public IMultipart createPart(World world, BlockPos pos, EnumFacing side, Vec3d hit, ItemStack stack, EntityPlayer player) {
-                return new MachinaryFrame();
+                return new MachineryFrame();
             }
         };
-        item.setUnlocalizedName("machinary_frame");
+        item.setUnlocalizedName("machinery_frame");
         item.setCreativeTab(IMCreativeTab.INSTANCE);
-        GameRegistry.<Item>register(item, new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "machinary_frame"));
-        MultipartRegistry.registerPart(MachinaryFrame.class, "machinary_frame");
+        GameRegistry.<Item>register(item, new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "machinery_frame"));
+        MultipartRegistry.registerPart(MachineryFrame.class, "machinery_frame");
 
         registerModule("furnace", FurnaceModule.class);
     }

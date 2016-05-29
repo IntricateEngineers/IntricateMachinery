@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * @author topisani
  */
-public class MachinaryFrameBakedModel implements IBakedModel {
+public class MachineryFrameBakedModel implements IBakedModel {
 
     private List<BakedQuad> quads = new ArrayList<>();
 

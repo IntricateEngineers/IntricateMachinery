@@ -21,6 +21,6 @@ import mcmultipart.multipart.Multipart;
 /**
  * @author topisani
  */
-public class MachinaryFrame extends Multipart {
+public class MachineryFrame extends Multipart {
 
 }
