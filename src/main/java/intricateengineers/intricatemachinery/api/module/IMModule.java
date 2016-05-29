@@ -30,6 +30,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import org.lwjgl.util.vector.Vector3f;
 
 import java.util.*;
 
@@ -56,6 +57,24 @@ public abstract class IMModule extends Multipart {
         this.posX = (byte) (localPos.xCoord * 16f);
         this.posY = (byte) (localPos.yCoord * 16f);
         this.posZ = (byte) (localPos.zCoord * 16f);
+        this.rotation = rotation;
+    }
+
+    // For debugging only, probably won't be very useful in practice
+    // since parts can take many sizes inside the same machine frame
+    public void setLocalPosCenteredSnapped(Vec3d localPos, byte rotation) {
+
+        Vector3f modelSize = model.getMainBox().getSize();
+
+        // Center
+        this.posX -= modelSize.x/2;
+        this.posY -= modelSize.y/2;
+        this.posZ -= modelSize.z/2;
+
+        // Snap
+        this.posX = (byte) (((int)(localPos.xCoord * 16) / (int)modelSize.x) * modelSize.x);
+        this.posY = (byte) (((int)(localPos.yCoord * 16) / (int)modelSize.y) * modelSize.y);
+        this.posZ = (byte) (((int)(localPos.zCoord * 16) / (int)modelSize.z) * modelSize.z);
         this.rotation = rotation;
     }
 

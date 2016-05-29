@@ -135,6 +135,11 @@ public abstract class IMModel {
             return Pair.of(from, to);
         }
 
+        public Vector3f getSize() {
+            Vector3f boxSize = new Vector3f();
+            return Vector3f.sub(boxTo, boxFrom, boxSize);
+        }
+
         public AxisAlignedBB toAABB(double x, double y, double z) {
             return new AxisAlignedBB(
                 (boxFrom.getX() + x) / 16,
