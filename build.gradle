@@ -62,7 +62,7 @@ minecraft {
 repositories {
     maven {
         // Tesla
-        url 'http://maven.rubbix.net'
+        url 'http://maven.epoxide.xyz'
     }
     maven {
         // MCMultipart
