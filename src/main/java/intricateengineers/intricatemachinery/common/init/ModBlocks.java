@@ -19,6 +19,7 @@ package intricateengineers.intricatemachinery.common.init;
 import intricateengineers.intricatemachinery.api.module.IMModule;
 import intricateengineers.intricatemachinery.api.module.IMModuleItem;
 import intricateengineers.intricatemachinery.api.module.MachineryFrame;
+import intricateengineers.intricatemachinery.common.module.DummyModule;
 import intricateengineers.intricatemachinery.common.module.FurnaceModule;
 import intricateengineers.intricatemachinery.common.util.gui.IMCreativeTab;
 import intricateengineers.intricatemachinery.core.ModInfo;
@@ -53,6 +54,7 @@ public final class ModBlocks {
         MultipartRegistry.registerPart(MachineryFrame.class, "machinery_frame");
 
         registerModule("furnace", FurnaceModule.class);
+        registerModule("dummy", DummyModule.class);
     }
 
     private static void registerModule(String name, Class<? extends IMModule> module) {

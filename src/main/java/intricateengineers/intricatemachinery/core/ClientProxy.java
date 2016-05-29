@@ -17,6 +17,7 @@
 package intricateengineers.intricatemachinery.core;
 
 import intricateengineers.intricatemachinery.client.event.DebugRenderHandler;
+import intricateengineers.intricatemachinery.common.module.DummyModule;
 import intricateengineers.intricatemachinery.common.module.FurnaceModule;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -38,17 +39,22 @@ public class ClientProxy extends CommonProxy {
     public void onPostBake(ModelBakeEvent event) {
         event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":furnace", "inventory"), FurnaceModule.MODEL.getBakedModel());
         event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":furnace", "multipart"), FurnaceModule.MODEL.getBakedModel());
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":dummy", "inventory"), DummyModule.MODEL.getBakedModel());
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":dummy", "multipart"), DummyModule.MODEL.getBakedModel());
     }
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
         FurnaceModule.MODEL.getBakedModel().initTextures();
         FurnaceModule.MODEL.init();
+        DummyModule.MODEL.getBakedModel().initTextures();
+        DummyModule.MODEL.init();
     }
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Post event) {
         FurnaceModule.MODEL.getBakedModel().initQuads();
+        DummyModule.MODEL.getBakedModel().initQuads();
     }
 
     @Override
