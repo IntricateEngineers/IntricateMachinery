@@ -21,8 +21,11 @@ import mcmultipart.client.multipart.MultipartSpecialRenderer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
@@ -34,39 +37,36 @@ public class IMModuleSpecialRenderer extends MultipartSpecialRenderer<IMModule> 
     private final Minecraft mc = Minecraft.getMinecraft();
     private IBlockState baseState = null;
     private BlockModelRenderer renderer = null;
-    private Tessellator tess = null;
-    private VertexBuffer buff = null;
 
     @Override
     public void renderMultipartAt(IMModule part, double x, double y, double z, float partialTicks, int destroyStage) {
+        mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.disableLighting();
+
+        VertexBuffer buffer = Tessellator.getInstance().getBuffer();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        renderMultipartFast(part, x, y, z, partialTicks, destroyStage, buffer);
+        Tessellator.getInstance().draw();
+
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
+    }
+
+    @Override
+    public void renderMultipartFast(IMModule part, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer buffer) {
         if (this.baseState == null) {
             this.baseState = part.createBlockState().getBaseState();
             renderer = mc.getBlockRendererDispatcher().getBlockModelRenderer();
-            tess = Tessellator.getInstance();
-            buff = tess.getBuffer();
         }
-        GL11.glPushMatrix();
-        //This will move our renderer so that it will be on proper place in the world
-        GL11.glTranslatef((float)x, (float)y, (float)z);
-        BlockPos pos = part.getPos().add(part.posX, part.posY, part.posZ);
-        //int l = part.getWorld().getCombinedLight(pos, 0);
-        //int l1 = l % 65536;
-        //int l2 = l / 65536;
-        //OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)l1, (float)l2);
-
+        BlockPos pos = part.getPos();
         int dir = part.rotation;
+        GlStateManager.rotate(dir * (-90F), 0F, 1F, 0F);
 
-        GL11.glPushMatrix();
-        GL11.glTranslatef(0.5F, 0, 0.5F);
-        //This line actually rotates the renderer.
-        GL11.glRotatef(dir * (-90F), 0F, 1F, 0F);
-        GL11.glTranslatef(-0.5F, 0, -0.5F);
-        GL11.glTranslatef(part.posX, part.posY, part.posZ);
-
-        renderer.renderModel(part.getWorld(), part.getModel().getBakedModel(), part.getExtendedState(this.baseState), pos, buff, false, 52L );
-
-        GL11.glPopMatrix();
-        GL11.glPopMatrix();
+        buffer.setTranslation(part.posX / 16f, part.posY / 16f, part.posZ / 16f);
+        renderer.renderModel(part.getWorld(), part.getModel().getBakedModel(), part.getExtendedState(this.baseState), pos, buffer, false, 52L );
+        buffer.setTranslation(0, 0, 0);
     }
 
 }

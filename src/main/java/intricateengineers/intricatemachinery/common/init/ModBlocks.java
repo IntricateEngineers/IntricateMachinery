@@ -16,17 +16,23 @@
 
 package intricateengineers.intricatemachinery.common.init;
 
-import intricateengineers.intricatemachinery.api.client.IMModuleSpecialRenderer;
 import intricateengineers.intricatemachinery.api.module.IMModule;
 import intricateengineers.intricatemachinery.api.module.IMModuleItem;
-import intricateengineers.intricatemachinery.common.block.FurnaceModule;
+import intricateengineers.intricatemachinery.api.module.MachinaryFrame;
+import intricateengineers.intricatemachinery.common.module.FurnaceModule;
 import intricateengineers.intricatemachinery.common.util.gui.IMCreativeTab;
 import intricateengineers.intricatemachinery.core.ModInfo;
-import mcmultipart.client.multipart.MultipartRegistryClient;
 import mcmultipart.item.ItemMultiPart;
+import mcmultipart.multipart.IMultipart;
 import mcmultipart.multipart.MultipartRegistry;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -35,6 +41,17 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public final class ModBlocks {
 
     public static void init() {
+        ItemMultiPart item = new ItemMultiPart() {
+            @Override
+            public IMultipart createPart(World world, BlockPos pos, EnumFacing side, Vec3d hit, ItemStack stack, EntityPlayer player) {
+                return new MachinaryFrame();
+            }
+        };
+        item.setUnlocalizedName("machinary_frame");
+        item.setCreativeTab(IMCreativeTab.INSTANCE);
+        GameRegistry.<Item>register(item, new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "machinary_frame"));
+        MultipartRegistry.registerPart(MachinaryFrame.class, "machinary_frame");
+
         registerModule("furnace", FurnaceModule.class);
     }
 
@@ -44,6 +61,5 @@ public final class ModBlocks {
         item.setCreativeTab(IMCreativeTab.INSTANCE);
         GameRegistry.<Item>register(item, new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), name));
         MultipartRegistry.registerPart(module, name);
-        MultipartRegistryClient.bindMultipartSpecialRenderer(module, new IMModuleSpecialRenderer());
     }
 }
