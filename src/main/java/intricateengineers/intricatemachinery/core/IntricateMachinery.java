@@ -31,9 +31,14 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import java.io.File;
 
 
-//@Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION, dependencies = "required-after:Forge@[" + ModInfo.FORGE_DEP + ",)", acceptableRemoteVersions = "*")
-@Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION, dependencies = "required-after:Forge@[" + "12.17.0.1909" + ",)", acceptableRemoteVersions = "*")
+@Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION, dependencies = IntricateMachinery.DEPENDENCIES, acceptableRemoteVersions = "*")
 public class IntricateMachinery {
+
+    public static final String DEPENDENCIES = "required-after:Forge@["
+            + net.minecraftforge.common.ForgeVersion.majorVersion + '.'
+            + net.minecraftforge.common.ForgeVersion.minorVersion + '.'
+            + net.minecraftforge.common.ForgeVersion.revisionVersion + '.'
+            + net.minecraftforge.common.ForgeVersion.buildVersion + ",);after:mcmultipart";
 
     @Instance(ModInfo.MOD_ID)
     public static IntricateMachinery instance;
