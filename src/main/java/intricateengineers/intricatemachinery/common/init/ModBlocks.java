@@ -30,7 +30,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -41,6 +40,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 public final class ModBlocks {
 
+    public static final String unlocalizedPrefix = ModInfo.MOD_ID.toLowerCase() + ".";
+
+
     public static void init() {
         ItemMultiPart item = new ItemMultiPart() {
             @Override
@@ -48,9 +50,7 @@ public final class ModBlocks {
                 return new MachineryFrame();
             }
         };
-        item.setUnlocalizedName("machinery_frame");
-        item.setCreativeTab(IMCreativeTab.INSTANCE);
-        GameRegistry.<Item>register(item, new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "machinery_frame"));
+        registerItem(item, "machinery_frame");
         MultipartRegistry.registerPart(MachineryFrame.class, "machinery_frame");
 
         registerModule("furnace", FurnaceModule.class);
@@ -59,9 +59,21 @@ public final class ModBlocks {
 
     private static void registerModule(String name, Class<? extends IMModule> module) {
         ItemMultiPart item = new IMModuleItem(module);
-        item.setUnlocalizedName(name);
-        item.setCreativeTab(IMCreativeTab.INSTANCE);
-        GameRegistry.<Item>register(item, new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), name));
+        registerItem(item, name);
+
         MultipartRegistry.registerPart(module, name);
+    }
+
+    private static <T extends Item> T registerItem(
+            final T item,
+            final String name )
+    {
+        item.setCreativeTab( IMCreativeTab.INSTANCE );
+
+        item.setUnlocalizedName( unlocalizedPrefix + name );
+        item.setRegistryName( ModInfo.MOD_ID.toLowerCase(), name );
+
+        GameRegistry.register( item );
+        return item;
     }
 }
