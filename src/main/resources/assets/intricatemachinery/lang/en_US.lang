@@ -1,3 +1,5 @@
-item.furnace.name=Furnace Module
-item.dummy.name=Dummy Module
-item.machinery_frame.name=Machinery Frame
+itemGroup.tabIntricateMachinery=Intricate Machinery
+
+item.intricateengineers.intricatemachinery.furnace.name=Furnace Module
+item.intricateengineers.intricatemachinery.dummy.name=Dummy Module
+item.intricateengineers.intricatemachinery.machinery_frame.name=Machinery Frame
