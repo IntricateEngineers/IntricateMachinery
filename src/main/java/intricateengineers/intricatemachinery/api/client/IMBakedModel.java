@@ -35,6 +35,7 @@ import org.lwjgl.util.vector.Vector3f;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author topisani
@@ -44,8 +45,11 @@ public class IMBakedModel implements IBakedModel {
 
     private final ResourceLocation particle;
     private IMModel model;
-    public static final FaceBakery  faceBakery = new FaceBakery();
-    public final List<BakedQuad> quads = new ArrayList<>();
+    private static final FaceBakery faceBakery = new FaceBakery();
+    private final List<BakedQuad> quadsNorth = new ArrayList<>();
+    private final List<BakedQuad> quadsSouth = new ArrayList<>();
+    private final List<BakedQuad> quadsEast = new ArrayList<>();
+    private final List<BakedQuad> quadsWest = new ArrayList<>();
 
     public IMBakedModel(IMModel model) {
         this.model = model;
@@ -53,6 +57,14 @@ public class IMBakedModel implements IBakedModel {
     }
 
     public void initQuads() {
+        initRotatedQuads(quadsNorth, 0);
+        initRotatedQuads(quadsEast, 90);
+        initRotatedQuads(quadsSouth, 180);
+        initRotatedQuads(quadsWest, 270);
+    }
+
+    private void initRotatedQuads(List<BakedQuad> quads, int rotation)
+    {
         quads.clear();
         for (IMModel.Box box : model.getBoxes()) {
             for (EnumFacing face : EnumFacing.values()) {
@@ -63,8 +75,8 @@ public class IMBakedModel implements IBakedModel {
                 TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(box.faces.get(face).getLeft().toString());
                 BlockPartFace partFace = new BlockPartFace(null, 0, "", box.faces.get(face).getRight());
                 ModelRotation mr = ModelRotation.X0_Y0;
-                BlockPartRotation rotation =  null;
-                BakedQuad quad = faceBakery.makeBakedQuad(vecs.getLeft(), vecs.getRight(), partFace, texture, face, mr, rotation, true, true);
+                BlockPartRotation blockPartRotation =  new BlockPartRotation((Vector3f)model.getMainBox().getSize().scale(1f/16/2), EnumFacing.Axis.Y, rotation, false);
+                BakedQuad quad = faceBakery.makeBakedQuad(vecs.getLeft(), vecs.getRight(), partFace, texture, face, mr, blockPartRotation, true, true);
                 quads.add(quad);
             }
         }
@@ -93,8 +105,24 @@ public class IMBakedModel implements IBakedModel {
             module = ((IExtendedBlockState) state).getValue(IMModule.PROPERTY);
         }
         if (module == null) {
-            return this.quads;
+            return null;
         }
+
+        List<BakedQuad> quads = new ArrayList<>();
+
+        Random r = new Random(rand);
+        switch(r.nextInt(4))        // Random rotation for now because module.rotation doesn't work
+        {
+            case 0:
+                quads = quadsNorth; break;
+            case 1:
+                quads = quadsEast;  break;
+            case 2:
+                quads = quadsSouth; break;
+            case 3:
+                quads = quadsWest;  break;
+        }
+        //System.out.println("module.rotation = " + module.rotation);
 
         int[] vertexData;
         List<BakedQuad> quads1 = new ArrayList<>();

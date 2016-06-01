@@ -111,6 +111,10 @@ public abstract class IMModule extends Multipart {
         pos.setByte("z", posZ);
         tag.setTag("module_pos", pos);
 
+        NBTTagCompound rot = new NBTTagCompound();
+        rot.setByte("rot", rotation);
+        tag.setTag("module_rot", pos);
+
         return tag;
     }
 
@@ -121,6 +125,9 @@ public abstract class IMModule extends Multipart {
         this.posX = pos.getByte("x");
         this.posY = pos.getByte("y");
         this.posZ = pos.getByte("z");
+
+        NBTTagCompound rot = tag.getCompoundTag("module_rot");
+        this.rotation = rot.getByte("rot");
     }
 
     @Override
@@ -148,14 +155,14 @@ public abstract class IMModule extends Multipart {
         hashMapName.put("Name", name.getResourcePath());
 
         // Position in pixels in relation to current block
-        HashMap<String, Byte> hashMapLocalPos = new HashMap<>(3);
-        hashMapLocalPos.put("posX", this.posX);
-        hashMapLocalPos.put("posY", this.posY);
-        hashMapLocalPos.put("posZ", this.posZ);
-        hashMapLocalPos.put("rotation", this.rotation);
+        HashMap<String, Byte> hashMapPosAndRot = new HashMap<>(4);
+        hashMapPosAndRot.put("posX", this.posX);
+        hashMapPosAndRot.put("posY", this.posY);
+        hashMapPosAndRot.put("posZ", this.posZ);
+        hashMapPosAndRot.put("rotation", this.rotation);
 
         Set<HashMap<String, ?>> setHashMaps = new HashSet<>();
-        setHashMaps.add(hashMapLocalPos);
+        setHashMaps.add(hashMapPosAndRot);
         setHashMaps.add(hashMapName);
 
         return setHashMaps;

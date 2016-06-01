@@ -46,6 +46,7 @@ public class IMModuleItem extends ItemMultiPart {
         try {
             IMModule instance = module.newInstance();
             byte dir = (byte) (MathHelper.floor_double((double)((player.rotationYaw * 4F) / 360F) + 0.5D) & 3);
+            System.out.println("dir = " + dir);
             instance.setLocalPosCenteredSnapped(VectorUtils.modulus(hit, 1), dir);
             return instance;
         } catch (InstantiationException | IllegalAccessException e) {
