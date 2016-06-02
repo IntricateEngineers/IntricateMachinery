@@ -16,7 +16,8 @@
 
 package intricateengineers.intricatemachinery.core;
 
-import intricateengineers.intricatemachinery.api.client.ModuleSpecialRenderer;
+import intricateengineers.intricatemachinery.api.client.FrameRenderer;
+import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.client.event.DebugRenderHandler;
 import intricateengineers.intricatemachinery.common.module.DummyModule;
 import intricateengineers.intricatemachinery.common.module.FurnaceModule;
@@ -82,10 +83,8 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void onPostBake(ModelBakeEvent event) {
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":furnace", "inventory"), EMPTY_MODEL);
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":furnace", "multipart"), EMPTY_MODEL);
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":dummy", "inventory"), EMPTY_MODEL);
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":dummy", "multipart"), EMPTY_MODEL);
+        event.getModelRegistry().putObject(new ModelResourceLocation(MachineryFrame.NAME, "inventory"), EMPTY_MODEL);
+        event.getModelRegistry().putObject(new ModelResourceLocation(MachineryFrame.NAME, "multipart"), EMPTY_MODEL);
     }
 
     @SubscribeEvent
@@ -94,12 +93,15 @@ public class ClientProxy extends CommonProxy {
         FurnaceModule.MODEL.init();
         DummyModule.MODEL.getBakedModel().initTextures();
         DummyModule.MODEL.init();
+        MachineryFrame.MODEL.getBakedModel().initTextures();
+        MachineryFrame.MODEL.init();
     }
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Post event) {
         FurnaceModule.MODEL.getBakedModel().initQuads();
         DummyModule.MODEL.getBakedModel().initQuads();
+        MachineryFrame.MODEL.getBakedModel().initQuads();
     }
 
     @Override
@@ -109,8 +111,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(DebugRenderHandler.instance);
-        MultipartRegistryClient.bindMultipartSpecialRenderer(FurnaceModule.class, new ModuleSpecialRenderer());
-        MultipartRegistryClient.bindMultipartSpecialRenderer(DummyModule.class, new ModuleSpecialRenderer());
+        MultipartRegistryClient.bindMultipartSpecialRenderer(MachineryFrame.class, new FrameRenderer());
     }
 
     @Override

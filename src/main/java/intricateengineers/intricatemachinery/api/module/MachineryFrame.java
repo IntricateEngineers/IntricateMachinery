@@ -30,6 +30,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -45,9 +46,16 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
 
     public static final Property PROPERTY = new Property();
     public static final ModelBase MODEL = new Model();
-    private final ResourceLocation name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "machinery_frame");
-    public Set<HashMap<String, ?>> debugInfo;
+    public static final ResourceLocation NAME = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "machinery_frame");
+    public Set<Map<String, ?>> debugInfo;
     private List<AxisAlignedBB> selectionBoxes = new ArrayList<>();
+    private final Module[][][] modulePositions = new Module[16][16][16];
+
+    public Map<Vec3i, Module> getModules() {
+        return modules;
+    }
+
+    private Map<Vec3i, Module> modules = new HashMap<>();
 
     public MachineryFrame() {
 
@@ -56,13 +64,12 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
 
     @Override
     public ResourceLocation getType() {
-        return name;
+        return NAME;
     }
 
     @Override
     public RayTraceUtils.AdvancedRayTraceResultPart collisionRayTrace(Vec3d start, Vec3d end) {
-        if (selectionBoxes.isEmpty())
-        {
+        if (selectionBoxes.isEmpty()) {
             addSelectionBoxes(selectionBoxes);
         }
         RayTraceUtils.AdvancedRayTraceResult result = RayTraceUtils.collisionRayTrace(getWorld(), getPos(), start, end, selectionBoxes);
@@ -75,12 +82,6 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
      */
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
-        list.add(MODEL.mainBox.toAABB(0, 0, 0));
-    }
-
-    @Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> list) {
-        // TODO: Add boxes from all modules
         list.add(MODEL.mainBox.toAABB(0, 0, 0));
     }
 
@@ -127,6 +128,11 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
         return ((IExtendedBlockState) state).withProperty(PROPERTY, this);
     }
 
+    @Override
+    public void addOcclusionBoxes(List<AxisAlignedBB> list) {
+        // TODO: Add boxes from all modules
+        list.add(MODEL.mainBox.toAABB(0, 0, 0));
+    }
 
     private static class Property implements IUnlistedProperty<MachineryFrame> {
 

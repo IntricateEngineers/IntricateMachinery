@@ -17,29 +17,19 @@
 package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.core.ModInfo;
-import mcmultipart.MCMultiPartMod;
 import mcmultipart.multipart.IMultipart;
-import mcmultipart.multipart.IMultipartContainer;
 import mcmultipart.raytrace.RayTraceUtils;
-import intricateengineers.intricatemachinery.api.module.ModelBase;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import org.apache.commons.lang3.RandomUtils;
 
 import java.util.*;
-
 
 public abstract class Module implements ICapabilitySerializable<NBTTagCompound> {
     public static final Property PROPERTY = new Property();
@@ -110,14 +100,9 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
         list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
     }
 
-    //@Override
-    public void addOcclusionBoxes(List<AxisAlignedBB> list) {
-        list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
-    }
-
-    //@Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        //super.writeToNBT(tag);
+    @Override
+    public NBTTagCompound serializeNBT() {
+        NBTTagCompound tag = new NBTTagCompound();
 
         NBTTagCompound pos = new NBTTagCompound();
         pos.setByte("x", posX);
@@ -129,45 +114,13 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
         return tag;
     }
 
-    //@Override
-    public void readFromNBT(NBTTagCompound tag) {
-        //super.readFromNBT(tag);
-
+    @Override
+    public void deserializeNBT(NBTTagCompound tag) {
         NBTTagCompound pos = tag.getCompoundTag("module_pos");
         this.posX = pos.getByte("x");
         this.posY = pos.getByte("y");
         this.posZ = pos.getByte("z");
         this.rotation = pos.getByte("rot");
-    }
-
-    //@Override
-    public void writeUpdatePacket(PacketBuffer buf) {
-        buf.setBytes(9384, new byte[]{posX, posY, posZ, rotation});
-    }
-
-    //@Override
-    public void readUpdatePacket(PacketBuffer buf) {
-        this.posX = buf.getBytes(9384, new byte[]{posX, posY, posZ, rotation}).getByte(0);
-        this.posY = buf.getBytes(9384, new byte[]{posX, posY, posZ, rotation}).getByte(1);
-        this.posZ = buf.getBytes(9384, new byte[]{posX, posY, posZ, rotation}).getByte(2);
-        this.rotation = buf.getBytes(9384, new byte[]{posX, posY, posZ, rotation}).getByte(3);
-    }
-
-    //@Override
-    public BlockStateContainer createBlockState() {
-
-        return new ExtendedBlockState(MCMultiPartMod.multipart, new IProperty[0], new IUnlistedProperty[] {PROPERTY});
-    }
-
-    //@Override
-    public IBlockState getActualState(IBlockState state) {
-
-        return state;
-    }
-
-    //@Override
-    public IBlockState getExtendedState(IBlockState state) {
-        return ((IExtendedBlockState) state).withProperty(PROPERTY, this);
     }
 
     // TODO: Use SortedMap for correct ordering
