@@ -38,7 +38,7 @@ public abstract class Model {
     protected final Box mainBox;
     @SideOnly(Side.CLIENT)
     protected BakedModelIM bakedModel;
-    public Model() {
+    public ModelBase() {
         this.init();
         this.mainBox = this.initMainBox();
     }

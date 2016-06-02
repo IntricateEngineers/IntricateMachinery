@@ -16,7 +16,7 @@
 
 package intricateengineers.intricatemachinery.api.client;
 
-import intricateengineers.intricatemachinery.api.module.Model;
+import intricateengineers.intricatemachinery.api.module.ModelBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
@@ -37,29 +37,18 @@ import java.util.List;
 public class BakedModelIM implements IBakedModel {
 
     private final ResourceLocation particle;
-    private Model model;
+    private ModelBase model;
     private static final FaceBakery faceBakery = new FaceBakery();
-    private final List<BakedQuad> quadsNorth = new ArrayList<>();
-    private final List<BakedQuad> quadsSouth = new ArrayList<>();
-    private final List<BakedQuad> quadsEast = new ArrayList<>();
-    private final List<BakedQuad> quadsWest = new ArrayList<>();
+    private final List<BakedQuad> quads = new ArrayList<>();
 
-    public BakedModelIM(Model model) {
+    public BakedModelIM(ModelBase model) {
         this.model = model;
         this.particle = TextureMap.LOCATION_MISSING_TEXTURE;
     }
 
     public void initQuads() {
-        initRotatedQuads(quadsNorth, 0);
-        initRotatedQuads(quadsEast, 90);
-        initRotatedQuads(quadsSouth, 180);
-        initRotatedQuads(quadsWest, 270);
-    }
-
-    private void initRotatedQuads(List<BakedQuad> quads, int rotation)
-    {
         quads.clear();
-        for (Model.Box box : model.getBoxes()) {
+        for (ModelBase.Box box : model.getBoxes()) {
             for (EnumFacing face : EnumFacing.values()) {
                 Pair<Vector3f, Vector3f> vecs = box.getFace(face);
                 if (vecs.getLeft() == null) {
@@ -68,7 +57,7 @@ public class BakedModelIM implements IBakedModel {
                 TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(box.faces.get(face).getLeft().toString());
                 BlockPartFace partFace = new BlockPartFace(null, 0, "", box.faces.get(face).getRight());
                 ModelRotation mr = ModelRotation.X0_Y0;
-                BlockPartRotation blockPartRotation =  new BlockPartRotation((Vector3f)model.getMainBox().getSize().scale(1f/16/2), EnumFacing.Axis.Y, rotation, false);
+                BlockPartRotation blockPartRotation = null;
                 BakedQuad quad = faceBakery.makeBakedQuad(vecs.getLeft(), vecs.getRight(), partFace, texture, face, mr, blockPartRotation, true, true);
                 quads.add(quad);
             }
@@ -76,7 +65,7 @@ public class BakedModelIM implements IBakedModel {
     }
 
     public void initTextures() {
-        for (Model.Box box : model.getBoxes()) {
+        for (ModelBase.Box box : model.getBoxes()) {
             for (EnumFacing face : EnumFacing.values()) {
                 Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(box.faces.get(face).getLeft());
             }
@@ -84,61 +73,13 @@ public class BakedModelIM implements IBakedModel {
     }
 
     // TODO: Cache the displaced quads so this doesn't run for every side on placement. Hack it up for now (it works)
-    // TODO: Possibly make it so that existing quads are changed instead of creating new ones with BakedQuad(...)
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-
-        return quadsNorth;
-        /*
         // Hack in question. Only run when when side is null (ie. once for each box)
         if (side != null){
             return new ArrayList<>();
         }
-
-        Module module = null;
-        if (state instanceof IExtendedBlockState) {
-            module = ((IExtendedBlockState) state).getValue(Module.PROPERTY);
-        }
-        if (module == null) {
-            return null;
-        }
-
-        List<BakedQuad> quads = new ArrayList<>();
-
-        Random r = new Random(rand);
-        switch(r.nextInt(4))        // Random rotation for now because module.rotation doesn't work
-        {
-            case 0:
-                quads = quadsNorth; break;
-            case 1:
-                quads = quadsEast;  break;
-            case 2:
-                quads = quadsSouth; break;
-            case 3:
-                quads = quadsWest;  break;
-        }
-        //System.out.println("module.rotation = " + module.rotation);
-
-        int[] vertexData;
-        List<BakedQuad> quads1 = new ArrayList<>();
-
-        for (BakedQuad quad : quads) {
-            vertexData = quad.getVertexData().clone();
-            for (int i = 0; i < 4 * 7; i += 7)
-            {
-                float xFloat = Float.intBitsToFloat(vertexData[i]);
-                float yFloat = Float.intBitsToFloat(vertexData[i+1]);
-                float zFloat = Float.intBitsToFloat(vertexData[i+2]);
-
-                vertexData[i] = Float.floatToRawIntBits((xFloat)+(module.posX / 16f));
-                vertexData[(i)+1] = Float.floatToRawIntBits((yFloat)+(module.posY / 16f));
-                vertexData[(i)+2] = Float.floatToRawIntBits((zFloat)+(module.posZ / 16f));
-            }
-            BakedQuad quad1 = new BakedQuad(vertexData, quad.getTintIndex(), quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), DefaultVertexFormats.ITEM);
-            quads1.add(quad1);
-        }
-
-        return quads1;*/
+        return quads;
     }
 
     @Override
