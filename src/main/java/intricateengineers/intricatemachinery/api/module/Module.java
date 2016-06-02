@@ -25,6 +25,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -32,42 +33,28 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import org.apache.commons.lang3.RandomUtils;
-import org.lwjgl.util.vector.Vector3f;
 
 import java.util.*;
 
 /**
- * @author topisani
+ * Its a module
  */
 public abstract class Module extends Multipart implements INormallyOccludingPart {
     public static final Property PROPERTY = new Property();
     private final ResourceLocation name;
-    private final Model model;
+    private final ModelBase model;
     public byte posX, posY, posZ, rotation;
-    public final Set<HashMap<String, ?>> debugInfo;
+    public Set<HashMap<String, ?>> debugInfo;
     private List<AxisAlignedBB> selectionBoxes = new ArrayList<>();
 
-    public Module(String name, Model model) {
+    public Module(String name, ModelBase model) {
         this.name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), name);
         this.model = model;
-
-        // Name of the module
-        HashMap<String, String> hashMapName = new HashMap<>(1);
-        hashMapName.put("Name", name);
-
-        // Position in pixels in relation to current block
-        HashMap<String, Byte> hashMapPosAndRot = new HashMap<>(4);
-        hashMapPosAndRot.put("posX", this.posX);
-        hashMapPosAndRot.put("posY", this.posY);
-        hashMapPosAndRot.put("posZ", this.posZ);
-        hashMapPosAndRot.put("rotation", this.rotation);
-
-        debugInfo = new HashSet<>();
-        debugInfo.add(hashMapName);
-        debugInfo.add(hashMapPosAndRot);
+        this.debugInfo = initDebugInfo();
+        setLocalPos(new Vec3d(8/16d, 8/16d, 8/16d), (byte) 2);
     }
 
-    public Model getModel() {
+    public ModelBase getModel() {
         return model;
     }
 
@@ -75,25 +62,8 @@ public abstract class Module extends Multipart implements INormallyOccludingPart
         this.posX = (byte) (localPos.xCoord * 16f);
         this.posY = (byte) (localPos.yCoord * 16f);
         this.posZ = (byte) (localPos.zCoord * 16f);
-        this.rotation = rotation;
-    }
-
-    // For debugging only, probably won't be very useful in practice
-    // since parts can take many sizes inside the same machine frame
-    public void setLocalPosCenteredSnapped(Vec3d localPos, byte rotation) {
-
-        Vector3f modelSize = model.getMainBox().getSize();
-
-        // Center
-        this.posX -= modelSize.x/2;
-        this.posY -= modelSize.y/2;
-        this.posZ -= modelSize.z/2;
-
-        // Snap
-        this.posX = (byte) (((int)(localPos.xCoord * 16) / (int)modelSize.x) * modelSize.x);
-        this.posY = (byte) (((int)(localPos.yCoord * 16) / (int)modelSize.y) * modelSize.y);
-        this.posZ = (byte) (((int)(localPos.zCoord * 16) / (int)modelSize.z) * modelSize.z);
         this.rotation = (byte) RandomUtils.nextInt(0, 3);
+        this.debugInfo = initDebugInfo();
     }
 
     @Override
@@ -133,11 +103,8 @@ public abstract class Module extends Multipart implements INormallyOccludingPart
         pos.setByte("x", posX);
         pos.setByte("y", posY);
         pos.setByte("z", posZ);
+        pos.setByte("rot", rotation);
         tag.setTag("module_pos", pos);
-
-        NBTTagCompound rot = new NBTTagCompound();
-        rot.setByte("rot", rotation);
-        tag.setTag("module_rot", pos);
 
         return tag;
     }
@@ -149,9 +116,20 @@ public abstract class Module extends Multipart implements INormallyOccludingPart
         this.posX = pos.getByte("x");
         this.posY = pos.getByte("y");
         this.posZ = pos.getByte("z");
+        this.rotation = pos.getByte("rot");
+    }
 
-        NBTTagCompound rot = tag.getCompoundTag("module_rot");
-        this.rotation = rot.getByte("rot");
+    @Override
+    public void writeUpdatePacket(PacketBuffer buf) {
+        buf.setBytes(9384, new byte[]{posX, posY, posZ, rotation});
+    }
+
+    @Override
+    public void readUpdatePacket(PacketBuffer buf) {
+        this.posX = buf.getBytes(9384, new byte[]{posX, posY, posZ, rotation}).getByte(0);
+        this.posY = buf.getBytes(9384, new byte[]{posX, posY, posZ, rotation}).getByte(1);
+        this.posZ = buf.getBytes(9384, new byte[]{posX, posY, posZ, rotation}).getByte(2);
+        this.rotation = buf.getBytes(9384, new byte[]{posX, posY, posZ, rotation}).getByte(3);
     }
 
     @Override
@@ -174,6 +152,24 @@ public abstract class Module extends Multipart implements INormallyOccludingPart
     // TODO: Use SortedMap for correct ordering
     public Set<HashMap<String, ?>> getDebugInfo()
     {
+        return debugInfo;
+    }
+
+    protected Set<HashMap<String, ?>> initDebugInfo() {
+        // Name of the module
+        HashMap<String, String> hashMapName = new HashMap<>(1);
+        hashMapName.put("Name", name.getResourcePath());
+
+        // Position in pixels in relation to current block
+        HashMap<String, Byte> hashMapPosAndRot = new HashMap<>(4);
+        hashMapPosAndRot.put("posX", this.posX);
+        hashMapPosAndRot.put("posY", this.posY);
+        hashMapPosAndRot.put("posZ", this.posZ);
+        hashMapPosAndRot.put("rotation", this.rotation);
+
+        Set<HashMap<String, ?>> debugInfo = new HashSet<>();
+        debugInfo.add(hashMapName);
+        debugInfo.add(hashMapPosAndRot);
         return debugInfo;
     }
 

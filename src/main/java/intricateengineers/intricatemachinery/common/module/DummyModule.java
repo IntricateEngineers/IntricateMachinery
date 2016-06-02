@@ -17,6 +17,7 @@
 package intricateengineers.intricatemachinery.common.module;
 
 import intricateengineers.intricatemachinery.api.client.util.UV;
+import intricateengineers.intricatemachinery.api.module.ModelBase;
 import intricateengineers.intricatemachinery.api.module.Module;
 import intricateengineers.intricatemachinery.core.ModInfo;
 import net.minecraft.util.ResourceLocation;
@@ -36,7 +37,7 @@ public class DummyModule extends Module {
         super("dummy", MODEL);
     }
 
-    public static class Model extends intricateengineers.intricatemachinery.api.module.Model {
+    public static class Model extends ModelBase {
         private static ResourceLocation texture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/dummy");
 
         @Override

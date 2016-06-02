@@ -35,13 +35,13 @@ import java.util.List;
 /**
  * @author topisani
  */
-public abstract class Model {
+public abstract class ModelBase {
 
     protected final List<Box> boxes = new ArrayList<>();
     protected final Box mainBox;
     @SideOnly(Side.CLIENT)
     protected BakedModelIM bakedModel;
-    public Model() {
+    public ModelBase() {
         this.init();
         this.mainBox = this.initMainBox();
     }

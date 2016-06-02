@@ -16,11 +16,233 @@
 
 package intricateengineers.intricatemachinery.api.module;
 
+import intricateengineers.intricatemachinery.api.client.util.UV;
+import intricateengineers.intricatemachinery.core.ModInfo;
+import mcmultipart.MCMultiPartMod;
+import mcmultipart.multipart.INormallyOccludingPart;
 import mcmultipart.multipart.Multipart;
+import mcmultipart.raytrace.RayTraceUtils;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
+
+import java.util.*;
+
+import static net.minecraft.util.EnumFacing.*;
 
 /**
  * @author topisani
  */
-public class MachineryFrame extends Multipart {
+public class MachineryFrame extends Multipart implements INormallyOccludingPart {
 
+    public static final Property PROPERTY = new Property();
+    public static final ModelBase MODEL = new Model();
+    private final ResourceLocation name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "machinery_frame");
+    public Set<HashMap<String, ?>> debugInfo;
+    private List<AxisAlignedBB> selectionBoxes = new ArrayList<>();
+
+    public MachineryFrame() {
+
+    }
+
+
+    @Override
+    public ResourceLocation getType() {
+        return name;
+    }
+
+    @Override
+    public RayTraceUtils.AdvancedRayTraceResultPart collisionRayTrace(Vec3d start, Vec3d end) {
+        if (selectionBoxes.isEmpty())
+        {
+            addSelectionBoxes(selectionBoxes);
+        }
+        RayTraceUtils.AdvancedRayTraceResult result = RayTraceUtils.collisionRayTrace(getWorld(), getPos(), start, end, selectionBoxes);
+        return result == null ? null : new RayTraceUtils.AdvancedRayTraceResultPart(result, this);
+    }
+
+    /**
+     * Adds the selection boxes used to ray trace this part.
+     * Called only once when module is placed
+     */
+    @Override
+    public void addSelectionBoxes(List<AxisAlignedBB> list) {
+        list.add(MODEL.mainBox.toAABB(0, 0, 0));
+    }
+
+    @Override
+    public void addOcclusionBoxes(List<AxisAlignedBB> list) {
+        // TODO: Add boxes from all modules
+        list.add(MODEL.mainBox.toAABB(0, 0, 0));
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+
+        // TODO: write modules to NBT
+
+        return tag;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+
+        // TODO: Read modules from NBT
+    }
+
+    @Override
+    public void writeUpdatePacket(PacketBuffer buf) {
+        // TODO: Write modules to packets
+    }
+
+    @Override
+    public void readUpdatePacket(PacketBuffer buf) {
+        // TODO: Read modules from packets
+    }
+
+    @Override
+    public BlockStateContainer createBlockState() {
+
+        return new ExtendedBlockState(MCMultiPartMod.multipart, new IProperty[0], new IUnlistedProperty[] {PROPERTY});
+    }
+
+    @Override
+    public IBlockState getActualState(IBlockState state) {
+
+        return state;
+    }
+
+    @Override
+    public IBlockState getExtendedState(IBlockState state) {
+        return ((IExtendedBlockState) state).withProperty(PROPERTY, this);
+    }
+
+
+    private static class Property implements IUnlistedProperty<MachineryFrame> {
+
+        @Override
+        public String getName() {
+            return "machine_frame";
+        }
+
+        @Override
+        public boolean isValid(MachineryFrame value) {
+            return true;
+        }
+
+        @Override
+        public Class<MachineryFrame> getType() {
+            return MachineryFrame.class;
+        }
+
+        @Override
+        public String valueToString(MachineryFrame value) {
+            return value.toString();
+        }
+    }
+
+    private static class Model extends ModelBase {
+        ResourceLocation frameTexture = new ResourceLocation("minecraft", "blocks/furnace_top");
+
+        @Override
+        public void init() {
+
+            // Corners
+            addBox(vec(0, 0, 0), vec(1, 16, 1))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+            addBox(vec(0, 0, 15), vec(1, 16, 16))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+            addBox(vec(15, 0, 0), vec(16, 16, 1))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+            addBox(vec(15, 0, 15), vec(16, 16, 16))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+            // Horizontals
+            addBox(vec(1, 0, 0), vec(15, 1, 1))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+            addBox(vec(1, 15, 0), vec(15, 16, 1))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+            addBox(vec(0, 0, 1), vec(1, 1, 15))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+            addBox(vec(0, 15, 1), vec(1, 16, 15))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+            addBox(vec(15, 0, 1), vec(16, 1, 15))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+            addBox(vec(15, 15, 1), vec(16, 16, 15))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+            addBox(vec(1, 0, 15), vec(15, 1, 16))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+            addBox(vec(1, 15, 15), vec(15, 16, 16))
+                .setFace(NORTH, frameTexture, UV.auto(16))
+                .setFace(EAST, frameTexture, UV.auto(16))
+                .setFace(SOUTH, frameTexture, UV.auto(16))
+                .setFace(WEST, frameTexture, UV.auto(16))
+                .setFace(UP, frameTexture, UV.auto(16))
+                .setFace(DOWN, frameTexture, UV.auto(16));
+        }
+    }
 }

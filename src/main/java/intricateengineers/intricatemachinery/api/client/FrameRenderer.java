@@ -16,7 +16,7 @@
 
 package intricateengineers.intricatemachinery.api.client;
 
-import intricateengineers.intricatemachinery.api.module.Module;
+import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import mcmultipart.client.multipart.MultipartSpecialRenderer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -32,14 +32,13 @@ import org.lwjgl.opengl.GL11;
 /**
  * @author topisani
  */
-public class ModuleSpecialRenderer extends MultipartSpecialRenderer<Module> {
-
+public class FrameRenderer extends MultipartSpecialRenderer<MachineryFrame> {
     private final Minecraft mc = Minecraft.getMinecraft();
     private IBlockState baseState = null;
     private BlockModelRenderer renderer = null;
 
     @Override
-    public void renderMultipartAt(Module part, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void renderMultipartAt(MachineryFrame part, double x, double y, double z, float partialTicks, int destroyStage) {
         mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
         GlStateManager.pushMatrix();
@@ -55,7 +54,7 @@ public class ModuleSpecialRenderer extends MultipartSpecialRenderer<Module> {
     }
 
     @Override
-    public void renderMultipartFast(Module part, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer buffer) {
+    public void renderMultipartFast(MachineryFrame part, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer buffer) {
         if (this.baseState == null) {
             this.baseState = part.createBlockState().getBaseState();
             renderer = mc.getBlockRendererDispatcher().getBlockModelRenderer();
@@ -65,11 +64,7 @@ public class ModuleSpecialRenderer extends MultipartSpecialRenderer<Module> {
         }
 
         BlockPos pos = part.getPos();
-        buffer.setTranslation(x - pos.getX() + part.posX / 16f, y - pos.getY() + part.posY / 16f, z - pos.getZ() + part.posZ / 16f);
-        int dir = part.rotation;
-        //GlStateManager.rotate(dir * (-90F), 0F, 1F, 0F);
-        renderer.renderModel(part.getWorld(), part.getModel().getBakedModel(), part.getExtendedState(this.baseState), pos, buffer, false, 52L );
+        renderer.renderModel(part.getWorld(), MachineryFrame.MODEL.getBakedModel(), part.getExtendedState(this.baseState), pos, buffer, false, 52L );
         buffer.setTranslation(0, 0, 0);
     }
-
 }
