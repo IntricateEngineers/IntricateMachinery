@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class Model {
+public abstract class ModelBase {
 
     protected final List<Box> boxes = new ArrayList<>();
     protected final Box mainBox;

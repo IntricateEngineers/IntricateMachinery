@@ -18,9 +18,10 @@ package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.core.ModInfo;
 import mcmultipart.MCMultiPartMod;
-import mcmultipart.multipart.INormallyOccludingPart;
-import mcmultipart.multipart.Multipart;
+import mcmultipart.multipart.IMultipart;
+import mcmultipart.multipart.IMultipartContainer;
 import mcmultipart.raytrace.RayTraceUtils;
+import intricateengineers.intricatemachinery.api.module.ModelBase;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -28,7 +29,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -36,9 +40,11 @@ import org.apache.commons.lang3.RandomUtils;
 
 import java.util.*;
 
-public abstract class Module extends Multipart implements INormallyOccludingPart {
+
+public abstract class Module implements ICapabilitySerializable<NBTTagCompound> {
     public static final Property PROPERTY = new Property();
     private final ResourceLocation name;
+    private IMultipart container;
     private final ModelBase model;
     public byte posX, posY, posZ, rotation;
     public Set<HashMap<String, ?>> debugInfo;
@@ -49,6 +55,25 @@ public abstract class Module extends Multipart implements INormallyOccludingPart
         this.model = model;
         this.debugInfo = initDebugInfo();
         setLocalPos(new Vec3d(8/16d, 8/16d, 8/16d), (byte) 2);
+    }
+
+    public World getWorld() {
+        return getContainerMultipart() != null ? getContainerMultipart().getWorld() : null;
+    }
+
+    public BlockPos getPos() {
+
+        return getContainerMultipart() != null ? getContainerMultipart().getPos() : null;
+    }
+
+    public IMultipart getContainerMultipart() {
+
+        return container;
+    }
+
+    public void setContainer(IMultipart container) {
+
+        this.container = container;
     }
 
     public ModelBase getModel() {
@@ -63,38 +88,36 @@ public abstract class Module extends Multipart implements INormallyOccludingPart
         this.debugInfo = initDebugInfo();
     }
 
-    @Override
     public ResourceLocation getType() {
         return name;
     }
 
-    @Override
     public RayTraceUtils.AdvancedRayTraceResultPart collisionRayTrace(Vec3d start, Vec3d end) {
         if (selectionBoxes.isEmpty())
         {
             addSelectionBoxes(selectionBoxes);
         }
         RayTraceUtils.AdvancedRayTraceResult result = RayTraceUtils.collisionRayTrace(getWorld(), getPos(), start, end, selectionBoxes);
-        return result == null ? null : new RayTraceUtils.AdvancedRayTraceResultPart(result, this);
+        return result == null ? null : null; //TODO: Raytracing
+        // new RayTraceUtils.AdvancedRayTraceResultPart(result, this);
     }
 
     /**
      * Adds the selection boxes used to ray trace this part.
      * Called only once when module is placed
      */
-    @Override
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
         list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
     }
 
-    @Override
+    //@Override
     public void addOcclusionBoxes(List<AxisAlignedBB> list) {
         list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
     }
 
-    @Override
+    //@Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
+        //super.writeToNBT(tag);
 
         NBTTagCompound pos = new NBTTagCompound();
         pos.setByte("x", posX);
@@ -106,9 +129,10 @@ public abstract class Module extends Multipart implements INormallyOccludingPart
         return tag;
     }
 
-    @Override
+    //@Override
     public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
+        //super.readFromNBT(tag);
+
         NBTTagCompound pos = tag.getCompoundTag("module_pos");
         this.posX = pos.getByte("x");
         this.posY = pos.getByte("y");
@@ -116,12 +140,12 @@ public abstract class Module extends Multipart implements INormallyOccludingPart
         this.rotation = pos.getByte("rot");
     }
 
-    @Override
+    //@Override
     public void writeUpdatePacket(PacketBuffer buf) {
         buf.setBytes(9384, new byte[]{posX, posY, posZ, rotation});
     }
 
-    @Override
+    //@Override
     public void readUpdatePacket(PacketBuffer buf) {
         this.posX = buf.getBytes(9384, new byte[]{posX, posY, posZ, rotation}).getByte(0);
         this.posY = buf.getBytes(9384, new byte[]{posX, posY, posZ, rotation}).getByte(1);
@@ -129,19 +153,19 @@ public abstract class Module extends Multipart implements INormallyOccludingPart
         this.rotation = buf.getBytes(9384, new byte[]{posX, posY, posZ, rotation}).getByte(3);
     }
 
-    @Override
+    //@Override
     public BlockStateContainer createBlockState() {
 
         return new ExtendedBlockState(MCMultiPartMod.multipart, new IProperty[0], new IUnlistedProperty[] {PROPERTY});
     }
 
-    @Override
+    //@Override
     public IBlockState getActualState(IBlockState state) {
 
         return state;
     }
 
-    @Override
+    //@Override
     public IBlockState getExtendedState(IBlockState state) {
         return ((IExtendedBlockState) state).withProperty(PROPERTY, this);
     }
