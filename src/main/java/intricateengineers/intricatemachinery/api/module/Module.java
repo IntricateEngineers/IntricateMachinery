@@ -36,9 +36,6 @@ import org.lwjgl.util.vector.Vector3f;
 
 import java.util.*;
 
-/**
- * @author topisani
- */
 public abstract class Module extends Multipart implements INormallyOccludingPart {
     public static final Property PROPERTY = new Property();
     private final ResourceLocation name;

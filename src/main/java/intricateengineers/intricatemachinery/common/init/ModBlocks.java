@@ -35,9 +35,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-/**
- * @author topisani
- */
 public final class ModBlocks {
 
     public static final String unlocalizedPrefix = ModInfo.MOD_ID.toLowerCase() + ".";

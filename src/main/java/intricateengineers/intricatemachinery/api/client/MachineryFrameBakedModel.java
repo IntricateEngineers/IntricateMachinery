@@ -28,9 +28,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author topisani
- */
 public class MachineryFrameBakedModel implements IBakedModel {
 
     private List<BakedQuad> quads = new ArrayList<>();

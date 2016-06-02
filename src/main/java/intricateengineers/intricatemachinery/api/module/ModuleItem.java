@@ -30,9 +30,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-/**
- * @author topisani
- */
 public class ModuleItem extends ItemMultiPart {
 
     public final Class<? extends Module> module;

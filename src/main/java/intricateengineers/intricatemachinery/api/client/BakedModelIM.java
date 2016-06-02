@@ -33,9 +33,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author topisani
- */
 @SideOnly(Side.CLIENT)
 public class BakedModelIM implements IBakedModel {
 

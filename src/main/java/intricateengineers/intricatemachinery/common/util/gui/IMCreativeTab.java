@@ -4,9 +4,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 
-/**
- * @author topisani
- */
 public class IMCreativeTab extends CreativeTabs {
 
     public static final IMCreativeTab INSTANCE = new IMCreativeTab(CreativeTabs.getNextID(), "tabIntricateMachinery");

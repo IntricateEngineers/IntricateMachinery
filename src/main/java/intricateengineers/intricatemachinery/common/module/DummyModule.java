@@ -26,7 +26,7 @@ import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
 /**
- * Created by VelocityRa on 29/5/2016.
+ * Created by VelocityRa
  */
 public class DummyModule extends Module {
 

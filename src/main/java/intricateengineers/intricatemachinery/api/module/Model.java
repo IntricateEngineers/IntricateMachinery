@@ -32,9 +32,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * @author topisani
- */
 public abstract class Model {
 
     protected final List<Box> boxes = new ArrayList<>();
