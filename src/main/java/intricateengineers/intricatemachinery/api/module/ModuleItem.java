@@ -16,27 +16,16 @@
 
 package intricateengineers.intricatemachinery.api.module;
 
-import intricateengineers.intricatemachinery.api.util.VectorUtils;
-import mcmultipart.item.ItemMultiPart;
-import mcmultipart.multipart.IMultipart;
-import mcmultipart.multipart.MultipartHelper;
-import net.minecraft.block.SoundType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.item.Item;
 
-public class ModuleItem extends ItemMultiPart {
+public class ModuleItem extends Item {
 
     public final Class<? extends Module> module;
 
     public ModuleItem(Class<? extends Module> module) {
         this.module = module;
     }
+    /*
 
     @Override
     public IMultipart createPart(World world, BlockPos pos, EnumFacing side, Vec3d hit, ItemStack stack, EntityPlayer player) {
@@ -72,5 +61,6 @@ public class ModuleItem extends ItemMultiPart {
 
         return false;
     }
+    */
 
 }

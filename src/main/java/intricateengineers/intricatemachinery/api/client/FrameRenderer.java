@@ -54,17 +54,17 @@ public class FrameRenderer extends MultipartSpecialRenderer<MachineryFrame> {
     }
 
     @Override
-    public void renderMultipartFast(MachineryFrame part, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer buffer) {
+    public void renderMultipartFast(MachineryFrame frame, double x, double y, double z, float partialTicks, int destroyStage, VertexBuffer buffer) {
         if (this.baseState == null) {
-            this.baseState = part.createBlockState().getBaseState();
+            this.baseState = frame.createBlockState().getBaseState();
             renderer = mc.getBlockRendererDispatcher().getBlockModelRenderer();
         }
-        if (part == null) {
+        if (frame == null) {
             return;
         }
 
-        BlockPos pos = part.getPos();
-        renderer.renderModel(part.getWorld(), MachineryFrame.MODEL.getBakedModel(), part.getExtendedState(this.baseState), pos, buffer, false, 52L );
+        BlockPos pos = frame.getPos();
+        renderer.renderModel(frame.getWorld(), MachineryFrame.MODEL.getBakedModel(), frame.getExtendedState(this.baseState), pos, buffer, false, 52L );
         buffer.setTranslation(0, 0, 0);
     }
 }

@@ -16,7 +16,9 @@
 
 package intricateengineers.intricatemachinery.api.client;
 
+import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.ModelBase;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
@@ -24,6 +26,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
@@ -74,10 +77,21 @@ public class BakedModelIM implements IBakedModel {
 
     // TODO: Cache the displaced quads so this doesn't run for every side on placement. Hack it up for now (it works)
     @Override
+    @MethodsReturnNonnullByDefault
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
         // Hack in question. Only run when when side is null (ie. once for each box)
         if (side != null){
             return new ArrayList<>();
+        }
+        if (state.getProperties().containsKey(MachineryFrame.PROPERTY)) {
+            if (state instanceof IExtendedBlockState) {
+                MachineryFrame frame = ((IExtendedBlockState) state).getValue(MachineryFrame.PROPERTY);
+                List<BakedQuad> quads1 = new ArrayList<>();
+                quads1.addAll(quads);
+                frame.getModules().forEach((vec, module) -> {
+                    quads1.addAll(module.getModel().getBakedModel().getQuads(state, side, rand));
+                });
+            }
         }
         return quads;
     }

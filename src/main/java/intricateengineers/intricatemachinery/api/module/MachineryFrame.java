@@ -17,6 +17,7 @@
 package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.api.client.util.UV;
+import intricateengineers.intricatemachinery.common.module.FurnaceModule;
 import intricateengineers.intricatemachinery.core.ModInfo;
 import mcmultipart.MCMultiPartMod;
 import mcmultipart.multipart.INormallyOccludingPart;
@@ -58,7 +59,7 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     private Map<Vec3i, Module> modules = new HashMap<>();
 
     public MachineryFrame() {
-
+        modules.put(new Vec3i(0,0,0), new FurnaceModule());
     }
 
 

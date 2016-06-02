@@ -16,11 +16,9 @@
 
 package intricateengineers.intricatemachinery.common.init;
 
+import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.Module;
 import intricateengineers.intricatemachinery.api.module.ModuleItem;
-import intricateengineers.intricatemachinery.api.module.MachineryFrame;
-import intricateengineers.intricatemachinery.common.module.DummyModule;
-import intricateengineers.intricatemachinery.common.module.FurnaceModule;
 import intricateengineers.intricatemachinery.common.util.gui.IMCreativeTab;
 import intricateengineers.intricatemachinery.core.ModInfo;
 import mcmultipart.item.ItemMultiPart;
@@ -49,16 +47,11 @@ public final class ModBlocks {
         };
         registerItem(item, "machinery_frame");
         MultipartRegistry.registerPart(MachineryFrame.class, "machinery_frame");
-
-        registerModule("furnace", FurnaceModule.class);
-        registerModule("dummy", DummyModule.class);
     }
 
     private static void registerModule(String name, Class<? extends Module> module) {
         ItemMultiPart item = new ModuleItem(module);
         registerItem(item, name);
-
-        MultipartRegistry.registerPart(module, name);
     }
 
     private static <T extends Item> T registerItem(
