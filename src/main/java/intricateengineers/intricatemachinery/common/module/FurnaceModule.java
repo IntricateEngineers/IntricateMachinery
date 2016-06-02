@@ -17,8 +17,7 @@
 package intricateengineers.intricatemachinery.common.module;
 
 import intricateengineers.intricatemachinery.api.client.util.UV;
-import intricateengineers.intricatemachinery.api.module.IMModel;
-import intricateengineers.intricatemachinery.api.module.IMModule;
+import intricateengineers.intricatemachinery.api.module.Module;
 import intricateengineers.intricatemachinery.core.ModInfo;
 import net.minecraft.util.ResourceLocation;
 
@@ -27,7 +26,7 @@ import static net.minecraft.util.EnumFacing.*;
 /**
  * @author topisani
  */
-public class FurnaceModule extends IMModule {
+public class FurnaceModule extends Module {
 
     public static Model MODEL = new Model();
 
@@ -35,11 +34,11 @@ public class FurnaceModule extends IMModule {
         super("furnace", MODEL);
     }
 
-    public static class Model extends IMModel {
+    public static class Model extends intricateengineers.intricatemachinery.api.module.Model {
         private static ResourceLocation topTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_top");
         private static ResourceLocation sideTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_side");
         private static ResourceLocation frontTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_front_on");
-        private static ResourceLocation frameTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/modular_components/empty_frame");
+        private static ResourceLocation frameTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_top");
 
         @Override
         public void init() {

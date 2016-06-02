@@ -1,6 +1,22 @@
+/*
+ * Copyright (c) 2016 IntricateEngineers
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package intricateengineers.intricatemachinery.api.module;
 
-import intricateengineers.intricatemachinery.api.client.IMBakedModel;
+import intricateengineers.intricatemachinery.api.client.BakedModelIM;
 import intricateengineers.intricatemachinery.api.client.util.UV;
 import intricateengineers.intricatemachinery.api.util.VectorUtils;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
@@ -19,13 +35,13 @@ import java.util.List;
 /**
  * @author topisani
  */
-public abstract class IMModel {
+public abstract class Model {
 
     protected final List<Box> boxes = new ArrayList<>();
     protected final Box mainBox;
     @SideOnly(Side.CLIENT)
-    protected IMBakedModel bakedModel;
-    public IMModel() {
+    protected BakedModelIM bakedModel;
+    public Model() {
         this.init();
         this.mainBox = this.initMainBox();
     }
@@ -51,9 +67,9 @@ public abstract class IMModel {
     }
 
     @SideOnly(Side.CLIENT)
-    public IMBakedModel getBakedModel() {
+    public BakedModelIM getBakedModel() {
         if (this.bakedModel == null) {
-            this.bakedModel = new IMBakedModel(this);
+            this.bakedModel = new BakedModelIM(this);
         }
         return this.bakedModel;
     }

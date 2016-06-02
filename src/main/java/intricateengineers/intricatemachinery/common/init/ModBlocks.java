@@ -16,8 +16,8 @@
 
 package intricateengineers.intricatemachinery.common.init;
 
-import intricateengineers.intricatemachinery.api.module.IMModule;
-import intricateengineers.intricatemachinery.api.module.IMModuleItem;
+import intricateengineers.intricatemachinery.api.module.Module;
+import intricateengineers.intricatemachinery.api.module.ModuleItem;
 import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.common.module.DummyModule;
 import intricateengineers.intricatemachinery.common.module.FurnaceModule;
@@ -57,8 +57,8 @@ public final class ModBlocks {
         registerModule("dummy", DummyModule.class);
     }
 
-    private static void registerModule(String name, Class<? extends IMModule> module) {
-        ItemMultiPart item = new IMModuleItem(module);
+    private static void registerModule(String name, Class<? extends Module> module) {
+        ItemMultiPart item = new ModuleItem(module);
         registerItem(item, name);
 
         MultipartRegistry.registerPart(module, name);

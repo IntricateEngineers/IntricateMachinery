@@ -33,21 +33,21 @@ import net.minecraft.world.World;
 /**
  * @author topisani
  */
-public class IMModuleItem extends ItemMultiPart {
+public class ModuleItem extends ItemMultiPart {
 
-    public final Class<? extends IMModule> module;
+    public final Class<? extends Module> module;
 
-    public IMModuleItem(Class<? extends IMModule> module) {
+    public ModuleItem(Class<? extends Module> module) {
         this.module = module;
     }
 
     @Override
     public IMultipart createPart(World world, BlockPos pos, EnumFacing side, Vec3d hit, ItemStack stack, EntityPlayer player) {
         try {
-            IMModule instance = module.newInstance();
+            Module instance = module.newInstance();
             byte dir = (byte) (MathHelper.floor_double((double)((player.rotationYaw * 4F) / 360F) + 0.5D) & 3);
             System.out.println("dir = " + dir);
-            instance.setLocalPosCenteredSnapped(VectorUtils.modulus(hit, 1), dir);
+            instance.setLocalPos(VectorUtils.modulus(hit, 1), dir);
             return instance;
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();

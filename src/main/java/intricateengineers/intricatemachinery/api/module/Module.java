@@ -18,6 +18,7 @@ package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.core.ModInfo;
 import mcmultipart.MCMultiPartMod;
+import mcmultipart.multipart.INormallyOccludingPart;
 import mcmultipart.multipart.Multipart;
 import mcmultipart.raytrace.RayTraceUtils;
 import net.minecraft.block.properties.IProperty;
@@ -30,6 +31,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import org.apache.commons.lang3.RandomUtils;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.*;
@@ -37,19 +39,35 @@ import java.util.*;
 /**
  * @author topisani
  */
-public abstract class IMModule extends Multipart {
+public abstract class Module extends Multipart implements INormallyOccludingPart {
     public static final Property PROPERTY = new Property();
     private final ResourceLocation name;
-    private final IMModel model;
+    private final Model model;
     public byte posX, posY, posZ, rotation;
+    public final Set<HashMap<String, ?>> debugInfo;
     private List<AxisAlignedBB> selectionBoxes = new ArrayList<>();
 
-    public IMModule(String name, IMModel model) {
+    public Module(String name, Model model) {
         this.name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), name);
         this.model = model;
+
+        // Name of the module
+        HashMap<String, String> hashMapName = new HashMap<>(1);
+        hashMapName.put("Name", name);
+
+        // Position in pixels in relation to current block
+        HashMap<String, Byte> hashMapPosAndRot = new HashMap<>(4);
+        hashMapPosAndRot.put("posX", this.posX);
+        hashMapPosAndRot.put("posY", this.posY);
+        hashMapPosAndRot.put("posZ", this.posZ);
+        hashMapPosAndRot.put("rotation", this.rotation);
+
+        debugInfo = new HashSet<>();
+        debugInfo.add(hashMapName);
+        debugInfo.add(hashMapPosAndRot);
     }
 
-    public IMModel getModel() {
+    public Model getModel() {
         return model;
     }
 
@@ -75,7 +93,7 @@ public abstract class IMModule extends Multipart {
         this.posX = (byte) (((int)(localPos.xCoord * 16) / (int)modelSize.x) * modelSize.x);
         this.posY = (byte) (((int)(localPos.yCoord * 16) / (int)modelSize.y) * modelSize.y);
         this.posZ = (byte) (((int)(localPos.zCoord * 16) / (int)modelSize.z) * modelSize.z);
-        this.rotation = rotation;
+        this.rotation = (byte) RandomUtils.nextInt(0, 3);
     }
 
     @Override
@@ -97,7 +115,13 @@ public abstract class IMModule extends Multipart {
      * Adds the selection boxes used to ray trace this part.
      * Called only once when module is placed
      */
+    @Override
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
+        list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
+    }
+
+    @Override
+    public void addOcclusionBoxes(List<AxisAlignedBB> list) {
         list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
     }
 
@@ -150,25 +174,10 @@ public abstract class IMModule extends Multipart {
     // TODO: Use SortedMap for correct ordering
     public Set<HashMap<String, ?>> getDebugInfo()
     {
-        // Name of the module
-        HashMap<String, String> hashMapName = new HashMap<>(1);
-        hashMapName.put("Name", name.getResourcePath());
-
-        // Position in pixels in relation to current block
-        HashMap<String, Byte> hashMapPosAndRot = new HashMap<>(4);
-        hashMapPosAndRot.put("posX", this.posX);
-        hashMapPosAndRot.put("posY", this.posY);
-        hashMapPosAndRot.put("posZ", this.posZ);
-        hashMapPosAndRot.put("rotation", this.rotation);
-
-        Set<HashMap<String, ?>> setHashMaps = new HashSet<>();
-        setHashMaps.add(hashMapPosAndRot);
-        setHashMaps.add(hashMapName);
-
-        return setHashMaps;
+        return debugInfo;
     }
 
-    private static class Property implements IUnlistedProperty<IMModule> {
+    private static class Property implements IUnlistedProperty<Module> {
 
         @Override
         public String getName() {
@@ -176,17 +185,17 @@ public abstract class IMModule extends Multipart {
         }
 
         @Override
-        public boolean isValid(IMModule value) {
+        public boolean isValid(Module value) {
             return true;
         }
 
         @Override
-        public Class<IMModule> getType() {
-            return IMModule.class;
+        public Class<Module> getType() {
+            return Module.class;
         }
 
         @Override
-        public String valueToString(IMModule value) {
+        public String valueToString(Module value) {
             return value.toString();
         }
     }

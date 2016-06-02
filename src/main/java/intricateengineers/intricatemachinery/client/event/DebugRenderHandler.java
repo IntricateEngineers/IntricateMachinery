@@ -16,7 +16,7 @@
 
 package intricateengineers.intricatemachinery.client.event;
 
-import intricateengineers.intricatemachinery.api.module.IMModule;
+import intricateengineers.intricatemachinery.api.module.Module;
 import mcmultipart.raytrace.PartMOP;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.RayTraceResult;
@@ -49,7 +49,7 @@ public class DebugRenderHandler {
                     ev.getLeft().add(TextFormatting.BOLD.toString() + TextFormatting.GREEN + "[Intricate Machinery]");
                     //ev.getRight().add(mop.partHit.getType().toString());
 
-                    for (HashMap<String, ?> hashMap : ((IMModule)mop.partHit).getDebugInfo()) {
+                    for (HashMap<String, ?> hashMap : ((Module)mop.partHit).getDebugInfo()) {
                         for (Map.Entry<String, ?> entry: hashMap.entrySet()){
                             ev.getLeft().add(entry.getKey() + ": " + TextFormatting.GREEN + entry.getValue());
                         }

@@ -16,17 +16,14 @@
 
 package intricateengineers.intricatemachinery.api.client;
 
-import intricateengineers.intricatemachinery.api.module.IMModel;
-import intricateengineers.intricatemachinery.api.module.IMModule;
+import intricateengineers.intricatemachinery.api.module.Model;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
@@ -35,23 +32,22 @@ import org.lwjgl.util.vector.Vector3f;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author topisani
  */
 @SideOnly(Side.CLIENT)
-public class IMBakedModel implements IBakedModel {
+public class BakedModelIM implements IBakedModel {
 
     private final ResourceLocation particle;
-    private IMModel model;
+    private Model model;
     private static final FaceBakery faceBakery = new FaceBakery();
     private final List<BakedQuad> quadsNorth = new ArrayList<>();
     private final List<BakedQuad> quadsSouth = new ArrayList<>();
     private final List<BakedQuad> quadsEast = new ArrayList<>();
     private final List<BakedQuad> quadsWest = new ArrayList<>();
 
-    public IMBakedModel(IMModel model) {
+    public BakedModelIM(Model model) {
         this.model = model;
         this.particle = TextureMap.LOCATION_MISSING_TEXTURE;
     }
@@ -66,7 +62,7 @@ public class IMBakedModel implements IBakedModel {
     private void initRotatedQuads(List<BakedQuad> quads, int rotation)
     {
         quads.clear();
-        for (IMModel.Box box : model.getBoxes()) {
+        for (Model.Box box : model.getBoxes()) {
             for (EnumFacing face : EnumFacing.values()) {
                 Pair<Vector3f, Vector3f> vecs = box.getFace(face);
                 if (vecs.getLeft() == null) {
@@ -83,7 +79,7 @@ public class IMBakedModel implements IBakedModel {
     }
 
     public void initTextures() {
-        for (IMModel.Box box : model.getBoxes()) {
+        for (Model.Box box : model.getBoxes()) {
             for (EnumFacing face : EnumFacing.values()) {
                 Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(box.faces.get(face).getLeft());
             }
@@ -95,14 +91,16 @@ public class IMBakedModel implements IBakedModel {
     @Override
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
 
+        return quadsNorth;
+        /*
         // Hack in question. Only run when when side is null (ie. once for each box)
         if (side != null){
             return new ArrayList<>();
         }
 
-        IMModule module = null;
+        Module module = null;
         if (state instanceof IExtendedBlockState) {
-            module = ((IExtendedBlockState) state).getValue(IMModule.PROPERTY);
+            module = ((IExtendedBlockState) state).getValue(Module.PROPERTY);
         }
         if (module == null) {
             return null;
@@ -143,7 +141,7 @@ public class IMBakedModel implements IBakedModel {
             quads1.add(quad1);
         }
 
-        return quads1;
+        return quads1;*/
     }
 
     @Override

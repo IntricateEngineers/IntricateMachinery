@@ -16,10 +16,15 @@
 
 package intricateengineers.intricatemachinery.core;
 
+import intricateengineers.intricatemachinery.api.client.ModuleSpecialRenderer;
 import intricateengineers.intricatemachinery.client.event.DebugRenderHandler;
 import intricateengineers.intricatemachinery.common.module.DummyModule;
 import intricateengineers.intricatemachinery.common.module.FurnaceModule;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import mcmultipart.client.multipart.MultipartRegistryClient;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,19 +33,59 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author topisani
  */
 @SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
 
+    public static IBakedModel EMPTY_MODEL = new IBakedModel() {
+        @Override
+        public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+            return new ArrayList<>();
+        }
+
+        @Override
+        public boolean isAmbientOcclusion() {
+            return false;
+        }
+
+        @Override
+        public boolean isGui3d() {
+            return false;
+        }
+
+        @Override
+        public boolean isBuiltInRenderer() {
+            return false;
+        }
+
+        @Override
+        public TextureAtlasSprite getParticleTexture() {
+            return null;
+        }
+
+        @Override
+        public ItemCameraTransforms getItemCameraTransforms() {
+            return null;
+        }
+
+        @Override
+        public ItemOverrideList getOverrides() {
+            return null;
+        }
+    };
 
     @SubscribeEvent
     public void onPostBake(ModelBakeEvent event) {
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":furnace", "inventory"), FurnaceModule.MODEL.getBakedModel());
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":furnace", "multipart"), FurnaceModule.MODEL.getBakedModel());
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":dummy", "inventory"), DummyModule.MODEL.getBakedModel());
-        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":dummy", "multipart"), DummyModule.MODEL.getBakedModel());
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":furnace", "inventory"), EMPTY_MODEL);
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":furnace", "multipart"), EMPTY_MODEL);
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":dummy", "inventory"), EMPTY_MODEL);
+        event.getModelRegistry().putObject(new ModelResourceLocation(ModInfo.MOD_ID + ":dummy", "multipart"), EMPTY_MODEL);
     }
 
     @SubscribeEvent
@@ -64,6 +109,8 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(DebugRenderHandler.instance);
+        MultipartRegistryClient.bindMultipartSpecialRenderer(FurnaceModule.class, new ModuleSpecialRenderer());
+        MultipartRegistryClient.bindMultipartSpecialRenderer(DummyModule.class, new ModuleSpecialRenderer());
     }
 
     @Override
