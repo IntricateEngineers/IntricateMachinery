@@ -16,7 +16,6 @@
 
 package intricateengineers.intricatemachinery.api.client;
 
-import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.ModelBase;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
@@ -26,7 +25,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
@@ -39,10 +37,10 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class BakedModelIM implements IBakedModel {
 
-    private final ResourceLocation particle;
-    private ModelBase model;
-    private static final FaceBakery faceBakery = new FaceBakery();
-    private final List<BakedQuad> quads = new ArrayList<>();
+    protected static final FaceBakery faceBakery = new FaceBakery();
+    protected final ResourceLocation particle;
+    protected final List<BakedQuad> quads = new ArrayList<>();
+    protected ModelBase model;
 
     public BakedModelIM(ModelBase model) {
         this.model = model;
@@ -82,18 +80,8 @@ public class BakedModelIM implements IBakedModel {
     @MethodsReturnNonnullByDefault
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
         // Hack in question. Only run when when side is null (ie. once for each box)
-        if (side != null){
+        if (side != null) {
             return new ArrayList<>();
-        }
-        if (state != null && state.getProperties().containsKey(MachineryFrame.PROPERTY)) {
-            if (state instanceof IExtendedBlockState) {
-                MachineryFrame frame = ((IExtendedBlockState) state).getValue(MachineryFrame.PROPERTY);
-                List<BakedQuad> quads1 = new ArrayList<>();
-                quads1.addAll(quads);
-                frame.getModules().forEach((vec, module) -> {
-                    quads1.addAll(module.getModel().getBakedModel().getQuads(state, side, rand));
-                });
-            }
         }
         return quads;
     }

@@ -99,7 +99,7 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
      * Called only once when module is placed
      */
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
-        list.add(model.mainBox.toAABB(this.posX, this.posY, this.posZ));
+        model.getBoxes().forEach((box) -> list.add(box.toAABB(0, 0, 0)));
     }
 
     @Override

@@ -16,7 +16,10 @@
 
 package intricateengineers.intricatemachinery.api.module;
 
+import intricateengineers.intricatemachinery.api.client.BakedModelFrame;
+import intricateengineers.intricatemachinery.api.client.BakedModelIM;
 import intricateengineers.intricatemachinery.api.client.util.UV;
+import intricateengineers.intricatemachinery.common.module.DummyModule;
 import intricateengineers.intricatemachinery.common.module.FurnaceModule;
 import intricateengineers.intricatemachinery.core.ModInfo;
 import mcmultipart.MCMultiPartMod;
@@ -31,12 +34,14 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static net.minecraft.util.EnumFacing.*;
 
@@ -48,20 +53,19 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     public static final Property PROPERTY = new Property();
     public static final ModelBase MODEL = new Model();
     public static final ResourceLocation NAME = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "machinery_frame");
+    private final Module[][][] modulePositions = new Module[16][16][16];
     public Set<Map<String, ?>> debugInfo;
     private List<AxisAlignedBB> selectionBoxes = new ArrayList<>();
-    private final Module[][][] modulePositions = new Module[16][16][16];
-
-    public Map<Vec3i, Module> getModules() {
-        return modules;
-    }
-
-    private Map<Vec3i, Module> modules = new HashMap<>();
+    private List<Module> modules = new ArrayList<>();
 
     public MachineryFrame() {
-        modules.put(new Vec3i(0,0,0), new FurnaceModule());
+        modules.add(new FurnaceModule(){{setLocalPos(new Vec3d(3, 0, 1), (byte) 1);}});
+        modules.add(new DummyModule(){{setLocalPos(new Vec3d(0, 5, 1), (byte) 3);}});
     }
 
+    public List<Module> getModules() {
+        return modules;
+    }
 
     @Override
     public ResourceLocation getType() {
@@ -83,7 +87,8 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
      */
     @Override
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
-        list.add(MODEL.mainBox.toAABB(0, 0, 0));
+        MODEL.getBoxes().forEach((box) -> list.add(box.toAABB(0, 0, 0)));
+        modules.forEach((module) -> module.addSelectionBoxes(list));
     }
 
     @Override
@@ -249,6 +254,14 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
                 .setFace(WEST, frameTexture, UV.auto(16))
                 .setFace(UP, frameTexture, UV.auto(16))
                 .setFace(DOWN, frameTexture, UV.auto(16));
+        }
+
+        @Override
+        public BakedModelIM getBakedModel() {
+            if (this.bakedModel == null) {
+                this.bakedModel = new BakedModelFrame(this);
+            }
+            return this.bakedModel;
         }
     }
 }
