@@ -159,11 +159,10 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     }
 
     private static class Model extends ModelBase {
-        ResourceLocation frameTexture = new ResourceLocation("minecraft", "blocks/furnace_top");
 
         @Override
         public void init() {
-
+            ResourceLocation frameTexture = new ResourceLocation("minecraft", "blocks/furnace_top");
             // Corners
             addBox(vec(0, 0, 0), vec(1, 16, 1))
                 .setFace(NORTH, frameTexture, UV.auto(16))

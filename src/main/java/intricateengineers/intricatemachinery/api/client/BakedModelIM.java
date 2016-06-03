@@ -70,7 +70,9 @@ public class BakedModelIM implements IBakedModel {
     public void initTextures() {
         for (ModelBase.Box box : model.getBoxes()) {
             for (EnumFacing face : EnumFacing.values()) {
-                Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(box.faces.get(face).getLeft());
+                if (box.faces.get(face) != null) {
+                    Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(box.faces.get(face).getLeft());
+                }
             }
         }
     }
@@ -83,7 +85,7 @@ public class BakedModelIM implements IBakedModel {
         if (side != null){
             return new ArrayList<>();
         }
-        if (state.getProperties().containsKey(MachineryFrame.PROPERTY)) {
+        if (state != null && state.getProperties().containsKey(MachineryFrame.PROPERTY)) {
             if (state instanceof IExtendedBlockState) {
                 MachineryFrame frame = ((IExtendedBlockState) state).getValue(MachineryFrame.PROPERTY);
                 List<BakedQuad> quads1 = new ArrayList<>();
@@ -112,12 +114,14 @@ public class BakedModelIM implements IBakedModel {
     }
 
     @Override
+    @MethodsReturnNonnullByDefault
     public TextureAtlasSprite getParticleTexture() {
         return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(particle.toString());
     }
 
     @Override
     @Deprecated
+    @MethodsReturnNonnullByDefault
     public ItemCameraTransforms getItemCameraTransforms() {
         return ItemCameraTransforms.DEFAULT;
     }

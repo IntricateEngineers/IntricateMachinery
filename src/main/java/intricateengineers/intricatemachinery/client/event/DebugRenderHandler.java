@@ -45,7 +45,7 @@ public class DebugRenderHandler {
             RayTraceResult hit = mc.objectMouseOver;
             if (hit != null && hit instanceof PartMOP) {
                 PartMOP mop = (PartMOP) hit;
-                if (mop.partHit != null) {
+                if (mop.partHit instanceof Module) {
                     ev.getLeft().add(TextFormatting.BOLD.toString() + TextFormatting.GREEN + "[Intricate Machinery]");
                     //ev.getRight().add(mop.partHit.getType().toString());
 
