@@ -36,36 +36,32 @@ import java.util.*;
 public abstract class Module implements ICapabilitySerializable<NBTTagCompound> {
     public static final Property PROPERTY = new Property();
     private final ResourceLocation name;
-    private IMultipart container;
+    private final MachineryFrame frame;
     private final ModelBase model;
     public byte posX, posY, posZ, rotation;
     public Set<HashMap<String, ?>> debugInfo;
     private List<AxisAlignedBB> selectionBoxes = new ArrayList<>();
 
-    public Module(String name, ModelBase model) {
+    public Module(String name, ModelBase model, MachineryFrame parentFrame) {
         this.name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), name);
         this.model = model;
         this.debugInfo = initDebugInfo();
-        setLocalPos(new Vec3d(8/16d, 8/16d, 8/16d), (byte) 2);
+        this.frame = parentFrame;
+        setLocalPos(new Vec3d(8/16d, 8/16d, 8/16d), (byte) RandomUtils.nextInt(0, 3));
     }
 
     public World getWorld() {
-        return getContainerMultipart() != null ? getContainerMultipart().getWorld() : null;
+        return getFrame() != null ? getFrame().getWorld() : null;
     }
 
     public BlockPos getPos() {
 
-        return getContainerMultipart() != null ? getContainerMultipart().getPos() : null;
+        return getFrame() != null ? getFrame().getPos() : null;
     }
 
-    public IMultipart getContainerMultipart() {
+    public MachineryFrame getFrame() {
 
-        return container;
-    }
-
-    public void setContainer(IMultipart container) {
-
-        this.container = container;
+        return frame;
     }
 
     public ModelBase getModel() {
@@ -76,7 +72,7 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
         this.posX = (byte) (localPos.xCoord * 16f);
         this.posY = (byte) (localPos.yCoord * 16f);
         this.posZ = (byte) (localPos.zCoord * 16f);
-        this.rotation = (byte) RandomUtils.nextInt(0, 3);
+        this.rotation = rotation;
         this.debugInfo = initDebugInfo();
     }
 
