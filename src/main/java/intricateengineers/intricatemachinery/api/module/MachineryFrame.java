@@ -59,8 +59,8 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     private List<Module> modules = new ArrayList<>();
 
     public MachineryFrame() {
-        modules.add(new FurnaceModule(){{setLocalPos(new Vec3d(3, 0, 1), (byte) 1);}});
-        modules.add(new DummyModule(){{setLocalPos(new Vec3d(0, 5, 1), (byte) 3);}});
+        modules.add(new FurnaceModule(this){{setLocalPos(new Vec3d(3, 0, 1), (byte) 1);}});
+        modules.add(new DummyModule(this){{setLocalPos(new Vec3d(0, 5, 1), (byte) 3);}});
     }
 
     public List<Module> getModules() {
@@ -138,6 +138,11 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     public void addOcclusionBoxes(List<AxisAlignedBB> list) {
         // TODO: Add boxes from all modules
         list.add(MODEL.mainBox.toAABB(0, 0, 0));
+    }
+
+    public Set<Map<String, ?>> getDebugInfo()
+    {
+        return debugInfo;
     }
 
     private static class Property implements IUnlistedProperty<MachineryFrame> {

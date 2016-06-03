@@ -17,6 +17,7 @@
 package intricateengineers.intricatemachinery.common.module;
 
 import intricateengineers.intricatemachinery.api.client.util.UV;
+import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.ModelBase;
 import intricateengineers.intricatemachinery.api.module.Module;
 import intricateengineers.intricatemachinery.core.ModInfo;
@@ -31,8 +32,8 @@ public class FurnaceModule extends Module {
 
     public static Model MODEL = new Model();
 
-    public FurnaceModule() {
-        super("furnace", MODEL);
+    public FurnaceModule(MachineryFrame parentFrame) {
+        super("furnace", MODEL, parentFrame);
     }
 
     public static class Model extends ModelBase {
