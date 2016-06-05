@@ -27,15 +27,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ModuleItem extends Item {
 
-    public final Class<? extends Module> module;
+    public final ResourceLocation name;
 
-    public ModuleItem(Class<? extends Module> module) {
-        this.module = module;
+    public ModuleItem(ResourceLocation name) {
+        this.name = name;
     }
     
     /**
@@ -63,7 +64,7 @@ public class ModuleItem extends Item {
     public boolean placeInFrame(MachineryFrame frame, ItemStack stack, EntityPlayer player, EnumHand hand, EnumFacing facing, Vector3f hit) {
         //TODO: Place at correct positions
         try {
-            frame.addModule(module.newInstance());
+            frame.addModule(Modules.newModule(name));
             return true;
         } catch (Exception e) {
             e.printStackTrace();
