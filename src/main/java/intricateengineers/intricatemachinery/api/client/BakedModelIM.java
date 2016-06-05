@@ -17,12 +17,15 @@
 package intricateengineers.intricatemachinery.api.client;
 
 import intricateengineers.intricatemachinery.api.module.ModelBase;
+import intricateengineers.intricatemachinery.api.module.Module;
+import intricateengineers.intricatemachinery.api.util.Logger;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -75,19 +78,20 @@ public class BakedModelIM implements IBakedModel {
         }
     }
 
-    // TODO: Cache the displaced quads so this doesn't run for every side on placement. Hack it up for now (it works)
     @Override
-    @MethodsReturnNonnullByDefault
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+        Logger.debug("Empty getQuads called.");
+        return null;
+    }
+
+    // TODO: Cache the displaced quads so this doesn't run for every side on placement. Hack it up for now (it works)
+    @MethodsReturnNonnullByDefault
+    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand, Module module) {
         // Hack in question. Only run when when side is null (ie. once for each box)
         if (side != null){
             return new ArrayList<>();
         }
 
-        IMModule module = null;
-        if (state instanceof IExtendedBlockState) {
-            module = ((IExtendedBlockState) state).getValue(IMModule.PROPERTY);
-        }
         if (module == null) {
             return this.quads;
         }

@@ -18,6 +18,7 @@ package intricateengineers.intricatemachinery.api.client;
 
 import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.ModelBase;
+import intricateengineers.intricatemachinery.api.util.Logger;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -50,10 +51,12 @@ public class BakedModelFrame extends BakedModelIM {
             if (frame != null) {
                 List<BakedQuad> quads1 = new ArrayList<>();
                 quads1.addAll(quads);
-                frame.getModules().forEach((module) -> quads1.addAll(module.getModel().getBakedModel().getQuads(state, side, rand)));
+                frame.getModules().forEach((module) -> quads1.addAll(module.getModel().getBakedModel().getQuads(state, side, rand, module)));
                 return quads1;
+            } else {
+                Logger.error("Frame is null.");
             }
+            return quads;
         }
-        return quads;
     }
 }
