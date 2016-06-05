@@ -75,7 +75,7 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     }
 
     public boolean addModule(Module module) {
-        //TODO: check occolssion
+        //TODO: check occlusion
         modules.add(module);
         return true;
     }
@@ -187,7 +187,7 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
 
         @Override
         public String getName() {
-            return "machine_frame";
+            return "machinery_frame";
         }
 
         @Override
