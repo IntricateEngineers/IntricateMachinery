@@ -80,11 +80,39 @@ public class BakedModelIM implements IBakedModel {
     @MethodsReturnNonnullByDefault
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
         // Hack in question. Only run when when side is null (ie. once for each box)
-        if (side != null) {
+        if (side != null){
             return new ArrayList<>();
         }
-        return quads;
-    }
+
+        IMModule module = null;
+        if (state instanceof IExtendedBlockState) {
+            module = ((IExtendedBlockState) state).getValue(IMModule.PROPERTY);
+        }
+        if (module == null) {
+            return this.quads;
+        }
+
+        int[] vertexData;
+        List<BakedQuad> quads1 = new ArrayList<>();
+
+        for (BakedQuad quad : quads) {
+            vertexData = quad.getVertexData().clone();
+            for (int i = 0; i < 4 * 7; i += 7)
+            {
+                float xFloat = Float.intBitsToFloat(vertexData[i]);
+                float yFloat = Float.intBitsToFloat(vertexData[i+1]);
+                float zFloat = Float.intBitsToFloat(vertexData[i+2]);
+
+                vertexData[i] = Float.floatToRawIntBits((xFloat)+(module.posX / 16f));
+                vertexData[(i)+1] = Float.floatToRawIntBits((yFloat)+(module.posY / 16f));
+                vertexData[(i)+2] = Float.floatToRawIntBits((zFloat)+(module.posZ / 16f));
+            }
+            BakedQuad quad1 = new BakedQuad(vertexData, quad.getTintIndex(), quad.getFace(), quad.getSprite(), quad.shouldApplyDiffuseLighting(), DefaultVertexFormats.ITEM);
+            quads1.add(quad1);
+        }
+
+        return quads1; 
+	}
 
     @Override
     public boolean isAmbientOcclusion() {

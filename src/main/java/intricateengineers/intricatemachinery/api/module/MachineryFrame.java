@@ -30,6 +30,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -95,7 +96,13 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
 
-        // TODO: write modules to NBT
+        NBTTagCompound modules = new NBTTagCompound();
+
+        for (int i = 0; i < this.modules.size(); i++) { 
+            modules.setTag(String.valueOf(i), this.modules.get(i).serializeNBT());
+        }
+
+        tag.setTag("modules", modules);
 
         return tag;
     }
@@ -103,8 +110,13 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+        
+        NBTTagList modules = tag.getTagList("modules", 0);
 
-        // TODO: Read modules from NBT
+        for (int i = 0; i < modules.tagCount(); i++) {
+            this.modules.add(
+        }
+
     }
 
     @Override
@@ -119,7 +131,6 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
 
     @Override
     public BlockStateContainer createBlockState() {
-
         return new ExtendedBlockState(MCMultiPartMod.multipart, new IProperty[0], new IUnlistedProperty[] {PROPERTY});
     }
 
