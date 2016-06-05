@@ -11,7 +11,6 @@ The future is within....
 Hope you all enjoy this project in the future!
 
 ### People
-***
 
 * Developers: **Topisani**, **Vel0cityX**
 
@@ -21,6 +20,7 @@ Hope you all enjoy this project in the future!
 
 
 ### Discord Server
+***
 https://discord.gg/011RjqztHhDI3jcWE
 
 ### License
