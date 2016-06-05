@@ -19,20 +19,25 @@ package intricateengineers.intricatemachinery.api.module;
 import intricateengineers.intricatemachinery.api.client.BakedModelFrame;
 import intricateengineers.intricatemachinery.api.client.BakedModelIM;
 import intricateengineers.intricatemachinery.api.client.util.UV;
+import intricateengineers.intricatemachinery.api.module.ModelBase.Box;
 import intricateengineers.intricatemachinery.common.module.DummyModule;
 import intricateengineers.intricatemachinery.common.module.FurnaceModule;
 import intricateengineers.intricatemachinery.core.ModInfo;
+
 import mcmultipart.MCMultiPartMod;
 import mcmultipart.multipart.INormallyOccludingPart;
 import mcmultipart.multipart.Multipart;
 import mcmultipart.raytrace.RayTraceUtils;
+
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -42,6 +47,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.annotation.Nullable;
 
 import static net.minecraft.util.EnumFacing.*;
 
@@ -67,6 +74,12 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
         return modules;
     }
 
+    public boolean addModule(Module module) {
+        //TODO: check occolssion
+        modules.add(module);
+        return true;
+    }
+
     @Override
     public ResourceLocation getType() {
         return NAME;
@@ -79,6 +92,20 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
         }
         RayTraceUtils.AdvancedRayTraceResult result = RayTraceUtils.collisionRayTrace(getWorld(), getPos(), start, end, selectionBoxes);
         return result == null ? null : new RayTraceUtils.AdvancedRayTraceResultPart(result, this);
+    }
+
+    @Nullable
+    public Module modleHit(Vec3d start, Vec3d end) {
+        for (Module module : this.modules) {
+            for (AxisAlignedBB bounds : module.getAABBs()) {
+                //TODO: it would probably be faster to offset the start and end vectors, instead of all the AABBs
+                RayTraceResult rt = bounds.offset(module.posX, module.posY, module.posZ).calculateIntercept(start, end);
+                if (rt != null) {
+                    return module;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -95,7 +122,13 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
 
-        // TODO: write modules to NBT
+        NBTTagCompound modules = new NBTTagCompound();
+
+        for (int i = 0; i < this.modules.size(); i++) { 
+            modules.setTag(String.valueOf(i), this.modules.get(i).serializeNBT());
+        }
+
+        tag.setTag("modules", modules);
 
         return tag;
     }
@@ -103,8 +136,14 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+        
+        NBTTagList modules = tag.getTagList("modules", 0);
 
-        // TODO: Read modules from NBT
+        for (int i = 0; i < modules.tagCount(); i++) {
+            //this.modules.add(modules.get(i).
+            //TODO: read module
+        }
+
     }
 
     @Override
@@ -119,7 +158,6 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
 
     @Override
     public BlockStateContainer createBlockState() {
-
         return new ExtendedBlockState(MCMultiPartMod.multipart, new IProperty[0], new IUnlistedProperty[] {PROPERTY});
     }
 
