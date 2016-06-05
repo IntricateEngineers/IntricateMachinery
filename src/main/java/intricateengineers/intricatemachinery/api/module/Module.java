@@ -17,28 +17,21 @@
 package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.core.ModInfo;
-import mcmultipart.multipart.IMultipart;
-import mcmultipart.raytrace.RayTraceUtils;
-import mcmultipart.raytrace.RayTraceUtils.AdvancedRayTraceResult;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.property.IUnlistedProperty;
 
 import org.apache.commons.lang3.RandomUtils;
 
 import java.util.*;
 
 public abstract class Module implements ICapabilitySerializable<NBTTagCompound> {
-    public static final Property PROPERTY = new Property();
     private final ResourceLocation name;
     private final MachineryFrame frame;
     private final ModelBase model;
@@ -184,26 +177,4 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
      */
     public abstract ModuleItem getItem();
 
-    private static class Property implements IUnlistedProperty<Module> {
-
-        @Override
-        public String getName() {
-            return "im_module";
-        }
-
-        @Override
-        public boolean isValid(Module value) {
-            return true;
-        }
-
-        @Override
-        public Class<Module> getType() {
-            return Module.class;
-        }
-
-        @Override
-        public String valueToString(Module value) {
-            return value.toString();
-        }
-    }
 }
