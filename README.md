@@ -1,12 +1,28 @@
-# IntricateMachinery
-Intricate Machinery is Licenced under the GNU - General Public Licence
+# Intricate Machinery
 
+### Description
+***
 Intricate Machinery is mod aimed at re-imagining the creation process of machinery in minecraft.
-No longer single block, No longer Multiblocks.
+
+No longer single blocks, no longer multiblocks.
 The future is within....
--Redacted-
+***-Redacted-***
 
 Hope you all enjoy this project in the future!
 
-Made by; Topisani, Vel0cityX, Drullkus & Lanse505
-Also with special thanks to any future contributors!
+### People
+***
+
+* Developers: **Topisani**, **Vel0cityX**
+
+* Textures: **Drullkus**
+
+* Project/Ideas management: **Lanse505**
+
+
+### Discord Server
+https://discord.gg/011RjqztHhDI3jcWE
+
+### License
+***
+###### Intricate Machinery is Licenced under the **GNU - General Public Licence**
