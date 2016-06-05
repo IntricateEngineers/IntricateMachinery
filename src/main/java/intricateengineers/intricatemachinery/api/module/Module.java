@@ -19,16 +19,20 @@ package intricateengineers.intricatemachinery.api.module;
 import intricateengineers.intricatemachinery.core.ModInfo;
 import mcmultipart.multipart.IMultipart;
 import mcmultipart.raytrace.RayTraceUtils;
+import mcmultipart.raytrace.RayTraceUtils.AdvancedRayTraceResult;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.property.IUnlistedProperty;
+
 import org.apache.commons.lang3.RandomUtils;
 
 import java.util.*;
@@ -74,20 +78,12 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
         this.posZ = (byte) (localPos.zCoord * 16f);
         this.rotation = rotation;
         this.debugInfo = initDebugInfo();
+        this.selectionBoxes.clear();
+        this.addSelectionBoxes(this.selectionBoxes);
     }
 
     public ResourceLocation getType() {
         return name;
-    }
-
-    public RayTraceUtils.AdvancedRayTraceResultPart collisionRayTrace(Vec3d start, Vec3d end) {
-        if (selectionBoxes.isEmpty())
-        {
-            addSelectionBoxes(selectionBoxes);
-        }
-        RayTraceUtils.AdvancedRayTraceResult result = RayTraceUtils.collisionRayTrace(getWorld(), getPos(), start, end, selectionBoxes);
-        return result == null ? null : null; //TODO: Raytracing
-        // new RayTraceUtils.AdvancedRayTraceResultPart(result, this);
     }
 
     /**
@@ -95,7 +91,11 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
      * Called only once when module is placed
      */
     public void addSelectionBoxes(List<AxisAlignedBB> list) {
-        model.getBoxes().forEach((box) -> list.add(box.toAABB(0, 0, 0)));
+        model.getBoxes().forEach((box) -> list.add(box.toAABB(posX, posY, posZ)));
+    }
+
+    public List<AxisAlignedBB> getAABBs() {
+        return this.selectionBoxes;
     }
 
     @Override
