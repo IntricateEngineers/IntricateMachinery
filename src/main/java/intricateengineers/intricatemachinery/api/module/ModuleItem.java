@@ -16,7 +16,19 @@
 
 package intricateengineers.intricatemachinery.api.module;
 
+import javax.vecmath.Vector3f;
+
+import mcmultipart.multipart.IMultipart;
+import mcmultipart.multipart.MultipartHelper;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class ModuleItem extends Item {
 
@@ -25,42 +37,38 @@ public class ModuleItem extends Item {
     public ModuleItem(Class<? extends Module> module) {
         this.module = module;
     }
-    /*
-
+    
+    /**
+     * Called when a Block is right-clicked with this Item
+     */
     @Override
-    public IMultipart createPart(World world, BlockPos pos, EnumFacing side, Vec3d hit, ItemStack stack, EntityPlayer player) {
-        try {
-            Module instance = module.newInstance();
-            byte dir = (byte) (MathHelper.floor_double((double)((player.rotationYaw * 4F) / 360F) + 0.5D) & 3);
-            System.out.println("dir = " + dir);
-            instance.setLocalPos(VectorUtils.modulus(hit, 1), dir);
-            return instance;
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-            return null;
+    public final EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
+    {
+        for (IMultipart part : MultipartHelper.getPartContainer(worldIn, pos).getParts()) {
+            if (part instanceof MachineryFrame) {
+                MachineryFrame frame = (MachineryFrame) part;
+                //TODO: Raytracing. Let that function know which module was hit where
+                if (this.placeInFrame(frame, stack, playerIn, hand, facing, new Vector3f(hitX, hitY, hitZ))) return EnumActionResult.SUCCESS; 
+            }
         }
+
+        return EnumActionResult.PASS;
     }
 
-    @Override
-    public boolean place(World world, BlockPos pos, EnumFacing side, Vec3d hit, ItemStack stack, EntityPlayer player) {
-
-        if (!player.canPlayerEdit(pos, side, stack)) return false;
-
-        IMultipart part = createPart(world, pos, side, hit, stack, player);
-
-        if (part != null && MultipartHelper.canAddPart(world, pos, part)) {
-            if (!world.isRemote) MultipartHelper.addPart(world, pos, part);
-            consumeItem(stack);
-
-            SoundType sound = getPlacementSound(stack);
-            if (sound != null)
-                world.playSound(player, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, sound.getVolume(), sound.getPitch());
-
+    /**
+     * Do whatever you need to do when this item is rightclicked on a frame
+     * @return whether the action was successfull
+     * TODO: Raytracing. This function needs to know which module was clicked on which side.
+     */
+    public boolean placeInFrame(MachineryFrame frame, ItemStack stack, EntityPlayer player, EnumHand hand, EnumFacing facing, Vector3f hit) {
+        //TODO: Place at correct positions
+        try {
+            frame.addModule(module.newInstance());
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         return false;
     }
-    */
 
 }

@@ -178,6 +178,12 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
         return null;
     }
 
+    /**
+     * Returns the item that is used to place this module.
+     * The item should be a static final field in the module class.
+     */
+    public abstract ModuleItem getItem();
+
     private static class Property implements IUnlistedProperty<Module> {
 
         @Override

@@ -68,6 +68,12 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
         return modules;
     }
 
+    public boolean addModule(Module module) {
+        //TODO: check occolssion
+        modules.add(module);
+        return true;
+    }
+
     @Override
     public ResourceLocation getType() {
         return NAME;
@@ -114,7 +120,8 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
         NBTTagList modules = tag.getTagList("modules", 0);
 
         for (int i = 0; i < modules.tagCount(); i++) {
-            this.modules.add(
+            //this.modules.add(modules.get(i).
+            //TODO: read module
         }
 
     }
