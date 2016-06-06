@@ -81,6 +81,10 @@ public abstract class ModelBase {
         return box;
     }
 
+    /**
+     * A representation of a box in the model. Can be converted to AABBs or Vectors for faces.
+     * Also has texture and UV data
+     */
     public static class Box {
 
         public final HashMap<EnumFacing, Pair<ResourceLocation, BlockFaceUV>> faces = new HashMap<>();

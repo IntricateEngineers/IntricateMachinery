@@ -92,7 +92,7 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
     }
 
     @Override
-    public NBTTagCompound serializeNBT() {
+    public final NBTTagCompound serializeNBT() {
         NBTTagCompound tag = new NBTTagCompound();
 
         NBTTagCompound pos = new NBTTagCompound();
@@ -101,17 +101,32 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
         pos.setByte("z", posZ);
         pos.setByte("rot", rotation);
         tag.setTag("module_pos", pos);
+        
+        this.writeNBT(tag);
 
         return tag;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound tag) {
+    public final void deserializeNBT(NBTTagCompound tag) {
         NBTTagCompound pos = tag.getCompoundTag("module_pos");
         this.posX = pos.getByte("x");
         this.posY = pos.getByte("y");
         this.posZ = pos.getByte("z");
         this.rotation = pos.getByte("rot");
+        
+        this.readNBT(tag);
+    }
+
+    /**
+     * These are the methods that should be overridden by the individal modules
+     */
+    public NBTTagCompound writeNBT(NBTTagCompound tag) {
+        return tag;
+    }
+
+    public void readNBT(NBTTagCompound tag) {
+
     }
 
     // TODO: Use SortedMap for correct ordering
