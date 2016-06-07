@@ -18,11 +18,10 @@ package intricateengineers.intricatemachinery.client.event;
 
 import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.Module;
-
 import mcmultipart.raytrace.PartMOP;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -50,15 +49,19 @@ public class DebugRenderHandler {
                 PartMOP mop = (PartMOP) hit;
                 if (mop.partHit instanceof MachineryFrame) {
                     ev.getLeft().add(TextFormatting.BOLD.toString() + TextFormatting.GREEN + "[Intricate Machinery]");
-                    //ev.getRight().add(mop.partHit.getType().toString());
 
-                    for (HashMap<String, ?> hashMap : ((Module)mop.partHit).getDebugInfo()) {
-                        for (Map.Entry<String, ?> entry: hashMap.entrySet()){
-                            ev.getLeft().add(entry.getKey() + ": " + TextFormatting.GREEN + entry.getValue());
-                        }
+                    Vec3d eyes = mc.thePlayer.getPositionEyes(1);
+                    Module module = ((MachineryFrame) mop.partHit).moduleHit(eyes, eyes.add(mc.thePlayer.getLookVec()));
+
+                    if (module != null) {
+                        for (HashMap<String, ?> hashMap : module.getDebugInfo())
+                            for (Map.Entry<String, ?> entry : hashMap.entrySet()) {
+                                ev.getLeft().add(entry.getKey() + ": " + TextFormatting.GREEN + entry.getValue());
+                            }
                     }
                 }
             }
         }
     }
 }
+
