@@ -20,6 +20,7 @@ import intricateengineers.intricatemachinery.api.module.BlockModel.IMBakedModel;
 import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.ModelBase;
 import intricateengineers.intricatemachinery.api.util.Logger;
+import io.netty.util.internal.EmptyArrays;
 import mcp.MethodsReturnNonnullByDefault;
 
 import net.minecraft.block.state.IBlockState;
@@ -99,6 +100,8 @@ public class BakedModelFrame implements IMBakedModel {
             }
             return quads;
         }
+        else
+            return new ArrayList<>();
     }
 
     @Override
