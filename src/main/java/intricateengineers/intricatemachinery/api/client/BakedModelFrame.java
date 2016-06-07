@@ -19,7 +19,7 @@ package intricateengineers.intricatemachinery.api.client;
 import intricateengineers.intricatemachinery.api.module.BlockModel.IMBakedModel;
 import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.ModelBase;
-
+import intricateengineers.intricatemachinery.api.util.Logger;
 import mcp.MethodsReturnNonnullByDefault;
 
 import net.minecraft.block.state.IBlockState;
@@ -97,8 +97,8 @@ public class BakedModelFrame implements IMBakedModel {
                 frame.getModules().forEach((module) -> quads1.addAll(module.getModel().getQuadHandler().getQuads(frame, module, rand)));
                 return quads1;
             }
+            return quads;
         }
-        return quads;
     }
 
     @Override

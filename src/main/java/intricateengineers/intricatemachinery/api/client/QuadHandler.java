@@ -19,7 +19,7 @@ package intricateengineers.intricatemachinery.api.client;
 import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.ModelBase;
 import intricateengineers.intricatemachinery.api.module.Module;
-
+import intricateengineers.intricatemachinery.api.util.Logger;
 import mcp.MethodsReturnNonnullByDefault;
 
 import net.minecraft.client.Minecraft;
@@ -29,6 +29,7 @@ import net.minecraft.client.renderer.block.model.BlockPartRotation;
 import net.minecraft.client.renderer.block.model.FaceBakery;
 import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
@@ -81,6 +82,7 @@ public class QuadHandler {
 
     @MethodsReturnNonnullByDefault
     public List<BakedQuad> getQuads(MachineryFrame frame, Module module, long rand) {
+
         if (module == null) {
             return this.quads;
         }
