@@ -47,7 +47,7 @@ version = (System.getenv("TRAVIS") ? "1.9-DEV-" + System.getenv('TRAVIS_BUILD_NU
 def versionName = (System.getenv("TRAVIS") ? "1.9-" + ref.mod_version + "-DEV-" +  System.getenv('TRAVIS_BUILD_NUMBER') : version)
 
 minecraft {
-    version = ref.mcf_version + "-1.9.4"
+    version = ref.mcf_version
     runDir = ref.run_dir
     mappings = ref.mappings
     replace '@MOD_NAME@', ref.mod_name

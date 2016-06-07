@@ -64,8 +64,8 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     private List<Module> modules = new ArrayList<>();
 
     public MachineryFrame() {
-        modules.add(new FurnaceModule(this){{setLocalPos(new Vec3d(3, 0, 1), (byte) 1);}});
-        modules.add(new DummyModule(this){{setLocalPos(new Vec3d(0, 5, 1), (byte) 3);}});
+        modules.add(new FurnaceModule(this){{setLocalPos(new Vec3d(3 / 16f, 0, 1 / 16f), (byte) 1);}});
+        modules.add(new DummyModule(this){{setLocalPos(new Vec3d(0, 5 / 16f, 1 / 16f), (byte) 3);}});
     }
 
     public List<Module> getModules() {

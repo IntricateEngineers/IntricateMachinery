@@ -1,6 +1,5 @@
 package intricateengineers.intricatemachinery.api.util;
 
-import intricateengineers.intricatemachinery.core.IntricateMachinery;
 import net.minecraft.client.Minecraft;
 import net.minecraft.crash.CrashReport;
 import net.minecraftforge.fml.common.FMLLog;
