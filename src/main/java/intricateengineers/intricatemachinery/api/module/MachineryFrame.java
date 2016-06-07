@@ -93,7 +93,7 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     }
 
     @Nullable
-    public Module modleHit(Vec3d start, Vec3d end) {
+    public Module moduleHit(Vec3d start, Vec3d end) {
         for (Module module : this.modules) {
             for (AxisAlignedBB bounds : module.getAABBs()) {
                 //TODO: it would probably be faster to offset the start and end vectors, instead of all the AABBs
