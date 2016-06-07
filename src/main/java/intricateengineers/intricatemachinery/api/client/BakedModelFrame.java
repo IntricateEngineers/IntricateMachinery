@@ -19,8 +19,6 @@ package intricateengineers.intricatemachinery.api.client;
 import intricateengineers.intricatemachinery.api.module.BlockModel.IMBakedModel;
 import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.ModelBase;
-import intricateengineers.intricatemachinery.api.util.Logger;
-import io.netty.util.internal.EmptyArrays;
 import mcp.MethodsReturnNonnullByDefault;
 
 import net.minecraft.block.state.IBlockState;
@@ -28,7 +26,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockPartFace;
 import net.minecraft.client.renderer.block.model.BlockPartRotation;
-import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelRotation;

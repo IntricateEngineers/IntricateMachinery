@@ -94,10 +94,12 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
 
     @Nullable
     public Module modleHit(Vec3d start, Vec3d end) {
+        Vec3d framePos = new Vec3d(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+        start = start.add(framePos);
+        end = end.add(framePos);
         for (Module module : this.modules) {
             for (AxisAlignedBB bounds : module.getAABBs()) {
-                //TODO: it would probably be faster to offset the start and end vectors, instead of all the AABBs
-                RayTraceResult rt = bounds.offset(module.posX, module.posY, module.posZ).calculateIntercept(start, end);
+                RayTraceResult rt = bounds.offset(module.posX / 16f, module.posY / 16f, module.posZ / 16f).calculateIntercept(start, end);
                 if (rt != null) {
                     return module;
                 }
