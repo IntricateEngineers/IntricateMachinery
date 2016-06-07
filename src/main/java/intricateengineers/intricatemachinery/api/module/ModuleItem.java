@@ -64,7 +64,7 @@ public class ModuleItem extends Item {
     public boolean placeInFrame(MachineryFrame frame, ItemStack stack, EntityPlayer player, EnumHand hand, EnumFacing facing, Vector3f hit) {
         //TODO: Place at correct positions
         try {
-            frame.addModule(Modules.newModule(name));
+			frame.addModule(Modules.newModule(name, frame));
             return true;
         } catch (Exception e) {
             e.printStackTrace();

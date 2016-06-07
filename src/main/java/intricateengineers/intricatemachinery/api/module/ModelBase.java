@@ -16,7 +16,6 @@
 
 package intricateengineers.intricatemachinery.api.module;
 
-import intricateengineers.intricatemachinery.api.client.BakedModelIM;
 import intricateengineers.intricatemachinery.api.client.util.UV;
 import intricateengineers.intricatemachinery.api.util.VectorUtils;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
@@ -37,7 +36,6 @@ public abstract class ModelBase {
     protected final List<Box> boxes = new ArrayList<>();
     protected final Box mainBox;
     @SideOnly(Side.CLIENT)
-    protected BakedModelIM bakedModel;
     public ModelBase() {
         this.init();
         this.mainBox = this.initMainBox();
@@ -63,14 +61,6 @@ public abstract class ModelBase {
         return mainBox;
     }
 
-    @SideOnly(Side.CLIENT)
-    public BakedModelIM getBakedModel() {
-        if (this.bakedModel == null) {
-            this.bakedModel = new BakedModelIM(this);
-        }
-        return this.bakedModel;
-    }
-
     public List<Box> getBoxes() {
         return boxes;
     }
@@ -90,7 +80,6 @@ public abstract class ModelBase {
         public final HashMap<EnumFacing, Pair<ResourceLocation, BlockFaceUV>> faces = new HashMap<>();
         private final Vector3f boxFrom;
         private final Vector3f boxTo;
-        private AxisAlignedBB aabb = null;
 
         public Box(Vector3f boxFrom, Vector3f boxTo) {
             this.boxFrom = boxFrom;

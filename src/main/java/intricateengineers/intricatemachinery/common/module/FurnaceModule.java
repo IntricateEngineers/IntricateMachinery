@@ -20,7 +20,9 @@ import intricateengineers.intricatemachinery.api.client.util.UV;
 import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.ModelBase;
 import intricateengineers.intricatemachinery.api.module.Module;
+import intricateengineers.intricatemachinery.api.module.ModuleModel;
 import intricateengineers.intricatemachinery.core.ModInfo;
+
 import net.minecraft.util.ResourceLocation;
 
 import static net.minecraft.util.EnumFacing.*;
@@ -36,7 +38,7 @@ public class FurnaceModule extends Module {
         super("furnace", MODEL, parentFrame);
     }
 
-    public static class Model extends ModelBase {
+    public static class Model extends ModuleModel {
         private static ResourceLocation topTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_top");
         private static ResourceLocation sideTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_side");
         private static ResourceLocation frontTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/furnace_front_on");

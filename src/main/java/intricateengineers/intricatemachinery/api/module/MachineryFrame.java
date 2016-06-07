@@ -17,9 +17,7 @@
 package intricateengineers.intricatemachinery.api.module;
 
 import intricateengineers.intricatemachinery.api.client.BakedModelFrame;
-import intricateengineers.intricatemachinery.api.client.BakedModelIM;
 import intricateengineers.intricatemachinery.api.client.util.UV;
-import intricateengineers.intricatemachinery.api.module.ModelBase.Box;
 import intricateengineers.intricatemachinery.common.module.DummyModule;
 import intricateengineers.intricatemachinery.common.module.FurnaceModule;
 import intricateengineers.intricatemachinery.core.ModInfo;
@@ -58,7 +56,7 @@ import static net.minecraft.util.EnumFacing.*;
 public class MachineryFrame extends Multipart implements INormallyOccludingPart {
 
     public static final Property PROPERTY = new Property();
-    public static final ModelBase MODEL = new Model();
+    public static final BlockModel MODEL = new Model();
     public static final ResourceLocation NAME = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "machinery_frame");
     private final Module[][][] modulePositions = new Module[16][16][16];
     public Set<Map<String, ?>> debugInfo;
@@ -206,7 +204,7 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
         }
     }
 
-    private static class Model extends ModelBase {
+    private static class Model extends BlockModel {
 
         @Override
         public void init() {
@@ -300,11 +298,8 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
         }
 
         @Override
-        public BakedModelIM getBakedModel() {
-            if (this.bakedModel == null) {
-                this.bakedModel = new BakedModelFrame(this);
-            }
-            return this.bakedModel;
+        public BakedModelFrame initBakedModel() {
+            return new BakedModelFrame();
         }
     }
 }

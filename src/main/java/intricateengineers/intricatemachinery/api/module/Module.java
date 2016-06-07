@@ -34,12 +34,12 @@ import java.util.*;
 public abstract class Module implements ICapabilitySerializable<NBTTagCompound> {
     private final ResourceLocation name;
     private final MachineryFrame frame;
-    private final ModelBase model;
+    private final ModuleModel model;
     public byte posX, posY, posZ, rotation;
     public Set<HashMap<String, ?>> debugInfo;
     private List<AxisAlignedBB> selectionBoxes = new ArrayList<>();
 
-    public Module(String name, ModelBase model, MachineryFrame parentFrame) {
+    public Module(String name, ModuleModel model, MachineryFrame parentFrame) {
         this.name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), name);
         this.model = model;
         this.debugInfo = initDebugInfo();
@@ -61,7 +61,7 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
         return frame;
     }
 
-    public ModelBase getModel() {
+    public ModuleModel getModel() {
         return model;
     }
 
@@ -185,11 +185,4 @@ public abstract class Module implements ICapabilitySerializable<NBTTagCompound> 
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         return null;
     }
-
-    /**
-     * Returns the item that is used to place this module.
-     * The item should be a static final field in the module class.
-     */
-    public abstract ModuleItem getItem();
-
 }

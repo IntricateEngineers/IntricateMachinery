@@ -65,7 +65,7 @@ public class FrameRenderer extends MultipartSpecialRenderer<MachineryFrame> {
 
         BlockPos pos = frame.getPos();
         buffer.setTranslation(x - pos.getX(), y - pos.getY(), z - pos.getZ());
-        renderer.renderModel(frame.getWorld(), MachineryFrame.MODEL.getBakedModel(), frame.getExtendedState(this.baseState), pos, buffer, false, 52L );
+        renderer.renderModel(frame.getWorld(), MachineryFrame.MODEL.getQuadHandler(), frame.getExtendedState(this.baseState), pos, buffer, false, 52L );
         buffer.setTranslation(0, 0, 0);
     }
 }

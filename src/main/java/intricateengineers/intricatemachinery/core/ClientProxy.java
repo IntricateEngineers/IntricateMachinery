@@ -89,9 +89,9 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
-        FurnaceModule.MODEL.getBakedModel().initTextures();
+        FurnaceModule.MODEL.getQuadHandler().initTextures();
         FurnaceModule.MODEL.init();
-        DummyModule.MODEL.getBakedModel().initTextures();
+        DummyModule.MODEL.getQuadHandler().initTextures();
         DummyModule.MODEL.init();
         MachineryFrame.MODEL.getBakedModel().initTextures();
         MachineryFrame.MODEL.init();
@@ -99,8 +99,8 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Post event) {
-        FurnaceModule.MODEL.getBakedModel().initQuads();
-        DummyModule.MODEL.getBakedModel().initQuads();
+        FurnaceModule.MODEL.getQuadHandler().initQuads();
+        DummyModule.MODEL.getQuadHandler().initQuads();
         MachineryFrame.MODEL.getBakedModel().initQuads();
     }
 

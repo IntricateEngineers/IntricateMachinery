@@ -18,9 +18,10 @@ package intricateengineers.intricatemachinery.common.module;
 
 import intricateengineers.intricatemachinery.api.client.util.UV;
 import intricateengineers.intricatemachinery.api.module.MachineryFrame;
-import intricateengineers.intricatemachinery.api.module.ModelBase;
 import intricateengineers.intricatemachinery.api.module.Module;
+import intricateengineers.intricatemachinery.api.module.ModuleModel;
 import intricateengineers.intricatemachinery.core.ModInfo;
+
 import net.minecraft.util.ResourceLocation;
 
 import static net.minecraft.util.EnumFacing.*;
@@ -38,7 +39,7 @@ public class DummyModule extends Module {
         super("dummy", MODEL, parentFrame);
     }
 
-    public static class Model extends ModelBase {
+    public static class Model extends ModuleModel {
         private static ResourceLocation texture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "blocks/dummy");
 
         @Override

@@ -16,40 +16,44 @@
 
 package intricateengineers.intricatemachinery.api.client;
 
+import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.ModelBase;
+import intricateengineers.intricatemachinery.api.module.Module;
+
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.state.IBlockState;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.BlockPartFace;
+import net.minecraft.client.renderer.block.model.BlockPartRotation;
+import net.minecraft.client.renderer.block.model.FaceBakery;
+import net.minecraft.client.renderer.block.model.ModelRotation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.util.vector.Vector3f;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class BakedModelIM implements IBakedModel {
+public class QuadHandler {
 
     protected static final FaceBakery faceBakery = new FaceBakery();
-    protected final ResourceLocation particle;
     protected final List<BakedQuad> quads = new ArrayList<>();
     protected ModelBase model;
 
-    public BakedModelIM(ModelBase model) {
+    public QuadHandler(ModelBase model) {
         this.model = model;
-        this.particle = TextureMap.LOCATION_MISSING_TEXTURE;
     }
 
     public void initQuads() {
         quads.clear();
-        for (ModelBase.Box box : model.getBoxes()) {
+        for (ModelBase.Box box : this.model.getBoxes()) {
             for (EnumFacing face : EnumFacing.values()) {
                 Pair<Vector3f, Vector3f> vecs = box.getFace(face);
                 if (vecs.getLeft() == null) {
@@ -66,7 +70,7 @@ public class BakedModelIM implements IBakedModel {
     }
 
     public void initTextures() {
-        for (ModelBase.Box box : model.getBoxes()) {
+        for (ModelBase.Box box : this.model.getBoxes()) {
             for (EnumFacing face : EnumFacing.values()) {
                 if (box.faces.get(face) != null) {
                     Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(box.faces.get(face).getLeft());
@@ -75,19 +79,8 @@ public class BakedModelIM implements IBakedModel {
         }
     }
 
-    // TODO: Cache the displaced quads so this doesn't run for every side on placement. Hack it up for now (it works)
-    @Override
     @MethodsReturnNonnullByDefault
-    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-        // Hack in question. Only run when when side is null (ie. once for each box)
-        if (side != null){
-            return new ArrayList<>();
-        }
-
-        IMModule module = null;
-        if (state instanceof IExtendedBlockState) {
-            module = ((IExtendedBlockState) state).getValue(IMModule.PROPERTY);
-        }
+    public List<BakedQuad> getQuads(MachineryFrame frame, Module module, long rand) {
         if (module == null) {
             return this.quads;
         }
@@ -112,38 +105,5 @@ public class BakedModelIM implements IBakedModel {
         }
 
         return quads1; 
-	}
-
-    @Override
-    public boolean isAmbientOcclusion() {
-        return true;
-    }
-
-    @Override
-    public boolean isGui3d() {
-        return true;
-    }
-
-    @Override
-    public boolean isBuiltInRenderer() {
-        return false;
-    }
-
-    @Override
-    @MethodsReturnNonnullByDefault
-    public TextureAtlasSprite getParticleTexture() {
-        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(particle.toString());
-    }
-
-    @Override
-    @Deprecated
-    @MethodsReturnNonnullByDefault
-    public ItemCameraTransforms getItemCameraTransforms() {
-        return ItemCameraTransforms.DEFAULT;
-    }
-
-    @Override
-    public ItemOverrideList getOverrides() {
-        return ItemOverrideList.NONE;
     }
 }
