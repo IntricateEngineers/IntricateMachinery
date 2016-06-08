@@ -44,4 +44,36 @@ public class Topitils {
             return false;
         }
     }
+
+    /**
+     * This is a magic method.
+     * It will try to run the passed Runnable, catching any exceptions.
+     * @param runnable the runnable to run
+     * @return true if no exception was thrown
+     */
+    public static boolean catchIgnore(Runnable runnable) {
+        try {
+            runnable.run();
+            return true;
+        } catch(Throwable e) {
+            return false;
+        }
+    }
+
+    /**
+     * This is a magic method.
+     * It will try to run the passed Runnable, catching any exceptions,
+     * and logging their stacktrace using the mods own Logger.
+     * @param runnable the runnable to run.
+     * @return true if no exceptions where thrown.
+     */
+    public static final boolean catchLog(Runnable runnable) {
+        try {
+            runnable.run();
+            return true;
+        } catch(Throwable e) {
+            Logger.error("This is Topitils! We have caught an exception for you! Heres your stacktrace: %n %s", e.getStackTrace().toString());
+            return false;
+        }
+    }
 }
