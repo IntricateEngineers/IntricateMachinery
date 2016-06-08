@@ -93,9 +93,9 @@ public class MachineryFrame extends Multipart implements INormallyOccludingPart 
     }
 
     @Nullable
-    public Module modleHit(Vec3d start, Vec3d end) {
+    public Module moduleHit(Vec3d start, Vec3d end) {
         Vec3d framePos = new Vec3d(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
-        start = start.add(framePos);
+        start = start.subtract(framePos);
         end = end.add(framePos);
         for (Module module : this.modules) {
             for (AxisAlignedBB bounds : module.getAABBs()) {

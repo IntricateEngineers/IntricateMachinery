@@ -18,7 +18,10 @@ package intricateengineers.intricatemachinery.client.event;
 
 import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.Module;
+import intricateengineers.intricatemachinery.api.util.Topitils;
+
 import mcmultipart.raytrace.PartMOP;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -45,8 +48,7 @@ public class DebugRenderHandler {
                 && mc.gameSettings.showDebugInfo) {
             RenderGameOverlayEvent.Text ev = (RenderGameOverlayEvent.Text) event;
             RayTraceResult hit = mc.objectMouseOver;
-            if (hit != null && hit instanceof PartMOP) {
-                PartMOP mop = (PartMOP) hit;
+            Topitils.<PartMOP>tryCast(hit, (mop) -> {
                 if (mop.partHit instanceof MachineryFrame) {
                     ev.getLeft().add(TextFormatting.BOLD.toString() + TextFormatting.GREEN + "[Intricate Machinery]");
 
@@ -60,7 +62,7 @@ public class DebugRenderHandler {
                             }
                     }
                 }
-            }
+            });
         }
     }
 }
