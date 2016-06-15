@@ -26,8 +26,10 @@ import net.minecraftforge.fml.common.SidedProxy
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
-
 import java.io.File
+
+import intricateengineers.intricatemachinery.common.event.EventManager
+import intricateengineers.intricatemachinery.common.init.ModBlocks
 
 
 @SuppressWarnings("unused")
@@ -41,7 +43,6 @@ object IntricateMachinery {
             + net.minecraftforge.common.ForgeVersion.buildVersion + ",)after:mcmultipart"
 
     val config : Configuration
-    val eventManager : EventManager
 
     @SidedProxy(serverSide = ModInfo.PROXY_COMMON, clientSide = ModInfo.PROXY_CLIENT)
     val proxy : CommonProxy
@@ -49,10 +50,9 @@ object IntricateMachinery {
     @EventHandler
     def preInit(event : FMLPreInitializationEvent) = {
         config = new Configuration(new File(event.getModConfigurationDirectory(), ModInfo.MOD_ID + ".cfg"))
-        ModBlocks.init()
-        eventManager = new EventManager()
+        ModBlocks.init
 
-        MinecraftForge.EVENT_BUS.register(eventManager)
+        MinecraftForge.EVENT_BUS.register(new EventManager)
         MinecraftForge.EVENT_BUS.register(proxy)
         proxy.preInit(event)
     }
