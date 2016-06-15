@@ -17,7 +17,6 @@
 package intricateengineers.intricatemachinery.common.module;
 
 import intricateengineers.intricatemachinery.api.client.util.UV;
-import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.ModelBase;
 import intricateengineers.intricatemachinery.api.module.Module;
 import intricateengineers.intricatemachinery.api.module.ModuleModel;

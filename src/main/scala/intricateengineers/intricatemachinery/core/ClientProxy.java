@@ -16,8 +16,6 @@
 
 package intricateengineers.intricatemachinery.core;
 
-import intricateengineers.intricatemachinery.api.client.FrameRenderer;
-import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.client.event.DebugRenderHandler;
 import intricateengineers.intricatemachinery.common.module.DummyModule;
 import intricateengineers.intricatemachinery.common.module.FurnaceModule;
