@@ -42,6 +42,8 @@ import java.util.List
 import java.util.Map
 import java.util.Set
 import javax.annotation.Nullable
+
+import intricateengineers.intricatemachinery.api.model
 import net.minecraft.util.EnumFacing._
 
 object MachineryFrame {
@@ -94,16 +96,16 @@ object MachineryFrame {
 class MachineryFrame extends Multipart with INormallyOccludingPart {
   modules.add(new FurnaceModule((this)) {})
   modules.add(new DummyModule((this)) {})
-  var getModules: util.List[Module] = null
+  var getModules: util.List[model.Module] = null
   () {
     return modules
   }
-  final private val modulePositions: Array[Array[Array[Module]]] = new Array[Array[Array[Module]]](16, 16, 16)
+  final private val modulePositions: Array[Array[Array[model.Module]]] = new Array[Array[Array[model.Module]]](16, 16, 16)
   var debugInfo: util.Set[util.Map[String, _]] = null
   private val selectionBoxes: util.List[AxisAlignedBB] = new util.ArrayList[AxisAlignedBB]
-  private val modules: util.List[Module] = new util.ArrayList[Module]
+  private val modules: util.List[model.Module] = new util.ArrayList[model.Module]
 
-  def addModule(module: Module): Boolean = {
+  def addModule(module: model.Module): Boolean = {
     modules.add(module)
     return true
   }
@@ -121,7 +123,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
     else new RayTraceUtils.AdvancedRayTraceResultPart(result, this)
   }
 
-  @Nullable def moduleHit(start: Vec3d, end: Vec3d): Module = {
+  @Nullable def moduleHit(start: Vec3d, end: Vec3d): model.Module = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
     start = start.subtract(framePos)
     end = end.add(framePos)

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package intricateengineers.intricatemachinery.api.module;
+package intricateengineers.intricatemachinery.api.model;
 
+import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.core.ModInfo;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;

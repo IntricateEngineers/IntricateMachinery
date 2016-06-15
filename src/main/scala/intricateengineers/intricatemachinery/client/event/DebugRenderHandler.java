@@ -16,7 +16,7 @@
 
 package intricateengineers.intricatemachinery.client.event;
 
-import intricateengineers.intricatemachinery.api.module.Module;
+import intricateengineers.intricatemachinery.api.model.Module;
 
 import mcmultipart.raytrace.PartMOP;
 

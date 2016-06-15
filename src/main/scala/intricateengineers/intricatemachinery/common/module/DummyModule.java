@@ -16,8 +16,7 @@
 
 package intricateengineers.intricatemachinery.common.module;
 
-import intricateengineers.intricatemachinery.api.client.util.UV;
-import intricateengineers.intricatemachinery.api.module.Module;
+import intricateengineers.intricatemachinery.api.model.Module;
 import intricateengineers.intricatemachinery.api.module.ModuleModel;
 import intricateengineers.intricatemachinery.core.ModInfo;
 
