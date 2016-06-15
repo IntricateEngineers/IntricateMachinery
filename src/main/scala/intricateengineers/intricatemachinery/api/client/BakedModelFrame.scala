@@ -17,7 +17,6 @@ package intricateengineers.intricatemachinery.api.client
 
 import intricateengineers.intricatemachinery.api.module.BlockModel.IMBakedModel
 import intricateengineers.intricatemachinery.api.module.MachineryFrame
-import intricateengineers.intricatemachinery.api.module.ModelBase
 import mcp.MethodsReturnNonnullByDefault
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -33,15 +32,14 @@ import net.minecraftforge.common.property.IExtendedBlockState
 import javax.annotation.Nullable
 import org.apache.commons.lang3.tuple.Pair
 import org.lwjgl.util.vector.Vector3f
-import java.util.ArrayList
-import java.util.List
+
+import scala.collection.JavaConversions._
 
 class BakedModelFrame extends IMBakedModel {
-  final protected val quads: util.List[BakedQuad] = new util.ArrayList[BakedQuad]
+  final protected val quads: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
 
   def initQuads {
     quads.clear
-    import scala.collection.JavaConversions._
     for (box <- MachineryFrame.MODEL.getBoxes) {
       for (face <- EnumFacing.values) {
         val vecs: Pair[Vector3f, Vector3f] = box.getFace(face)
@@ -59,7 +57,6 @@ class BakedModelFrame extends IMBakedModel {
   }
 
   def initTextures {
-    import scala.collection.JavaConversions._
     for (box <- MachineryFrame.MODEL.getBoxes) {
       for (face <- EnumFacing.values) {
         if (box.faces.get(face) != null) {
@@ -69,21 +66,21 @@ class BakedModelFrame extends IMBakedModel {
     }
   }
 
-  @MethodsReturnNonnullByDefault def getQuads(@Nullable state: IBlockState, @Nullable side: EnumFacing, rand: Long): util.List[BakedQuad] = {
+  @MethodsReturnNonnullByDefault def getQuads(@Nullable state: IBlockState, @Nullable side: EnumFacing, rand: Long): java.util.List[BakedQuad] = {
     if (side != null) {
-      return new util.ArrayList[BakedQuad]
+      return new java.util.ArrayList[BakedQuad]
     }
     if (state.isInstanceOf[IExtendedBlockState]) {
-      val frame: MachineryFrame = (state.asInstanceOf[IExtendedBlockState]).getValue(MachineryFrame.PROPERTY)
+      val frame: MachineryFrame = state.asInstanceOf[IExtendedBlockState].getValue(MachineryFrame.PROPERTY)
       if (frame != null) {
-        val quads1: util.List[BakedQuad] = new util.ArrayList[BakedQuad]
+        val quads1: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
         quads1.addAll(quads)
-        frame.getModules.forEach((module) -> quads1.addAll(module.getModel().getQuadHandler().getQuads(frame, module, rand)))
+        frame.getModules.foreach(module => quads1.addAll(module.getModel().getQuadHandler().getQuads(frame, module, rand)))
         return quads1
       }
       return quads
     }
-    else return new util.ArrayList[BakedQuad]
+    else return new java.util.ArrayList[BakedQuad]
   }
 
   def isAmbientOcclusion: Boolean = {

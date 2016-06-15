@@ -37,14 +37,12 @@ import net.minecraft.util.math.Vec3d
 import net.minecraftforge.common.property.ExtendedBlockState
 import net.minecraftforge.common.property.IExtendedBlockState
 import net.minecraftforge.common.property.IUnlistedProperty
-import java.util.ArrayList
-import java.util.List
-import java.util.Map
-import java.util.Set
 import javax.annotation.Nullable
 
 import intricateengineers.intricatemachinery.api.model
 import net.minecraft.util.EnumFacing._
+
+import scala.collection.JavaConversions._
 
 object MachineryFrame {
   val PROPERTY: MachineryFrame.Property = new MachineryFrame.Property
@@ -52,21 +50,13 @@ object MachineryFrame {
   val NAME: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "machinery_frame")
 
   private class Property extends IUnlistedProperty[MachineryFrame] {
-    def getName: String = {
-      return "machinery_frame"
-    }
+    def getName: String = "machinery_frame"
 
-    def isValid(value: MachineryFrame): Boolean = {
-      return true
-    }
+    def isValid(value: MachineryFrame): Boolean = true
 
-    def getType: Class[MachineryFrame] = {
-      return classOf[MachineryFrame]
-    }
+    def getType: Class[MachineryFrame] = classOf[MachineryFrame]
 
-    def valueToString(value: MachineryFrame): String = {
-      return value.toString
-    }
+    def valueToString(value: MachineryFrame): String = value.toString
   }
 
   private class Model extends BlockModel {
@@ -86,9 +76,7 @@ object MachineryFrame {
       += (vec(1, 15, 15), vec(15, 16, 16)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
     }
 
-    def initBakedModel: BakedModelFrame = {
-      return new BakedModelFrame
-    }
+    def initBakedModel: BakedModelFrame = new BakedModelFrame
   }
 
 }
@@ -96,42 +84,35 @@ object MachineryFrame {
 class MachineryFrame extends Multipart with INormallyOccludingPart {
   modules.add(new FurnaceModule((this)) {})
   modules.add(new DummyModule((this)) {})
-  var getModules: util.List[model.Module] = null
-  () {
-    return modules
-  }
+  var getModules: java.util.List[model.Module] = modules
+
   final private val modulePositions: Array[Array[Array[model.Module]]] = new Array[Array[Array[model.Module]]](16, 16, 16)
-  var debugInfo: util.Set[util.Map[String, _]] = null
-  private val selectionBoxes: util.List[AxisAlignedBB] = new util.ArrayList[AxisAlignedBB]
-  private val modules: util.List[model.Module] = new util.ArrayList[model.Module]
+  var debugInfo: java.util.Set[java.util.Map[String, _]] = null
+  private val selectionBoxes: java.util.List[AxisAlignedBB] = new java.util.ArrayList[AxisAlignedBB]
+  private val modules: java.util.List[model.Module] = new java.util.ArrayList[model.Module]
 
   def addModule(module: model.Module): Boolean = {
     modules.add(module)
     return true
   }
 
-  override def getType: ResourceLocation = {
-    return MachineryFrame.NAME
-  }
+  override def getType: ResourceLocation = MachineryFrame.NAME
 
   override def collisionRayTrace(start: Vec3d, end: Vec3d): RayTraceUtils.AdvancedRayTraceResultPart = {
     if (selectionBoxes.isEmpty) {
       addSelectionBoxes(selectionBoxes)
     }
     val result: RayTraceUtils.AdvancedRayTraceResult = RayTraceUtils.collisionRayTrace(getWorld, getPos, start, end, selectionBoxes)
-    return if (result == null) null
+
+    if (result == null) null
     else new RayTraceUtils.AdvancedRayTraceResultPart(result, this)
   }
 
   @Nullable def moduleHit(start: Vec3d, end: Vec3d): model.Module = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
-    start = start.subtract(framePos)
-    end = end.add(framePos)
-    import scala.collection.JavaConversions._
     for (module <- this.modules) {
-      import scala.collection.JavaConversions._
       for (bounds <- module.getAABBs) {
-        val rt: RayTraceResult = bounds.offset(module.posX / 16f, module.posY / 16f, module.posZ / 16f).calculateIntercept(start, end)
+        val rt: RayTraceResult = bounds.offset(module.posX / 16f, module.posY / 16f, module.posZ / 16f).calculateIntercept(start.subtract(framePos), end.add(framePos))
         if (rt != null) {
           return module
         }
@@ -140,9 +121,9 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
     return null
   }
 
-  override def addSelectionBoxes(list: util.List[AxisAlignedBB]) {
-    MachineryFrame.MODEL.getBoxes.forEach((box) -> list.add(box.toAABB(0, 0, 0)))
-    modules.forEach((module) -> module.addSelectionBoxes(list))
+  override def addSelectionBoxes(list: java.util.List[AxisAlignedBB]) {
+    MachineryFrame.MODEL.getBoxes.foreach(box => list.add(box.toAABB(0, 0, 0)))
+    modules.foreach(module => module.addSelectionBoxes(list))
   }
 
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
@@ -154,7 +135,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
         modules.setTag(String.valueOf(i), this.modules.get(i).serializeNBT)
       }
       ({
-        i += 1; i - 1
+        i += 1; i - 1   // wut
       })
     }
     tag.setTag("modules", modules)
@@ -169,7 +150,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
       {
       }
       ({
-        i += 1; i - 1
+        i += 1; i - 1   // wut
       })
     }
   }
@@ -181,22 +162,19 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
   }
 
   override def createBlockState: BlockStateContainer = {
-    return new ExtendedBlockState(MCMultiPartMod.multipart, new Array[IProperty[_ <: Comparable[T]]](0), Array[IUnlistedProperty[_]](MachineryFrame.PROPERTY))
+    new ExtendedBlockState(MCMultiPartMod.multipart, new Array[IProperty[_]](0), Array[IUnlistedProperty[_]](MachineryFrame.PROPERTY))
   }
 
-  override def getActualState(state: IBlockState): IBlockState = {
-    return state
-  }
+  override def getActualState(state: IBlockState): IBlockState = state
+
 
   override def getExtendedState(state: IBlockState): IBlockState = {
-    return (state.asInstanceOf[IExtendedBlockState]).withProperty(MachineryFrame.PROPERTY, this)
+    state.asInstanceOf[IExtendedBlockState].withProperty(MachineryFrame.PROPERTY, this)
   }
 
-  def addOcclusionBoxes(list: util.List[AxisAlignedBB]) {
+  def addOcclusionBoxes(list: java.util.List[AxisAlignedBB]) {
     list.add(MachineryFrame.MODEL.mainBox.toAABB(0, 0, 0))
   }
 
-  def getDebugInfo: util.Set[util.Map[String, _]] = {
-    return debugInfo
-  }
+  def getDebugInfo: java.util.Set[java.util.Map[String, _]] = debugInfo
 }
