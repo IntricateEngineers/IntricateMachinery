@@ -24,13 +24,13 @@ class QuadHandler(model : ModelBase) {
     _quads.clear
     for (box <- model.boxes) {
       for (face <- EnumFacing.values) {
-        var vecs = box.faceVecs(face)
+        val vecs = box.faceVecs(face)
         if (vecs != null) {
-          var texture = Minecraft.getMinecraft.getTextureMapBlocks
+          val texture = Minecraft.getMinecraft.getTextureMapBlocks
             .getAtlasSprite(box.faces(face)._1.toString)
-          var partFace = new BlockPartFace(null, 0, "", box.faces(face)._2)
-          var mr = ModelRotation.X0_Y0
-          var bpRot : BlockPartRotation = null
+          val partFace = new BlockPartFace(null, 0, "", box.faces(face)._2)
+          val mr = ModelRotation.X0_Y0
+          val bpRot : BlockPartRotation = null
           var quad = QuadHandler.FaceBakery.makeBakedQuad(
             vecs._1,
             vecs._2,
@@ -61,11 +61,11 @@ class QuadHandler(model : ModelBase) {
   def quads(frame: MachineryFrame, module: Module, rand: Long): List[BakedQuad] = {
     var quads1 = new ArrayBuffer[BakedQuad]
     for (quad <- _quads) {
-      var vertexData = quad.getVertexData.clone
+      val vertexData = quad.getVertexData.clone
       for (i <- 0 until 28 by 7) {
-        var x = java.lang.Float.intBitsToFloat(vertexData(i))
-        var y = java.lang.Float.intBitsToFloat(vertexData(i + 1))
-        var z = java.lang.Float.intBitsToFloat(vertexData(i + 2))
+        val x = java.lang.Float.intBitsToFloat(vertexData(i))
+        val y = java.lang.Float.intBitsToFloat(vertexData(i + 1))
+        val z = java.lang.Float.intBitsToFloat(vertexData(i + 2))
 
         vertexData(i) = java.lang.Float.floatToRawIntBits(x + (module.posX / 16f))
         vertexData(i + 1) = java.lang.Float.floatToRawIntBits(y + (module.posY / 16f))
