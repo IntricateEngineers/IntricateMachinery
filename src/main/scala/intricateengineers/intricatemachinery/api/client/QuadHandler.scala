@@ -3,7 +3,8 @@ package intricateengineers.intricatemachinery.api.client
 import net.minecraftforge.fml.relauncher.SideOnly
 import net.minecraft.client.renderer.block.model.FaceBakery
 import net.minecraftforge.fml.relauncher.Side
-import intricateengineers.intricatemachinery.api.model.ModelBase
+import intricateengineers.intricatemachinery.api.model.{ModelBase, Module}
+
 import scala.collection.mutable.ArrayBuffer
 import net.minecraft.client.renderer.block.model.BakedQuad
 import net.minecraft.util.EnumFacing
@@ -11,7 +12,6 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.BlockPartFace
 import net.minecraft.client.renderer.block.model.ModelRotation
 import net.minecraft.client.renderer.block.model.BlockPartRotation
-import intricateengineers.intricatemachinery.api.module.Module
 import intricateengineers.intricatemachinery.api.module.MachineryFrame
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 
