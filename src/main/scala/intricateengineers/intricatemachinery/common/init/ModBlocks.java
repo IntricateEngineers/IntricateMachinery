@@ -16,7 +16,6 @@
 
 package intricateengineers.intricatemachinery.common.init;
 
-import intricateengineers.intricatemachinery.api.module.MachineryFrame;
 import intricateengineers.intricatemachinery.api.module.Module;
 import intricateengineers.intricatemachinery.common.util.gui.IMCreativeTab;
 import intricateengineers.intricatemachinery.core.ModInfo;
