@@ -31,7 +31,7 @@ class QuadHandler(model : ModelBase) {
           val partFace = new BlockPartFace(null, 0, "", box.faces(face)._2)
           val mr = ModelRotation.X0_Y0
           val bpRot : BlockPartRotation = null
-          var quad = QuadHandler.FaceBakery.makeBakedQuad(
+          val quad = QuadHandler.FaceBakery.makeBakedQuad(
             vecs._1,
             vecs._2,
             partFace,
@@ -62,7 +62,7 @@ class QuadHandler(model : ModelBase) {
     var quads1 = new ArrayBuffer[BakedQuad]
     for (quad <- _quads) {
       val vertexData = quad.getVertexData.clone
-      for (i <- 0 until 4*7 by 7) {
+      for (i <- 0 until 28 by 7) {
         val x = java.lang.Float.intBitsToFloat(vertexData(i))
         val y = java.lang.Float.intBitsToFloat(vertexData(i + 1))
         val z = java.lang.Float.intBitsToFloat(vertexData(i + 2))
@@ -73,7 +73,7 @@ class QuadHandler(model : ModelBase) {
       }
       quads1 += new BakedQuad(vertexData, quad.getTintIndex, quad.getFace, quad.getSprite, quad.shouldApplyDiffuseLighting, DefaultVertexFormats.ITEM)
     }
-    return quads1.toList
+    quads1.toList
   }
 }
 

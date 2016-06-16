@@ -9,13 +9,13 @@ import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializab
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
-abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound] {
+class Module(val frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound] {
 
   val name: ResourceLocation
   val model: ModuleModel
 
   val boundingboxes = ArrayBuffer[AxisAlignedBB]
-  var debugInfo: Map[String, List[String]]
+  var debugInfo: List[Map[String, String]]
 
   onUpdate()
 
@@ -58,7 +58,7 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
   }
 
   protected def initBoundingBoxes(): List[AxisAlignedBB] = {
-    model.boxes.map(_.toAABB())
+    model.boxes.map(_.aabb()).toList
   }
 
   def initDebugInfo(): List[Map[String, String]] = {
@@ -75,34 +75,42 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
     List(hashMapName, hashMapPosAndRot)
   }
 
-  /**
-    * Determines if this object has support for the capability in question on the specific side.
-    * The return value of this MIGHT change during runtime if this object gains or looses support
-    * for a capability.
-    *
-    * Example:
-    * A Pipe getting a cover placed on one side causing it loose the Inventory attachment function for that side.
-    *
-    * This is a light weight version of getCapability, intended for metadata uses.
-    *
-    * @param capability The capability to check
-    * @param facing     The Side to check from:
-    *                   CAN BE NULL. Null is defined to represent 'internal' or 'self'
-    * @return True if this object supports the capability.
-    */
-  override def hasCapability(capability: Capability[_], facing: EnumFacing): Boolean = false
+  def serializeNBT: NBTTagCompound = {
+    val tag: NBTTagCompound = new NBTTagCompound
+    val pos: NBTTagCompound = new NBTTagCompound
+    pos.setByte("x", posInFrame._1)
+    pos.setByte("y", posInFrame._2)
+    pos.setByte("z", posInFrame._3)
+    pos.setByte("rot", rotation)
+    tag.setTag("module_pos", pos)
+    this.writeNBT(tag)
+    tag
+  }
 
-  /**
-    * Retrieves the handler for the capability requested on the specific side.
-    * The return value CAN be null if the object does not support the capability.
-    * The return value CAN be the same for multiple faces.
-    *
-    * @param capability The capability to check
-    * @param facing     The Side to check from:
-    *                   CAN BE NULL. Null is defined to represent 'internal' or 'self'
-    * @return True if this object supports the capability.
-    */
-  override def getCapability[T](capability: Capability[T], facing: EnumFacing): T = capability.asInstanceOf
+  def deserializeNBT(tag: NBTTagCompound) {
+    val pos: NBTTagCompound = tag.getCompoundTag("module_pos")
+    _posInFrame = (pos.getByte("x"), pos.getByte("y"), pos.getByte("z"))
+    _rotation = pos.getByte("rot")
+    readNBT(tag)
+    onUpdate()
+  }
+
+  def writeNBT(tag: NBTTagCompound): NBTTagCompound = {
+    val retrn: Any = retrn
+    tag
+  }
+
+  def readNBT(tag: NBTTagCompound) {
+  }
+
+  def hasCapability(capability: Capability[_], facing: EnumFacing): Boolean = {
+    false
+  }
+
+  def getCapability[T](capability: Capability[T], facing: EnumFacing): T = {
+    // Arbitrary stuff, it compiles
+    return new T
+  }
 }
 
 object Module {
