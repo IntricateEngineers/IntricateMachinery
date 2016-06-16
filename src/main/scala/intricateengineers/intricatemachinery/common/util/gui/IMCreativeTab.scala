@@ -9,7 +9,5 @@ object IMCreativeTab {
 }
 
 class IMCreativeTab(val index: Int, val label: String) extends CreativeTabs(index, label) {
-    def getTabIconItem: Item = {
-        return Item.getItemFromBlock(Blocks.PISTON)
-    }
+    def getTabIconItem: Item = Item.getItemFromBlock(Blocks.PISTON)
 }

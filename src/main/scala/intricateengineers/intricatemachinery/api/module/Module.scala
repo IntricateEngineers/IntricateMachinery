@@ -2,9 +2,9 @@ package intricateengineers.intricatemachinery.api.module
 
 import intricateengineers.intricatemachinery.api.model.ModuleModel
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.ResourceLocation
+import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraft.util.math.AxisAlignedBB
-import net.minecraftforge.common.capabilities.ICapabilitySerializable
+import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializable}
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
@@ -75,6 +75,34 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
     List(hashMapName, hashMapPosAndRot)
   }
 
+  /**
+    * Determines if this object has support for the capability in question on the specific side.
+    * The return value of this MIGHT change during runtime if this object gains or looses support
+    * for a capability.
+    *
+    * Example:
+    * A Pipe getting a cover placed on one side causing it loose the Inventory attachment function for that side.
+    *
+    * This is a light weight version of getCapability, intended for metadata uses.
+    *
+    * @param capability The capability to check
+    * @param facing     The Side to check from:
+    *                   CAN BE NULL. Null is defined to represent 'internal' or 'self'
+    * @return True if this object supports the capability.
+    */
+  override def hasCapability(capability: Capability[_], facing: EnumFacing): Boolean = false
+
+  /**
+    * Retrieves the handler for the capability requested on the specific side.
+    * The return value CAN be null if the object does not support the capability.
+    * The return value CAN be the same for multiple faces.
+    *
+    * @param capability The capability to check
+    * @param facing     The Side to check from:
+    *                   CAN BE NULL. Null is defined to represent 'internal' or 'self'
+    * @return True if this object supports the capability.
+    */
+  override def getCapability[T](capability: Capability[T], facing: EnumFacing): T = capability.asInstanceOf
 }
 
 object Module {

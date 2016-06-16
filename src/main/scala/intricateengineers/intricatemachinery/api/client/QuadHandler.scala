@@ -12,7 +12,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.BlockPartFace
 import net.minecraft.client.renderer.block.model.ModelRotation
 import net.minecraft.client.renderer.block.model.BlockPartRotation
-import intricateengineers.intricatemachinery.api.module.MachineryFrame
+import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 
 @SideOnly(Side.CLIENT)
@@ -62,7 +62,7 @@ class QuadHandler(model : ModelBase) {
     var quads1 = new ArrayBuffer[BakedQuad]
     for (quad <- _quads) {
       val vertexData = quad.getVertexData.clone
-      for (i <- 0 until 28 by 7) {
+      for (i <- 0 until 4*7 by 7) {
         val x = java.lang.Float.intBitsToFloat(vertexData(i))
         val y = java.lang.Float.intBitsToFloat(vertexData(i + 1))
         val z = java.lang.Float.intBitsToFloat(vertexData(i + 2))
