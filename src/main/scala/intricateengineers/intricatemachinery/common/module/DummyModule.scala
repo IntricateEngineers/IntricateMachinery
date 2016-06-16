@@ -34,11 +34,14 @@ object DummyModule {
     class Model extends ModuleModel {
         def init {
             this.boxes.clear
-            addBox(vec(0, 0, 0), vec(8, 8, 8)).setFace(NORTH, Model.texture, UV.fill).setFace(EAST, Model.texture, UV.fill).setFace(SOUTH, Model.texture, UV.fill).setFace(WEST, Model.texture, UV.fill).setFace(UP, Model.texture, UV.fill).setFace(DOWN, Model.texture, UV.fill)
+            += (vec(0, 0, 0), vec(8, 8, 8)).setFace(NORTH, Model.texture, UV.fill).setFace(EAST, Model.texture, UV.fill).setFace(SOUTH, Model.texture, UV.fill).setFace(WEST, Model.texture, UV.fill).setFace(UP, Model.texture, UV.fill).setFace(DOWN, Model.texture, UV.fill)
         }
     }
-
 }
 
-class DummyModule(val parentFrame: Nothing) extends Module("dummy", DummyModule.MODEL, parentFrame) {
+class DummyModule(val parentFrame: Nothing) extends {
+    val model = DummyModule.MODEL
+    val name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "dummy")
+} with Module(parentFrame) {
+
 }

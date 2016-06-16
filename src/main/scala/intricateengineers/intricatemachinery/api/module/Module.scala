@@ -1,6 +1,5 @@
 package intricateengineers.intricatemachinery.api.module
 
-import intricateengineers.intricatemachinery.api.model.ModuleModel
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraft.util.math.AxisAlignedBB
@@ -9,13 +8,13 @@ import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializab
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
 
-class Module(val frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound] {
+abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound] {
 
   val name: ResourceLocation
   val model: ModuleModel
 
-  val boundingboxes = ArrayBuffer[AxisAlignedBB]
-  var debugInfo: List[Map[String, String]]
+  val boundingBoxes = ArrayBuffer[AxisAlignedBB]
+  var debugInfo: Map[String, String]
 
   onUpdate()
 
@@ -30,7 +29,7 @@ class Module(val frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCo
   private var _rotation: Byte = Random.nextInt(3).toByte
 
   // Getters and setters
-  def posInFrame() = _posInFrame
+  def posInFrame = _posInFrame
 
   def posInFrame_=(vec: (Double, Double, Double)) = {
     _posInFrame = (
@@ -46,7 +45,7 @@ class Module(val frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCo
     onUpdate()
   }
 
-  def rotation() = _rotation
+  def rotation = _rotation
 
   def rotation_=(rotation: Byte): Unit = {
     _rotation = rotation
@@ -61,18 +60,19 @@ class Module(val frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCo
     model.boxes.map(_.aabb()).toList
   }
 
-  def initDebugInfo(): List[Map[String, String]] = {
+  def initDebugInfo: Map[String, String] = {
+    var debInfo: Map[String, String] = Map()
+
     // Name of the module
-    val hashMapName: Map[String, String] = Map("Name" -> name.getResourcePath)
+    debInfo += "Name" -> name.getResourcePath
 
     // Position in pixels in relation to current block
-    val hashMapPosAndRot: Map[String, String] = Map(
-      "posX" -> posInFrame._1,
-      "posY" -> posInFrame._2,
-      "posZ" -> posInFrame._3,
-      "rotation" -> rotation).mapValues(_.toString)
+    debInfo += "posX" -> posInFrame._1
+    debInfo += "posY" -> posInFrame._2
+    debInfo += "posZ" -> posInFrame._3
+    debInfo += "rotation" -> rotation
 
-    List(hashMapName, hashMapPosAndRot)
+    return debInfo
   }
 
   def serializeNBT: NBTTagCompound = {
@@ -109,7 +109,7 @@ class Module(val frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCo
 
   def getCapability[T](capability: Capability[T], facing: EnumFacing): T = {
     // Arbitrary stuff, it compiles
-    return new T
+    new T
   }
 }
 
