@@ -39,7 +39,7 @@ class BakedModelFrame extends IMBakedModel {
   final protected val quads: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
 
   def initQuads {
-    quads.clear
+    quads.clear()
     for (box <- MachineryFrame.MODEL.getBoxes) {
       for (face <- EnumFacing.values) {
         val vecs: Pair[Vector3f, Vector3f] = box.getFace(face)
@@ -83,27 +83,15 @@ class BakedModelFrame extends IMBakedModel {
     else return new java.util.ArrayList[BakedQuad]
   }
 
-  def isAmbientOcclusion: Boolean = {
-    return false
-  }
+  def isAmbientOcclusion: Boolean = false
 
-  def isGui3d: Boolean = {
-    return false
-  }
+  def isGui3d: Boolean = false
 
-  def isBuiltInRenderer: Boolean = {
-    return false
-  }
+  def isBuiltInRenderer: Boolean = false
 
-  def getParticleTexture: TextureAtlasSprite = {
-    return null
-  }
+  def getParticleTexture: TextureAtlasSprite = null
 
-  def getItemCameraTransforms: ItemCameraTransforms = {
-    return null
-  }
+  def getItemCameraTransforms: ItemCameraTransforms = null
 
-  def getOverrides: ItemOverrideList = {
-    return null
-  }
+  def getOverrides: ItemOverrideList = null
 }

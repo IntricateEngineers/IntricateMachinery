@@ -1,5 +1,6 @@
 package intricateengineers.intricatemachinery.api.module
 
+import intricateengineers.intricatemachinery.api.model.ModuleModel
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraft.util.math.AxisAlignedBB
@@ -44,6 +45,10 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
     _posInFrame = vec
     onUpdate()
   }
+
+  def posX = _posInFrame._1
+  def posY = _posInFrame._2
+  def posZ = _posInFrame._3
 
   def rotation = _rotation
 

@@ -3,7 +3,7 @@ package intricateengineers.intricatemachinery.api.client
 import net.minecraftforge.fml.relauncher.SideOnly
 import net.minecraft.client.renderer.block.model.FaceBakery
 import net.minecraftforge.fml.relauncher.Side
-import intricateengineers.intricatemachinery.api.model.{ModelBase, Module}
+import intricateengineers.intricatemachinery.api.model.ModelBase
 
 import scala.collection.mutable.ArrayBuffer
 import net.minecraft.client.renderer.block.model.BakedQuad

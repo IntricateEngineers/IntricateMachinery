@@ -20,10 +20,6 @@ import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.common.module.DummyModule
 import intricateengineers.intricatemachinery.common.module.FurnaceModule
 import intricateengineers.intricatemachinery.core.ModInfo
-import mcmultipart.MCMultiPartMod
-import mcmultipart.multipart.INormallyOccludingPart
-import mcmultipart.multipart.Multipart
-import mcmultipart.raytrace.RayTraceUtils
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.BlockStateContainer
 import net.minecraft.block.state.IBlockState
@@ -40,6 +36,9 @@ import net.minecraftforge.common.property.IUnlistedProperty
 import javax.annotation.Nullable
 
 import intricateengineers.intricatemachinery.api.model
+import mcmultipart.MCMultiPartMod
+import mcmultipart.multipart.{INormallyOccludingPart, Multipart}
+import mcmultipart.raytrace.RayTraceUtils
 import net.minecraft.util.EnumFacing._
 
 import scala.collection.JavaConversions._
@@ -84,14 +83,14 @@ object MachineryFrame {
 class MachineryFrame extends Multipart with INormallyOccludingPart {
   modules.add(new FurnaceModule((this)) {})
   modules.add(new DummyModule((this)) {})
-  var getModules: java.util.List[model.Module] = modules
+  var getModules: java.util.List[Module] = modules
 
-  final private val modulePositions: Array[Array[Array[model.Module]]] = new Array[Array[Array[model.Module]]](16, 16, 16)
+  final private val modulePositions: Array[Array[Array[Module]]] = new Array[Array[Array[model.Module]]](16, 16, 16)
   var debugInfo: java.util.Set[java.util.Map[String, _]] = null
   private val selectionBoxes: java.util.List[AxisAlignedBB] = new java.util.ArrayList[AxisAlignedBB]
-  private val modules: java.util.List[model.Module] = new java.util.ArrayList[model.Module]
+  private val modules: java.util.List[Module] = new java.util.ArrayList[Module]
 
-  def addModule(module: model.Module): Boolean = {
+  def addModule(module: Module): Boolean = {
     modules.add(module)
     return true
   }
@@ -108,7 +107,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
     else new RayTraceUtils.AdvancedRayTraceResultPart(result, this)
   }
 
-  @Nullable def moduleHit(start: Vec3d, end: Vec3d): model.Module = {
+  @Nullable def moduleHit(start: Vec3d, end: Vec3d): Module = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
     for (module <- this.modules) {
       for (bounds <- module.getAABBs) {
@@ -173,7 +172,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
   }
 
   def addOcclusionBoxes(list: java.util.List[AxisAlignedBB]) {
-    list.add(MachineryFrame.MODEL.mainBox.toAABB(0, 0, 0))
+    list.add(MachineryFrame.MODEL.mainBox.aabb(0, 0, 0))
   }
 
   def getDebugInfo: java.util.Set[java.util.Map[String, _]] = debugInfo
