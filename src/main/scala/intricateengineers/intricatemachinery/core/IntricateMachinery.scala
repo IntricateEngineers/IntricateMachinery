@@ -42,14 +42,14 @@ object IntricateMachinery {
             + net.minecraftforge.common.ForgeVersion.revisionVersion + '.'
             + net.minecraftforge.common.ForgeVersion.buildVersion + ",)after:mcmultipart"
 
-    val config : Configuration
+    //val config : Configuration
 
     @SidedProxy(serverSide = ModInfo.PROXY_COMMON, clientSide = ModInfo.PROXY_CLIENT)
-    val proxy : CommonProxy
+    val proxy : CommonProxy = null
 
     @EventHandler
-    def preInit(event : FMLPreInitializationEvent) = {
-        config = new Configuration(new File(event.getModConfigurationDirectory(), ModInfo.MOD_ID + ".cfg"))
+    def preInit(event : FMLPreInitializationEvent) {
+        ConfigIM.config = new Configuration(new File(event.getModConfigurationDirectory, ModInfo.MOD_ID + ".cfg"))
         ModBlocks.init
 
         MinecraftForge.EVENT_BUS.register(new EventManager)
@@ -62,11 +62,12 @@ object IntricateMachinery {
         proxy.init(event)
     }
 
-
     @EventHandler
     def postInit(event : FMLPostInitializationEvent) {
         proxy.postInit(event)
     }
 
-
+    object ConfigIM {
+        var config : Configuration = null
+    }
 }
