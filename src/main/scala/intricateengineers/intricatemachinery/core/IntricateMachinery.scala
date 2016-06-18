@@ -40,6 +40,9 @@ object IntricateMachinery {
             + net.minecraftforge.common.ForgeVersion.revisionVersion + '.'
             + net.minecraftforge.common.ForgeVersion.buildVersion + ",)after:mcmultipart"
 
+    @Instance(ModInfo.MOD_NAME)
+    var instance = this
+
     @SidedProxy(serverSide = ModInfo.PROXY_COMMON, clientSide = ModInfo.PROXY_CLIENT)
     val proxy : CommonProxy = null
 
