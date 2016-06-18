@@ -74,7 +74,7 @@ class BakedModelFrame extends IMBakedModel {
       if (frame != null) {
         val quads1: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
         quads1.addAll(quads)
-        frame.getModules.foreach(module => quads1.addAll(module.model.quadHandler.quads(frame, module, rand)))
+        frame.modules.foreach(module => quads1.addAll(module.model.quadHandler.quads(frame, module, rand)))
         return quads1
       }
       return quads

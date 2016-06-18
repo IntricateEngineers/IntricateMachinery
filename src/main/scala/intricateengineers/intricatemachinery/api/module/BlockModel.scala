@@ -1,5 +1,6 @@
 package intricateengineers.intricatemachinery.api.module
 
+import intricateengineers.intricatemachinery.api.client.BakedModelFrame
 import intricateengineers.intricatemachinery.api.model.{IMBakedModel, ModelBase}
 import net.minecraft.client.renderer.block.model.IBakedModel
 
@@ -18,10 +19,10 @@ abstract class BlockModel extends ModelBase {
 
   def getBakedModel: IMBakedModel = {
     if (this.bakedModel == null) {
-      this.bakedModel = this.initBakedModel
+      this.bakedModel = this.initBakedModel.asInstanceOf
     }
     this.bakedModel
   }
 
-  def initBakedModel: IMBakedModel
+  def initBakedModel: BakedModelFrame
 }

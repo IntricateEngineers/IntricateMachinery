@@ -36,7 +36,7 @@ object ModBlocks {
     def init {
         val item: ItemMultiPart = new ItemMultiPart() {
             def createPart(world: World, pos: BlockPos, side: EnumFacing, hit: Vec3d, stack: ItemStack, player: EntityPlayer): IMultipart = {
-                return new Nothing
+                null
             }
         }
         registerItem(item, "machinery_frame")

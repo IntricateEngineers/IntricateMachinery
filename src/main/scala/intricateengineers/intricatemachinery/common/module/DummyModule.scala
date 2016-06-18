@@ -17,25 +17,23 @@ package intricateengineers.intricatemachinery.common.module
 
 import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.api.model.ModuleModel
-import intricateengineers.intricatemachinery.api.module.Module
-import intricateengineers.intricatemachinery.api.module.ModuleModel
+import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
 import intricateengineers.intricatemachinery.core.ModInfo
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.EnumFacing._
 import net.minecraft.util.EnumFacing.DOWN
 import net.minecraft.util.EnumFacing.UP
 
-object DummyModule {
-  val Name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "dummy")
-}
+//object DummyModule {
+//  final val Name =
+//}
 
-class DummyModule(val parentFrame: Nothing) extends {
+class DummyModule(val parentFrame: MachineryFrame) extends {
   val model = DummyModel
-  val name = DummyModule.Name
+  val name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "dummy")
 } with Module(parentFrame) {
 
 }
-
 
 object DummyModel extends ModuleModel {
 

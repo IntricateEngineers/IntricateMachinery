@@ -8,6 +8,7 @@ import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializab
 
 import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import scala.reflect.ClassTag
 import scala.util.Random
 
 abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound] {
@@ -16,7 +17,7 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
   val model: ModuleModel
 
   val boundingBoxes: ListBuffer[AxisAlignedBB] = ListBuffer()
-  var debugInfo: mutable.Map[String, String] = null
+  private var _debugInfo: mutable.Map[String, String] = null
 
   onUpdate()
 
@@ -42,7 +43,8 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
     onUpdate()
   }
 
-  def posInFrame_=(vec: (Byte, Byte, Byte)) = {
+  // ClassTag to make the compiler differentiate this from the above overload
+  def posInFrame_=[X: ClassTag](vec: (Byte, Byte, Byte)) = {
     _posInFrame = vec
     onUpdate()
   }
@@ -58,25 +60,27 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
     onUpdate()
   }
 
+  def debugInfo = _debugInfo
+
   def onUpdate(): Unit = {
-    debugInfo = initDebugInfo
+    _debugInfo = initDebugInfo
   }
 
   protected def initBoundingBoxes(): List[AxisAlignedBB] = {
     model.boxes.map(_.aabb()).toList
   }
 
-  def initDebugInfo: Map[String, String] = {
-    var debInfo: Map[String, String] = Map()
+  def initDebugInfo: mutable.Map[String, String] = {
+    var debInfo: mutable.Map[String, String] = mutable.Map()
 
     // Name of the module
     debInfo += "Name" -> name.getResourcePath
 
     // Position in pixels in relation to current block
-    debInfo += "posX" -> posInFrame._1
-    debInfo += "posY" -> posInFrame._2
-    debInfo += "posZ" -> posInFrame._3
-    debInfo += "rotation" -> rotation
+    debInfo += "posX" -> posInFrame._1.toString
+    debInfo += "posY" -> posInFrame._2.toString
+    debInfo += "posZ" -> posInFrame._3.toString
+    debInfo += "rotation" -> rotation.toString
 
     return debInfo
   }
@@ -102,7 +106,7 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
   }
 
   def writeNBT(tag: NBTTagCompound): NBTTagCompound = {
-    val retrn: Any = retrn
+    val retrn: Any = null
     tag
   }
 
@@ -113,10 +117,7 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
     false
   }
 
-  def getCapability[T](capability: Capability[T], facing: EnumFacing): T = {
-    // Arbitrary stuff, it compiles
-    new T
-  }
+  def getCapability[T](capability: Capability[T], facing: EnumFacing): T = capability.asInstanceOf
 }
 
 object Module {

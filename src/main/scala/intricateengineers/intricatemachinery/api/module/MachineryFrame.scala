@@ -17,8 +17,7 @@ package intricateengineers.intricatemachinery.api.module
 
 import intricateengineers.intricatemachinery.api.client.BakedModelFrame
 import intricateengineers.intricatemachinery.api.client.util.UV
-import intricateengineers.intricatemachinery.common.module.DummyModule
-import intricateengineers.intricatemachinery.common.module.FurnaceModule
+import intricateengineers.intricatemachinery.common.module.{DummyModule, FurnaceModule}
 import intricateengineers.intricatemachinery.core.ModInfo
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.BlockStateContainer
@@ -50,7 +49,7 @@ object MachineryFrame {
   val MODEL: BlockModel = new MachineryFrame.Model
   val NAME: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "machinery_frame")
 
-  private class Property extends IUnlistedProperty[MachineryFrame] {
+  class Property extends IUnlistedProperty[MachineryFrame] {
     def getName: String = "machinery_frame"
 
     def isValid(value: MachineryFrame): Boolean = true
@@ -155,18 +154,20 @@ object MachineryFrame {
 }
 
 class MachineryFrame extends Multipart with INormallyOccludingPart {
-  modules.add(new FurnaceModule((this)) {})
-  modules.add(new DummyModule((this)) {})
+  _modules.add(new FurnaceModule(this) {})
+  _modules.add(new DummyModule(this) {})
 
   final private val modulePositions: Array[Array[Array[Module]]] = null
-  var debugInfo: List[mutable.Map[String, _]] = List()
+  var debugInfo: Map[String, String] = Map()
   val selectionBoxes: List[AxisAlignedBB] = List()
-  val modules: ListBuffer[Module] = ListBuffer()
+  private val _modules: ListBuffer[Module] = ListBuffer()
 
   def addModule(module: Module): Boolean = {
-    modules.add(module)
+    _modules.add(module)
     return true
   }
+
+  def modules = _modules
 
   override def getType: ResourceLocation = MachineryFrame.NAME
 
@@ -182,7 +183,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
 
   @Nullable def moduleHit(start: Vec3d, end: Vec3d): Module = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
-    for (module <- this.modules) {
+    for (module <- this._modules) {
       for (bounds: AxisAlignedBB <- module.boundingBoxes) {
         val rt: RayTraceResult = bounds.offset(module.posX / 16f, module.posY / 16f, module.posZ / 16f).calculateIntercept(start.subtract(framePos), end.add(framePos))
         if (rt != null) {
@@ -196,16 +197,16 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
   override def addSelectionBoxes(list: java.util.List[AxisAlignedBB]) {
     MachineryFrame.MODEL.boxes.foreach(box => list.add(box.aabb(0, 0, 0)))
     import scala.collection.JavaConversions._
-    modules.foreach(i => list.addAll(i.boundingBoxes.toList))
+    _modules.foreach(i => list.addAll(i.boundingBoxes.toList))
   }
 
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
     super.writeToNBT(tag)
     val modules: NBTTagCompound = new NBTTagCompound
     var i: Int = 0
-    while (i < this.modules.size) {
+    while (i < this._modules.size) {
       {
-        modules.setTag(String.valueOf(i), this.modules.get(i).serializeNBT)
+        modules.setTag(String.valueOf(i), this._modules.get(i).serializeNBT)
       }
       ({
         i += 1; i - 1   // wut
@@ -249,5 +250,5 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
     list.add(MachineryFrame.MODEL.mainBox.aabb(0, 0, 0))
   }
 
-  def getDebugInfo: java.util.Set[java.util.Map[String, _]] = debugInfo
+  def getDebugInfo: Map[String, String] = debugInfo
 }

@@ -16,7 +16,6 @@
 
 package intricateengineers.intricatemachinery.core
 
-import intricateengineers.intricatemachinery.common._
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.config.Configuration
 import net.minecraftforge.fml.common.Mod
@@ -32,17 +31,14 @@ import intricateengineers.intricatemachinery.common.event.EventManager
 import intricateengineers.intricatemachinery.common.init.ModBlocks
 
 
-@SuppressWarnings("unused")
 @Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION, dependencies = IntricateMachinery.DEPENDENCIES, acceptableRemoteVersions = "*", modLanguage = "scala")
 object IntricateMachinery {
 
-    val DEPENDENCIES = "required-after:Forge@["
+    final val DEPENDENCIES = "required-after:Forge@["
             + net.minecraftforge.common.ForgeVersion.majorVersion + '.'
             + net.minecraftforge.common.ForgeVersion.minorVersion + '.'
             + net.minecraftforge.common.ForgeVersion.revisionVersion + '.'
             + net.minecraftforge.common.ForgeVersion.buildVersion + ",)after:mcmultipart"
-
-    //val config : Configuration
 
     @SidedProxy(serverSide = ModInfo.PROXY_COMMON, clientSide = ModInfo.PROXY_CLIENT)
     val proxy : CommonProxy = null

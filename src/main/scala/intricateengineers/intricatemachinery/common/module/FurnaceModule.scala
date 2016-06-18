@@ -16,41 +16,42 @@
 package intricateengineers.intricatemachinery.common.module
 
 import intricateengineers.intricatemachinery.api.client.util.UV
-import intricateengineers.intricatemachinery.api.module.Module
-import intricateengineers.intricatemachinery.api.module.ModuleModel
+import intricateengineers.intricatemachinery.api.model.ModuleModel
+import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
 import intricateengineers.intricatemachinery.core.ModInfo
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.EnumFacing._
 
-object FurnaceModule {
-    var MODEL: FurnaceModule.Model = new FurnaceModule.Model
 
-    object Model {
-        private val topTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_top")
-        private val sideTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_side")
-        private val frontTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_front_on")
-        private val frameTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_top")
-    }
+class FurnaceModule(val parentFrame: MachineryFrame) extends {
+    val model = FurnaceModel
+    val name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "furnace")
+} with Module(parentFrame) {
 
-    class Model extends ModuleModel {
-        def init {
-            this.boxes.clear
-            addBox(vec(1, 1, 1), vec(5, 5, 5)).setFace(NORTH, Model.sideTexture, UV.fill).setFace(EAST, Model.sideTexture, UV.fill).setFace(SOUTH, Model.frontTexture, UV.fill).setFace(WEST, Model.sideTexture, UV.fill).setFace(UP, Model.topTexture, UV.fill).setFace(DOWN, Model.topTexture, UV.fill)
-            addBox(vec(0, 0, 0), vec(1, 6, 1)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-            addBox(vec(0, 0, 5), vec(1, 6, 6)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-            addBox(vec(5, 0, 0), vec(6, 6, 1)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-            addBox(vec(5, 0, 5), vec(6, 6, 6)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-            addBox(vec(1, 0, 0), vec(5, 1, 1)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-            addBox(vec(1, 5, 0), vec(5, 6, 1)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-            addBox(vec(0, 0, 1), vec(1, 1, 5)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-            addBox(vec(0, 5, 1), vec(1, 6, 5)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-            addBox(vec(5, 0, 1), vec(6, 1, 5)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-            addBox(vec(5, 5, 1), vec(6, 6, 5)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-            addBox(vec(1, 0, 5), vec(5, 1, 6)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-            addBox(vec(1, 5, 5), vec(5, 6, 6)).setFace(NORTH, Model.frameTexture, UV.auto(6)).setFace(EAST, Model.frameTexture, UV.auto(6)).setFace(SOUTH, Model.frameTexture, UV.auto(6)).setFace(WEST, Model.frameTexture, UV.auto(6)).setFace(UP, Model.frameTexture, UV.auto(6)).setFace(DOWN, Model.frameTexture, UV.auto(6))
-        }
+}
+
+object FurnaceModel extends ModuleModel {
+
+    private val topTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_top")
+    private val sideTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_side")
+    private val frontTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_front_on")
+    private val frameTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_top")
+
+    def init {
+        this.boxes.clear
+        +=((1, 1, 1), (5, 5, 5)).face(NORTH, sideTexture, UV.fill).face(EAST, sideTexture, UV.fill).face(SOUTH, frontTexture, UV.fill).face(WEST, sideTexture, UV.fill).face(UP, topTexture, UV.fill).face(DOWN, topTexture, UV.fill)
+        +=((0, 0, 0), (1, 6, 1)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
+        +=((0, 0, 5), (1, 6, 6)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
+        +=((5, 0, 0), (6, 6, 1)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
+        +=((5, 0, 5), (6, 6, 6)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
+        +=((1, 0, 0), (5, 1, 1)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
+        +=((1, 5, 0), (5, 6, 1)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
+        +=((0, 0, 1), (1, 1, 5)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
+        +=((0, 5, 1), (1, 6, 5)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
+        +=((5, 0, 1), (6, 1, 5)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
+        +=((5, 5, 1), (6, 6, 5)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
+        +=((1, 0, 5), (5, 1, 6)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
+        +=((1, 5, 5), (5, 6, 6)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))
     }
 }
 
-class FurnaceModule(val parentFrame: Nothing) extends Module("furnace", FurnaceModule.MODEL, parentFrame) {
-}

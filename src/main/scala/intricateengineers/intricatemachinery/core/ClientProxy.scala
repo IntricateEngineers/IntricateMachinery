@@ -17,8 +17,7 @@ package intricateengineers.intricatemachinery.core
 
 import intricateengineers.intricatemachinery.api.module.MachineryFrame
 import intricateengineers.intricatemachinery.client.event.DebugRenderHandler
-import intricateengineers.intricatemachinery.common.module.DummyModule
-import intricateengineers.intricatemachinery.common.module.FurnaceModule
+import intricateengineers.intricatemachinery.common.module.{DummyModel, FurnaceModel, FurnaceModule$}
 import mcmultipart.client.multipart.MultipartRegistryClient
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.block.model._
@@ -34,6 +33,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import javax.annotation.Nullable
 import java.util.ArrayList
 import java.util.List
+
+import intricateengineers.intricatemachinery.api.client.FrameRenderer
 
 @SuppressWarnings(Array("unused")) object ClientProxy {
     var EMPTY_MODEL: IBakedModel = new IBakedModel() {
@@ -59,18 +60,18 @@ import java.util.List
 
     @SubscribeEvent
     def onTextureStitch(event: TextureStitchEvent.Pre) {
-        FurnaceModule.MODEL.getQuadHandler.initTextures
-        FurnaceModule.MODEL.init
-        DummyModule.MODEL.getQuadHandler.initTextures
-        DummyModule.MODEL.init
+        FurnaceModel.quadHandler.initTextures
+        FurnaceModel.init
+        DummyModel.quadHandler.initTextures
+        DummyModel.init
         MachineryFrame.MODEL.getBakedModel.initTextures
         MachineryFrame.MODEL.init
     }
 
     @SubscribeEvent
     def onTextureStitch(event: TextureStitchEvent.Post) {
-        FurnaceModule.MODEL.getQuadHandler.initQuads
-        DummyModule.MODEL.getQuadHandler.initQuads
+        FurnaceModel.quadHandler.initQuads
+        DummyModel.quadHandler.initQuads
         MachineryFrame.MODEL.getBakedModel.initQuads
     }
 
@@ -79,7 +80,7 @@ import java.util.List
 
     override def init(event: FMLInitializationEvent) {
         MinecraftForge.EVENT_BUS.register(DebugRenderHandler.instance)
-        MultipartRegistryClient.bindMultipartSpecialRenderer(classOf[MachineryFrame], new Nothing)
+        MultipartRegistryClient.bindMultipartSpecialRenderer(classOf[MachineryFrame], new FrameRenderer)
     }
 
     override def postInit(event: FMLPostInitializationEvent) {
