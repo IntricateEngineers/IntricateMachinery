@@ -1,5 +1,6 @@
 package intricateengineers.intricatemachinery.api.model
 
+import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.api.util.VectorUtils
 import org.lwjgl.util.vector.Vector3f
 import net.minecraft.util.{EnumFacing, ResourceLocation}
@@ -31,10 +32,11 @@ abstract class ModelBase {
     new Box(min, max)
   }
 
-  def += (from : (Double, Double, Double), to : (Double, Double, Double)) {
-    boxes += new Box((from._1.toFloat, from._1.toFloat, from._3.toFloat),
+  def += (from : (Double, Double, Double), to : (Double, Double, Double)): Box = {
+    val box = new Box((from._1.toFloat, from._1.toFloat, from._3.toFloat),
       (to._1.toFloat, to._2.toFloat, to._3.toFloat))
-
+    boxes += box
+    return box
   }
 
 }
@@ -64,6 +66,11 @@ class Box(val from : (Double, Double, Double), val to : (Double, Double, Double)
         val k = max(from._1, to._1)
         ((k, from._2, from._3), (k, to._2, to._3))
     }
+  }
+
+  def face(face: EnumFacing, texture: ResourceLocation, uv: UV): Box = {
+    faces(face) = (texture, uv.toBFUV(face, (from, to)))
+    return this
   }
 
   def aabb(pos: (Byte, Byte, Byte) = (0, 0, 0)): AxisAlignedBB = {

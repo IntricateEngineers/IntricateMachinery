@@ -42,6 +42,8 @@ import mcmultipart.raytrace.RayTraceUtils
 import net.minecraft.util.EnumFacing._
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 object MachineryFrame {
   val PROPERTY: MachineryFrame.Property = new MachineryFrame.Property
@@ -61,18 +63,90 @@ object MachineryFrame {
   private class Model extends BlockModel {
     def init {
       val frameTexture: ResourceLocation = new ResourceLocation("minecraft", "blocks/furnace_top")
-      += (vec(0, 0, 0), vec(1, 16, 1)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
-      += (vec(0, 0, 15), vec(1, 16, 16)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
-      += (vec(15, 0, 0), vec(16, 16, 1)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
-      += (vec(15, 0, 15), vec(16, 16, 16)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
-      += (vec(1, 0, 0), vec(15, 1, 1)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
-      += (vec(1, 15, 0), vec(15, 16, 1)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
-      += (vec(0, 0, 1), vec(1, 1, 15)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
-      += (vec(0, 15, 1), vec(1, 16, 15)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
-      += (vec(15, 0, 1), vec(16, 1, 15)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
-      += (vec(15, 15, 1), vec(16, 16, 15)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
-      += (vec(1, 0, 15), vec(15, 1, 16)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
-      += (vec(1, 15, 15), vec(15, 16, 16)).setFace(NORTH, frameTexture, UV.auto(16)).setFace(EAST, frameTexture, UV.auto(16)).setFace(SOUTH, frameTexture, UV.auto(16)).setFace(WEST, frameTexture, UV.auto(16)).setFace(UP, frameTexture, UV.auto(16)).setFace(DOWN, frameTexture, UV.auto(16))
+      += ((0, 0, 0), (1, 16, 1))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
+      += ((0, 0, 15), (1, 16, 16))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
+      += ((15, 0, 0), (16, 16, 1))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
+      += ((15, 0, 15), (16, 16, 16))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
+      += ((1, 0, 0), (15, 1, 1))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
+      += ((1, 15, 0), (15, 16, 1))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
+      += ((0, 0, 1), (1, 1, 15))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
+      += ((0, 15, 1), (1, 16, 15))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
+      += ((15, 0, 1), (16, 1, 15))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
+      += ((15, 15, 1), (16, 16, 15))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
+      += ((1, 0, 15), (15, 1, 16))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
+      += ((1, 15, 15), (15, 16, 16))
+        .face(NORTH, frameTexture, UV.auto(16))
+        .face(EAST, frameTexture, UV.auto(16))
+        .face(SOUTH, frameTexture, UV.auto(16))
+        .face(WEST, frameTexture, UV.auto(16))
+        .face(UP, frameTexture, UV.auto(16))
+        .face(DOWN, frameTexture, UV.auto(16))
     }
 
     def initBakedModel: BakedModelFrame = new BakedModelFrame
@@ -83,12 +157,11 @@ object MachineryFrame {
 class MachineryFrame extends Multipart with INormallyOccludingPart {
   modules.add(new FurnaceModule((this)) {})
   modules.add(new DummyModule((this)) {})
-  var getModules: java.util.List[Module] = modules
 
-  final private val modulePositions: Array[Array[Array[Module]]] = new Array[Array[Array[model.Module]]](16, 16, 16)
-  var debugInfo: java.util.Set[java.util.Map[String, _]] = null
-  private val selectionBoxes: java.util.List[AxisAlignedBB] = new java.util.ArrayList[AxisAlignedBB]
-  private val modules: java.util.List[Module] = new java.util.ArrayList[Module]
+  final private val modulePositions: Array[Array[Array[Module]]] = null
+  var debugInfo: List[mutable.Map[String, _]] = List()
+  val selectionBoxes: List[AxisAlignedBB] = List()
+  val modules: ListBuffer[Module] = ListBuffer()
 
   def addModule(module: Module): Boolean = {
     modules.add(module)
@@ -110,7 +183,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
   @Nullable def moduleHit(start: Vec3d, end: Vec3d): Module = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
     for (module <- this.modules) {
-      for (bounds <- module.getAABBs) {
+      for (bounds: AxisAlignedBB <- module.boundingBoxes) {
         val rt: RayTraceResult = bounds.offset(module.posX / 16f, module.posY / 16f, module.posZ / 16f).calculateIntercept(start.subtract(framePos), end.add(framePos))
         if (rt != null) {
           return module
@@ -121,8 +194,9 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
   }
 
   override def addSelectionBoxes(list: java.util.List[AxisAlignedBB]) {
-    MachineryFrame.MODEL.getBoxes.foreach(box => list.add(box.toAABB(0, 0, 0)))
-    modules.foreach(module => module.addSelectionBoxes(list))
+    MachineryFrame.MODEL.boxes.foreach(box => list.add(box.aabb(0, 0, 0)))
+    import scala.collection.JavaConversions._
+    modules.foreach(i => list.addAll(i.boundingBoxes.toList))
   }
 
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {

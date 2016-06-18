@@ -40,27 +40,26 @@ class BakedModelFrame extends IMBakedModel {
 
   def initQuads {
     quads.clear()
-    for (box <- MachineryFrame.MODEL.getBoxes) {
+    for (box <- MachineryFrame.MODEL.boxes) {
       for (face <- EnumFacing.values) {
-        val vecs: Pair[Vector3f, Vector3f] = box.getFace(face)
-        if (vecs.getLeft == null) {
-          continue //todo: continue is not supported
+        val vecs: (Vector3f, Vector3f) = box.faceVecs(face)
+        if (vecs._1 != null) {
+          val texture: TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(box.faces.get(face).get._1.toString)
+          val partFace: BlockPartFace = new BlockPartFace(null, 0, "", box.faces.get(face).get._2)
+          val mr: ModelRotation = ModelRotation.X0_Y0
+          val blockPartRotation: BlockPartRotation = null
+          val quad: BakedQuad = QuadHandler.FaceBakery.makeBakedQuad(vecs._1, vecs._2, partFace, texture, face, mr, blockPartRotation, true, true)
+          quads.add(quad)
         }
-        val texture: TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(box.faces.get(face).getLeft.toString)
-        val partFace: BlockPartFace = new BlockPartFace(null, 0, "", box.faces.get(face).getRight)
-        val mr: ModelRotation = ModelRotation.X0_Y0
-        val blockPartRotation: BlockPartRotation = null
-        val quad: BakedQuad = QuadHandler.faceBakery.makeBakedQuad(vecs.getLeft, vecs.getRight, partFace, texture, face, mr, blockPartRotation, true, true)
-        quads.add(quad)
       }
     }
   }
 
   def initTextures {
-    for (box <- MachineryFrame.MODEL.getBoxes) {
+    for (box <- MachineryFrame.MODEL.boxes) {
       for (face <- EnumFacing.values) {
         if (box.faces.get(face) != null) {
-          Minecraft.getMinecraft.getTextureMapBlocks.registerSprite(box.faces.get(face).getLeft)
+          Minecraft.getMinecraft.getTextureMapBlocks.registerSprite(box.faces.get(face).get._1)
         }
       }
     }
@@ -75,7 +74,7 @@ class BakedModelFrame extends IMBakedModel {
       if (frame != null) {
         val quads1: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
         quads1.addAll(quads)
-        frame.getModules.foreach(module => quads1.addAll(module.getModel().getQuadHandler().getQuads(frame, module, rand)))
+        frame.getModules.foreach(module => quads1.addAll(module.model.quadHandler.quads(frame, module, rand)))
         return quads1
       }
       return quads

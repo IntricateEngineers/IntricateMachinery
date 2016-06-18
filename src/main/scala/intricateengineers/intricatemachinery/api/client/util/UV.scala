@@ -32,13 +32,13 @@ object UV {
 }
 
 class UV {
-  final private var u1: Double = .0
-  final private var v1: Double = .0
-  final private var u2: Double = .0
-  final private var v2: Double = .0
-  final private var auto: Boolean = false
-  final private var scale: Double = .0
-  final private var reset: Boolean = false
+  private var u1: Double = .0
+  private var v1: Double = .0
+  private var u2: Double = .0
+  private var v2: Double = .0
+  private var auto: Boolean = false
+  private var scale: Double = .0
+  private var reset: Boolean = false
 
   def this(u1: Double, v1: Double, u2: Double, v2: Double) {
     this()
@@ -62,52 +62,46 @@ class UV {
     this.reset = reset
   }
 
-  def toBFUV(face: EnumFacing, vecs: Pair[Vector3f, Vector3f]): BlockFaceUV = {
+  def toBFUV(face: EnumFacing, vecs: (Vector3f, Vector3f)): BlockFaceUV = {
     if (!this.auto) {
       return new BlockFaceUV(Array[Float](u1.toFloat, v1.toFloat, u2.toFloat, v2.toFloat), 0)
     }
     else {
-      var x1: Float = .0
-      var y1: Float = .0
-      var x2: Float = .0
-      var y2: Float = .0
+      var x1: Double = .0
+      var y1: Double = .0
+      var x2: Double = .0
+      var y2: Double = .0
       face match {
-        case DOWN =>
-          x1 = vecs.getLeft.getX
-          y1 = (scale - vecs.getRight.getZ).toFloat
-          x2 = vecs.getRight.getX
-          y2 = (scale - vecs.getLeft.getZ).toFloat
-          break //todo: break is not supported
-        case UP =>
-          x1 = vecs.getLeft.getX
-          y1 = vecs.getLeft.getZ
-          x2 = vecs.getRight.getX
-          y2 = vecs.getRight.getZ
-          break //todo: break is not supported
-        case NORTH =>
-          x1 = (scale - vecs.getRight.getX).toFloat
-          y1 = (scale - vecs.getRight.getY).toFloat
-          x2 = (scale - vecs.getLeft.getX).toFloat
-          y2 = (scale - vecs.getLeft.getY).toFloat
-          break //todo: break is not supported
-        case SOUTH =>
-          x1 = vecs.getLeft.getX
-          y1 = (scale - vecs.getRight.getY).toFloat
-          x2 = vecs.getRight.getX
-          y2 = (scale - vecs.getLeft.getY).toFloat
-          break //todo: break is not supported
-        case EAST =>
-          x1 = (scale - vecs.getRight.getZ).toFloat
-          y1 = (scale - vecs.getRight.getY).toFloat
-          x2 = (scale - vecs.getLeft.getZ).toFloat
-          y2 = (scale - vecs.getLeft.getY).toFloat
-          break //todo: break is not supported
-        case WEST =>
-          x1 = vecs.getLeft.getZ
-          y1 = (scale - vecs.getRight.getY).toFloat
-          x2 = vecs.getRight.getZ
-          y2 = (scale - vecs.getLeft.getY).toFloat
-          break //todo: break is not supported
+        case EnumFacing.DOWN =>
+          x1 = vecs._1.getX
+          y1 = (scale - vecs._2.getZ).toFloat
+          x2 = vecs._2.getX
+          y2 = (scale - vecs._1.getZ).toFloat
+        case EnumFacing.UP =>
+          x1 = vecs._1.getX
+          y1 = vecs._1.getZ
+          x2 = vecs._2.getX
+          y2 = vecs._2.getZ
+        case EnumFacing.NORTH =>
+          x1 = (scale - vecs._2.getX).toFloat
+          y1 = (scale - vecs._2.getY).toFloat
+          x2 = (scale - vecs._1.getX).toFloat
+          y2 = (scale - vecs._1.getY).toFloat
+        case EnumFacing.SOUTH =>
+          x1 = vecs._1.getX
+          y1 = (scale - vecs._2.getY).toFloat
+          x2 = vecs._2.getX
+          y2 = (scale - vecs._1.getY).toFloat
+        case EnumFacing.EAST =>
+          x1 = (scale - vecs._2.getZ).toFloat
+          y1 = (scale - vecs._2.getY).toFloat
+          x2 = (scale - vecs._1.getZ).toFloat
+          y2 = (scale - vecs._1.getY).toFloat
+        case EnumFacing.WEST =>
+          x1 = vecs._1.getZ
+          y1 = (scale - vecs._2.getY).toFloat
+          x2 = vecs._2.getZ
+          y2 = (scale - vecs._1.getY).toFloat
         case _ =>
           return null
       }
@@ -118,7 +112,7 @@ class UV {
         y1 = 0
       }
       val factor: Float = (16f / scale).toFloat
-      val floats: Array[Float] = Array(x1 * factor, y1 * factor, x2 * factor, y2 * factor)
+      val floats: Array[Float] = Array(x1 * factor, y1 * factor, x2 * factor, y2 * factor).map(_.toFloat)
       return new BlockFaceUV(floats, 0)
     }
   }

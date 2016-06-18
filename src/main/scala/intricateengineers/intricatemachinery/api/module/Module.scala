@@ -6,7 +6,8 @@ import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializable}
 
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.util.Random
 
 abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound] {
@@ -14,8 +15,8 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
   val name: ResourceLocation
   val model: ModuleModel
 
-  val boundingBoxes = ArrayBuffer[AxisAlignedBB]
-  var debugInfo: Map[String, String]
+  val boundingBoxes: ListBuffer[AxisAlignedBB] = ListBuffer()
+  var debugInfo: mutable.Map[String, String] = null
 
   onUpdate()
 
