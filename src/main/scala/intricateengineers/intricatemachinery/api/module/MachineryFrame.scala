@@ -34,14 +34,12 @@ import net.minecraftforge.common.property.IExtendedBlockState
 import net.minecraftforge.common.property.IUnlistedProperty
 import javax.annotation.Nullable
 
-import intricateengineers.intricatemachinery.api.model
 import mcmultipart.MCMultiPartMod
 import mcmultipart.multipart.{INormallyOccludingPart, Multipart}
 import mcmultipart.raytrace.RayTraceUtils
 import net.minecraft.util.EnumFacing._
 
 import scala.collection.JavaConversions._
-import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 object MachineryFrame {
@@ -249,6 +247,4 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
   def addOcclusionBoxes(list: java.util.List[AxisAlignedBB]) {
     list.add(MachineryFrame.MODEL.mainBox.aabb(0, 0, 0))
   }
-
-  def getDebugInfo: Map[String, String] = debugInfo
 }
