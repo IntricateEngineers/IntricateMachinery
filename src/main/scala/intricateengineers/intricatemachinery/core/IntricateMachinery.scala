@@ -34,17 +34,17 @@ import intricateengineers.intricatemachinery.common.init.ModBlocks
 @Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION, dependencies = IntricateMachinery.DEPENDENCIES, acceptableRemoteVersions = "*", modLanguage = "scala")
 object IntricateMachinery {
 
-    final val DEPENDENCIES = "required-after:Forge@["
-            + net.minecraftforge.common.ForgeVersion.majorVersion + '.'
-            + net.minecraftforge.common.ForgeVersion.minorVersion + '.'
-            + net.minecraftforge.common.ForgeVersion.revisionVersion + '.'
-            + net.minecraftforge.common.ForgeVersion.buildVersion + ",)after:mcmultipart"
+    final val DEPENDENCIES = ""//required-after:Forge@["
+//            + net.minecraftforge.common.ForgeVersion.majorVersion + '.'
+//            + net.minecraftforge.common.ForgeVersion.minorVersion + '.'
+//            + net.minecraftforge.common.ForgeVersion.revisionVersion + '.'
+//            + net.minecraftforge.common.ForgeVersion.buildVersion + ",)after:mcmultipart"
 
     @Instance(ModInfo.MOD_NAME)
     var instance = this
 
     @SidedProxy(serverSide = ModInfo.PROXY_COMMON, clientSide = ModInfo.PROXY_CLIENT)
-    val proxy : CommonProxy = null
+    var proxy : CommonProxy = null
 
     @EventHandler
     def preInit(event : FMLPreInitializationEvent) {

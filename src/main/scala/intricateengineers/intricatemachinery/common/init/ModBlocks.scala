@@ -15,7 +15,7 @@
  */
 package intricateengineers.intricatemachinery.common.init
 
-import intricateengineers.intricatemachinery.api.module.Module
+import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
 import intricateengineers.intricatemachinery.common.util.gui.IMCreativeTab
 import intricateengineers.intricatemachinery.core.ModInfo
 import mcmultipart.item.ItemMultiPart
@@ -40,7 +40,7 @@ object ModBlocks {
             }
         }
         registerItem(item, "machinery_frame")
-        MultipartRegistry.registerPart(classOf[Nothing], "machinery_frame")
+        MultipartRegistry.registerPart(classOf[MachineryFrame], "machinery_frame")
     }
 
     private def registerModule(name: String, module: Class[_ <: Module]) {
