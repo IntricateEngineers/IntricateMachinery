@@ -57,8 +57,8 @@ object MachineryFrame {
     def valueToString(value: MachineryFrame): String = value.toString
   }
 
-  private class Model extends BlockModel {
-    def init {
+  class Model extends BlockModel {
+    def init() {
       val frameTexture: ResourceLocation = new ResourceLocation("minecraft", "blocks/furnace_top")
       += ((0, 0, 0), (1, 16, 1))
         .face(NORTH, frameTexture, UV.auto(16))
@@ -146,26 +146,25 @@ object MachineryFrame {
         .face(DOWN, frameTexture, UV.auto(16))
     }
 
-    def initBakedModel: BakedModelFrame = new BakedModelFrame
+    def initBakedModel = new BakedModelFrame
   }
 
 }
 
 class MachineryFrame extends Multipart with INormallyOccludingPart {
-  _modules.add(new FurnaceModule(this) {})
-  _modules.add(new DummyModule(this) {})
 
   final private val modulePositions: Array[Array[Array[Module]]] = null
   var debugInfo: Map[String, String] = Map()
   val selectionBoxes: List[AxisAlignedBB] = List()
-  private val _modules: ListBuffer[Module] = ListBuffer()
+  val modules: ListBuffer[Module] = ListBuffer()
+
+  modules += new FurnaceModule(this)
+  modules += new DummyModule(this)
 
   def addModule(module: Module): Boolean = {
-    _modules.add(module)
+    modules += module
     return true
   }
-
-  def modules = _modules
 
   override def getType: ResourceLocation = MachineryFrame.NAME
 
@@ -181,7 +180,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
 
   @Nullable def moduleHit(start: Vec3d, end: Vec3d): Module = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
-    for (module <- this._modules) {
+    for (module <- this.modules) {
       for (bounds: AxisAlignedBB <- module.boundingBoxes) {
         val rt: RayTraceResult = bounds.offset(module.posX / 16f, module.posY / 16f, module.posZ / 16f).calculateIntercept(start.subtract(framePos), end.add(framePos))
         if (rt != null) {
@@ -195,16 +194,16 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
   override def addSelectionBoxes(list: java.util.List[AxisAlignedBB]) {
     MachineryFrame.MODEL.boxes.foreach(box => list.add(box.aabb(0, 0, 0)))
     import scala.collection.JavaConversions._
-    _modules.foreach(i => list.addAll(i.boundingBoxes.toList))
+    modules.foreach(i => list.addAll(i.boundingBoxes.toList))
   }
 
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
     super.writeToNBT(tag)
     val modules: NBTTagCompound = new NBTTagCompound
     var i: Int = 0
-    while (i < this._modules.size) {
+    while (i < this.modules.size) {
       {
-        modules.setTag(String.valueOf(i), this._modules.get(i).serializeNBT)
+        modules.setTag(String.valueOf(i), this.modules.apply(i).serializeNBT)
       }
       ({
         i += 1; i - 1   // wut

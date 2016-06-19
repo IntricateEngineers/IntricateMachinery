@@ -15,7 +15,6 @@
  */
 package intricateengineers.intricatemachinery.api.client
 
-import intricateengineers.intricatemachinery.api.module.BlockModel.IMBakedModel
 import intricateengineers.intricatemachinery.api.module.MachineryFrame
 import mcp.MethodsReturnNonnullByDefault
 import net.minecraft.block.state.IBlockState
@@ -30,7 +29,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.property.IExtendedBlockState
 import javax.annotation.Nullable
-import org.apache.commons.lang3.tuple.Pair
+
+import intricateengineers.intricatemachinery.api.model.IMBakedModel
 import org.lwjgl.util.vector.Vector3f
 
 import scala.collection.JavaConversions._
@@ -65,7 +65,8 @@ class BakedModelFrame extends IMBakedModel {
     }
   }
 
-  @MethodsReturnNonnullByDefault def getQuads(@Nullable state: IBlockState, @Nullable side: EnumFacing, rand: Long): java.util.List[BakedQuad] = {
+  @MethodsReturnNonnullByDefault
+  def getQuads(@Nullable state: IBlockState, @Nullable side: EnumFacing, rand: Long): java.util.List[BakedQuad] = {
     if (side != null) {
       return new java.util.ArrayList[BakedQuad]
     }

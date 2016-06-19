@@ -7,7 +7,7 @@ import intricateengineers.intricatemachinery.api.model.ModelBase
 
 import scala.collection.mutable.ArrayBuffer
 import net.minecraft.client.renderer.block.model.BakedQuad
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.BlockPartFace
 import net.minecraft.client.renderer.block.model.ModelRotation
@@ -50,9 +50,11 @@ class QuadHandler(model : ModelBase) {
   def initTextures() = {
     for (box <- model.boxes) {
       for (face <- EnumFacing.values) {
-        if (box.faces(face) != null) { 
-          Minecraft.getMinecraft.getTextureMapBlocks
-            .registerSprite(box.faces(face)._1)
+        if (box.faces(face) != null) {
+          val recLoc: ResourceLocation = box.faces(face)._1
+          if(recLoc != null)
+            Minecraft.getMinecraft.getTextureMapBlocks
+              .registerSprite(recLoc)
         }
       }
     }

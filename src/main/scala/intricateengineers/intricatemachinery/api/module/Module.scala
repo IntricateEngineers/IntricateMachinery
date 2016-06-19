@@ -6,30 +6,30 @@ import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializable}
 
-import scala.collection.mutable
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
 import scala.util.Random
 
-abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound] {
+abstract class Module(val frm: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound] {
 
   val name: ResourceLocation
   val model: ModuleModel
+  val frame = frm
 
   val boundingBoxes: ListBuffer[AxisAlignedBB] = ListBuffer()
-  private var _debugInfo: mutable.Map[String, String] = null
-
-  onUpdate()
+  var debugInfo: Map[String, String] = null
 
   // Temporary hardcoded values
   private var _posInFrame: (Byte, Byte, Byte) = (
-    (8 / Module.GridSize).toByte,
-    (8 / Module.GridSize).toByte,
-    (8 / Module.GridSize).toByte
-    )
+          (8 / Module.GridSize).toByte,
+          (8 / Module.GridSize).toByte,
+          (8 / Module.GridSize).toByte
+          )
 
   // Temporary hardcoded value
   private var _rotation: Byte = Random.nextInt(3).toByte
+
+  onUpdate()
 
   // Getters and setters
   def posInFrame = _posInFrame
@@ -60,18 +60,16 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
     onUpdate()
   }
 
-  def debugInfo = _debugInfo
-
   def onUpdate(): Unit = {
-    _debugInfo = initDebugInfo
+    debugInfo = initDebugInfo
   }
 
   protected def initBoundingBoxes(): List[AxisAlignedBB] = {
     model.boxes.map(_.aabb()).toList
   }
 
-  def initDebugInfo: mutable.Map[String, String] = {
-    var debInfo: mutable.Map[String, String] = mutable.Map()
+  def initDebugInfo: Map[String, String] = {
+    var debInfo: Map[String, String] = Map()
 
     // Name of the module
     debInfo += "Name" -> name.getResourcePath
@@ -121,5 +119,5 @@ abstract class Module(val frame: MachineryFrame) extends ICapabilitySerializable
 }
 
 object Module {
-  val GridSize: Double = 16
+  final val GridSize: Double = 16
 }
