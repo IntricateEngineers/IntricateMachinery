@@ -12,8 +12,8 @@ abstract class BlockModel extends ModelBase {
 
 trait IMBakedModel extends IBakedModel {
 
-  def initQuads : Unit
+  def initQuads() : Unit
 
-  def initTextures : Unit
+  def initTextures() : Unit
 
 }

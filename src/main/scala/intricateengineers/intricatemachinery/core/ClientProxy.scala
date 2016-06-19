@@ -17,7 +17,7 @@ package intricateengineers.intricatemachinery.core
 
 import intricateengineers.intricatemachinery.api.module.MachineryFrame
 import intricateengineers.intricatemachinery.client.event.DebugRenderHandler
-import intricateengineers.intricatemachinery.common.module.{DummyModel, FurnaceModel, FurnaceModule$}
+import intricateengineers.intricatemachinery.common.module.{DummyModel, FurnaceModel}
 import mcmultipart.client.multipart.MultipartRegistryClient
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.block.model._
@@ -31,15 +31,13 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import javax.annotation.Nullable
-import java.util.ArrayList
-import java.util.List
 
 import intricateengineers.intricatemachinery.api.client.FrameRenderer
 
-@SuppressWarnings(Array("unused")) object ClientProxy {
+object ClientProxy {
     var EMPTY_MODEL: IBakedModel = new IBakedModel() {
         def getQuads(@Nullable state: IBlockState, @Nullable side: EnumFacing, rand: Long): java.util.List[BakedQuad] = {
-            return new java.util.ArrayList[BakedQuad]
+            new java.util.ArrayList[BakedQuad]
         }
 
         def isAmbientOcclusion: Boolean = false
@@ -51,7 +49,7 @@ import intricateengineers.intricatemachinery.api.client.FrameRenderer
     }
 }
 
-@SuppressWarnings(Array("unused")) class ClientProxy extends CommonProxy {
+class ClientProxy extends CommonProxy {
     @SubscribeEvent
     def onPostBake(event: ModelBakeEvent) {
         event.getModelRegistry.putObject(new ModelResourceLocation(MachineryFrame.NAME, "inventory"), ClientProxy.EMPTY_MODEL)
@@ -60,19 +58,19 @@ import intricateengineers.intricatemachinery.api.client.FrameRenderer
 
     @SubscribeEvent
     def onTextureStitch(event: TextureStitchEvent.Pre) {
-        FurnaceModel.quadHandler.initTextures
-        FurnaceModel.init
-        DummyModel.quadHandler.initTextures
-        DummyModel.init
-        MachineryFrame.MODEL.getBakedModel.initTextures
-        MachineryFrame.MODEL.init
+        FurnaceModel.quadHandler.initTextures()
+        FurnaceModel.init()
+        DummyModel.quadHandler.initTextures()
+        DummyModel.init()
+        MachineryFrame.MODEL.getBakedModel.initTextures()
+        MachineryFrame.MODEL.init()
     }
 
     @SubscribeEvent
     def onTextureStitch(event: TextureStitchEvent.Post) {
-        FurnaceModel.quadHandler.initQuads
-        DummyModel.quadHandler.initQuads
-        MachineryFrame.MODEL.getBakedModel.initQuads
+        FurnaceModel.quadHandler.initQuads()
+        DummyModel.quadHandler.initQuads()
+        MachineryFrame.MODEL.getBakedModel.initQuads()
     }
 
     override def preInit(event: FMLPreInitializationEvent) {

@@ -16,9 +16,9 @@ import scala.collection.mutable
 abstract class ModelBase {
   val boxes = ArrayBuffer[Box]()
 
-  init()
-
   val mainBox = initMainBox()
+
+  init()
 
   def init()
 

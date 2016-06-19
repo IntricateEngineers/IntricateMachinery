@@ -20,7 +20,7 @@ class QuadHandler(model : ModelBase) {
 
   protected val _quads = new ArrayBuffer[BakedQuad]
 
-  def initQuads {
+  def initQuads() {
     _quads.clear
     for (box <- model.boxes) {
       for (face <- EnumFacing.values) {
@@ -47,7 +47,7 @@ class QuadHandler(model : ModelBase) {
     }
   }
 
-  def initTextures: Unit = {
+  def initTextures() = {
     for (box <- model.boxes) {
       for (face <- EnumFacing.values) {
         if (box.faces(face) != null) { 
