@@ -15,7 +15,7 @@
  */
 package intricateengineers.intricatemachinery.core
 
-import intricateengineers.intricatemachinery.api.module.MachineryFrame
+import intricateengineers.intricatemachinery.api.module.{FrameModel, MachineryFrame}
 import intricateengineers.intricatemachinery.client.event.DebugRenderHandler
 import intricateengineers.intricatemachinery.common.module.{DummyModel, FurnaceModel}
 import mcmultipart.client.multipart.MultipartRegistryClient
@@ -62,15 +62,15 @@ class ClientProxy extends CommonProxy {
         FurnaceModel.init()
         DummyModel.quadHandler.initTextures()
         DummyModel.init()
-        MachineryFrame.MODEL.getBakedModel.initTextures()
-        MachineryFrame.MODEL.init()
+        FrameModel.bakedModel.initTextures()
+        FrameModel.init()
     }
 
     @SubscribeEvent
     def onTextureStitch(event: TextureStitchEvent.Post) {
         FurnaceModel.quadHandler.initQuads()
         DummyModel.quadHandler.initQuads()
-        MachineryFrame.MODEL.getBakedModel.initQuads()
+        FrameModel.bakedModel.initQuads()
     }
 
     override def preInit(event: FMLPreInitializationEvent) {

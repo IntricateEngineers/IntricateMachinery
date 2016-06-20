@@ -15,7 +15,7 @@
  */
 package intricateengineers.intricatemachinery.api.client
 
-import intricateengineers.intricatemachinery.api.module.MachineryFrame
+import intricateengineers.intricatemachinery.api.module.{FrameModel, MachineryFrame}
 import mcmultipart.client.multipart.MultipartSpecialRenderer
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -55,7 +55,7 @@ class FrameRenderer extends MultipartSpecialRenderer[MachineryFrame] {
     }
     val pos: BlockPos = frame.getPos
     buffer.setTranslation(x - pos.getX, y - pos.getY, z - pos.getZ)
-    renderer.renderModel(frame.getWorld, MachineryFrame.MODEL.getBakedModel, frame.getExtendedState(this.baseState), pos, buffer, false, 52L)
+    renderer.renderModel(frame.getWorld, FrameModel.bakedModel, frame.getExtendedState(this.baseState), pos, buffer, false, 52L)
     buffer.setTranslation(0, 0, 0)
   }
 }

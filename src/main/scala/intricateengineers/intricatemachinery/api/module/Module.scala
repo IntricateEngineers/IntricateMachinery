@@ -10,11 +10,10 @@ import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
 import scala.util.Random
 
-abstract class Module(val frm: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound] {
+abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound] {
 
   val name: ResourceLocation
   val model: ModuleModel
-  val frame = frm
 
   val boundingBoxes: ListBuffer[AxisAlignedBB] = ListBuffer()
   var debugInfo: Map[String, String] = null

@@ -15,7 +15,7 @@
  */
 package intricateengineers.intricatemachinery.api.client
 
-import intricateengineers.intricatemachinery.api.module.MachineryFrame
+import intricateengineers.intricatemachinery.api.module.{FrameModel, FrameProperty, MachineryFrame}
 import mcp.MethodsReturnNonnullByDefault
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -40,7 +40,7 @@ class BakedModelFrame extends IMBakedModel {
 
   def initQuads {
     quads.clear()
-    for (box <- MachineryFrame.MODEL.boxes) {
+    for (box <- FrameModel.boxes) {
       for (face <- EnumFacing.values) {
         val vecs: (Vector3f, Vector3f) = box.faceVecs(face)
         if (vecs._1 != null) {
@@ -56,7 +56,7 @@ class BakedModelFrame extends IMBakedModel {
   }
 
   def initTextures {
-    for (box <- MachineryFrame.MODEL.boxes) {
+    for (box <- FrameModel.boxes) {
       for (face <- EnumFacing.values) {
         if (box.faces.get(face) != null) {
           Minecraft.getMinecraft.getTextureMapBlocks.registerSprite(box.faces.get(face).get._1)
@@ -71,7 +71,7 @@ class BakedModelFrame extends IMBakedModel {
       return new java.util.ArrayList[BakedQuad]
     }
     if (state.isInstanceOf[IExtendedBlockState]) {
-      val frame: MachineryFrame = state.asInstanceOf[IExtendedBlockState].getValue(MachineryFrame.PROPERTY)
+      val frame: MachineryFrame = state.asInstanceOf[IExtendedBlockState].getValue(FrameProperty)
       if (frame != null) {
         val quads1: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
         quads1.addAll(quads)

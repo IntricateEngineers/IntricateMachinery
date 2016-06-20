@@ -33,9 +33,6 @@ plugins {
 apply plugin: 'scala'
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 def parseprops(File cfg) {
     cfg.withReader {
         def prop = new Properties()
