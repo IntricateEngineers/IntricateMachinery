@@ -54,6 +54,9 @@ class DebugRenderHandler {
                     case _ =>
                 }
             }
+            catch {
+                case e: ClassCastException =>
+            }
         }
     }
 }
