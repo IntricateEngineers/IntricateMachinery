@@ -33,7 +33,7 @@ abstract class ModelBase {
   }
 
   def += (from : (Double, Double, Double), to : (Double, Double, Double)): Box = {
-    val box = new Box((from._1.toFloat, from._1.toFloat, from._3.toFloat),
+    val box = new Box((from._1.toFloat, from._2.toFloat, from._3.toFloat),
       (to._1.toFloat, to._2.toFloat, to._3.toFloat))
     boxes += box
     return box

@@ -96,17 +96,19 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
     super.writeToNBT(tag)
     val modules: NBTTagCompound = new NBTTagCompound
-    for (i <- 0 to this.modules.size) {
-      modules.setTag(String.valueOf(i), this.modules.apply(i).serializeNBT)
+    for (i <- this.modules.indices) {
+      try {
+        modules.setTag(String.valueOf(i), this.modules(i).serializeNBT)
+      }
     }
     tag.setTag("modules", modules)
-    return tag
+    tag
   }
 
   override def readFromNBT(tag: NBTTagCompound) {
     super.readFromNBT(tag)
     val modules: NBTTagList = tag.getTagList("modules", 0)
-    for (i <- 0 to modules.tagCount) {
+    for (i <- 0 until modules.tagCount) {
       try {
         modules.getCompoundTagAt(i)
         //TODO: Do stuff
