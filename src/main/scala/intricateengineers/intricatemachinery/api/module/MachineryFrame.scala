@@ -34,7 +34,7 @@ import net.minecraftforge.common.property.IExtendedBlockState
 import net.minecraftforge.common.property.IUnlistedProperty
 import javax.annotation.Nullable
 
-import intricateengineers.intricatemachinery.api.model.BlockModel
+import intricateengineers.intricatemachinery.api.model.{BlockModel, Box}
 import mcmultipart.MCMultiPartMod
 import mcmultipart.multipart.{INormallyOccludingPart, Multipart}
 import mcmultipart.raytrace.RayTraceUtils
@@ -56,12 +56,9 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
   val modules: ListBuffer[Module] = ListBuffer()
 
   modules += new FurnaceModule(this)
-  modules += new DummyModule(this)
+  //modules += new DummyModule(this)
 
-  def addModule(module: Module): Boolean = {
-    modules += module
-    return true
-  }
+  def addModule(module: Module): Unit = modules += module
 
   override def getType: ResourceLocation = MachineryFrame.NAME
 
@@ -90,7 +87,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
 
   def addSelectionBoxes(list: ListBuffer[AxisAlignedBB]) {
     FrameModel.boxes.foreach(box => list.add(box.aabb(0, 0, 0)))
-    modules.foreach(i => list.addAll(i.boundingBoxes.toList))
+    modules.foreach(i => list.addAll(i.boundingBoxes))
   }
 
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {

@@ -38,7 +38,7 @@ import scala.collection.JavaConversions._
 class BakedModelFrame extends IMBakedModel {
   final protected val quads: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
 
-  def initQuads {
+  def initQuads() {
     quads.clear()
     for (box <- FrameModel.boxes) {
       for (face <- EnumFacing.values) {
@@ -55,7 +55,7 @@ class BakedModelFrame extends IMBakedModel {
     }
   }
 
-  def initTextures {
+  def initTextures() {
     for (box <- FrameModel.boxes) {
       for (face <- EnumFacing.values) {
         if (box.faces.get(face) != null) {
@@ -73,6 +73,7 @@ class BakedModelFrame extends IMBakedModel {
     if (state.isInstanceOf[IExtendedBlockState]) {
       val frame: MachineryFrame = state.asInstanceOf[IExtendedBlockState].getValue(FrameProperty)
       if (frame != null) {
+        // TODO: Why do all this? Just modify the array we already have
         val quads1: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
         quads1.addAll(quads)
         frame.modules.foreach(module => quads1.addAll(module.model.quadHandler.quads(frame, module, rand)))

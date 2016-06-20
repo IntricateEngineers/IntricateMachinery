@@ -6,7 +6,6 @@ import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializable}
 
-import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
 import scala.util.Random
 
@@ -15,7 +14,9 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
   val name: ResourceLocation
   val model: ModuleModel
 
-  val boundingBoxes: ListBuffer[AxisAlignedBB] = ListBuffer()
+  // TODO: Do these need to be updated in onUpdate or can they just be vals?
+  // TODO: Also possibly make them ListBuffers
+  var boundingBoxes: List[AxisAlignedBB] = List()
   var debugInfo: Map[String, String] = null
 
   // Temporary hardcoded values
@@ -60,14 +61,15 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
   }
 
   def onUpdate(): Unit = {
-    debugInfo = initDebugInfo
+    debugInfo = initDebugInfo()
+    boundingBoxes = initBoundingBoxes()
   }
 
   protected def initBoundingBoxes(): List[AxisAlignedBB] = {
     model.boxes.map(_.aabb()).toList
   }
 
-  def initDebugInfo: Map[String, String] = {
+  def initDebugInfo(): Map[String, String] = {
     var debInfo: Map[String, String] = Map()
 
     // Name of the module

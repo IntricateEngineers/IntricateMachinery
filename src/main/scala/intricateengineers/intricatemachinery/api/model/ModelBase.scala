@@ -16,9 +16,7 @@ import scala.collection.mutable
 abstract class ModelBase {
   val boxes = ArrayBuffer[Box]()
 
-  val mainBox = initMainBox()
-
-  init()
+  lazy val mainBox = initMainBox()
 
   def init()
 
@@ -33,8 +31,8 @@ abstract class ModelBase {
   }
 
   def += (from : (Double, Double, Double), to : (Double, Double, Double)): Box = {
-    val box = new Box((from._1.toFloat, from._2.toFloat, from._3.toFloat),
-      (to._1.toFloat, to._2.toFloat, to._3.toFloat))
+    val box = new Box((from._1, from._2, from._3),
+      (to._1, to._2, to._3))
     boxes += box
     return box
   }
@@ -65,6 +63,7 @@ class Box(val from : (Double, Double, Double), val to : (Double, Double, Double)
       case EnumFacing.EAST =>
         val k = max(from._1, to._1)
         ((k, from._2, from._3), (k, to._2, to._3))
+      case _ => (null,null)
     }
   }
 
@@ -75,12 +74,12 @@ class Box(val from : (Double, Double, Double), val to : (Double, Double, Double)
 
   def aabb(pos: (Byte, Byte, Byte) = (0, 0, 0)): AxisAlignedBB = {
     new AxisAlignedBB(
-      from.x + pos._1,
-      from.y + pos._2,
-      from.z + pos._3,
-      from.x + pos._1,
-      from.y + pos._2,
-      from.z + pos._3
+      (from.x + pos._1) / 16f,
+      (from.y + pos._2) / 16f,
+      (from.z + pos._3) / 16f,
+      (to.x + pos._1) / 16f,
+      (to.y + pos._2) / 16f,
+      (to.z + pos._3) / 16f
     )
   }
 }

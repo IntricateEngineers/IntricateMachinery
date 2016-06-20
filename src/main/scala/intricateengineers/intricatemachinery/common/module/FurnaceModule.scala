@@ -31,13 +31,13 @@ class FurnaceModule(val parentFrame: MachineryFrame) extends {
 }
 
 object FurnaceModel extends ModuleModel {
-
-    private val topTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_top")
-    private val sideTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_side")
-    private val frontTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_front_on")
-    private val frameTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_top")
-
     def init {
+
+        val topTexture= new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_top")
+        val sideTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_side")
+        val frontTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_front_on")
+        val frameTexture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_top")
+
         this.boxes.clear
         +=((1, 1, 1), (5, 5, 5)).face(NORTH, sideTexture, UV.fill).face(EAST, sideTexture, UV.fill).face(SOUTH, frontTexture, UV.fill).face(WEST, sideTexture, UV.fill).face(UP, topTexture, UV.fill).face(DOWN, topTexture, UV.fill)
         +=((0, 0, 0), (1, 6, 1)).face(NORTH, frameTexture, UV.auto(6)).face(EAST, frameTexture, UV.auto(6)).face(SOUTH, frameTexture, UV.auto(6)).face(WEST, frameTexture, UV.auto(6)).face(UP, frameTexture, UV.auto(6)).face(DOWN, frameTexture, UV.auto(6))

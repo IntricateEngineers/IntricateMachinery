@@ -47,7 +47,7 @@ class ModuleItem(val name: ResourceLocation) extends Item {
     }
     catch {
       case e: Exception => {
-        e.printStackTrace
+        e.printStackTrace()
       }
     }
     return false
