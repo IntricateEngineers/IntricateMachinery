@@ -15,6 +15,7 @@
  */
 package intricateengineers.intricatemachinery.api.module
 
+
 import intricateengineers.intricatemachinery.api.client.BakedModelFrame
 import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.common.module.{DummyModule, FurnaceModule}
@@ -40,6 +41,7 @@ import mcmultipart.raytrace.RayTraceUtils
 import net.minecraft.util.EnumFacing._
 
 import scala.collection.JavaConversions._
+import scala.collection._
 import scala.collection.mutable.ListBuffer
 
 object MachineryFrame {
@@ -155,7 +157,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
 
   final private val modulePositions: Array[Array[Array[Module]]] = null
   var debugInfo: Map[String, String] = Map()
-  val selectionBoxes: List[AxisAlignedBB] = List()
+  val selectionBoxes: ListBuffer[AxisAlignedBB] = ListBuffer()
   val modules: ListBuffer[Module] = ListBuffer()
 
   modules += new FurnaceModule(this)
@@ -191,9 +193,8 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
     return null
   }
 
-  override def addSelectionBoxes(list: java.util.List[AxisAlignedBB]) {
+  def addSelectionBoxes(list: ListBuffer[AxisAlignedBB]) {
     MachineryFrame.MODEL.boxes.foreach(box => list.add(box.aabb(0, 0, 0)))
-    import scala.collection.JavaConversions._
     modules.foreach(i => list.addAll(i.boundingBoxes.toList))
   }
 
@@ -205,9 +206,6 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
       {
         modules.setTag(String.valueOf(i), this.modules.apply(i).serializeNBT)
       }
-      ({
-        i += 1; i - 1   // wut
-      })
     }
     tag.setTag("modules", modules)
     return tag
@@ -218,11 +216,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
     val modules: NBTTagList = tag.getTagList("modules", 0)
     var i: Int = 0
     while (i < modules.tagCount) {
-      {
-      }
-      ({
-        i += 1; i - 1   // wut
-      })
+
     }
   }
 

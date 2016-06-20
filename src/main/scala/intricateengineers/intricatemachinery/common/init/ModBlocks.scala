@@ -33,10 +33,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry
 object ModBlocks {
     val unlocalizedPrefix: String = ModInfo.MOD_ID.toLowerCase + "."
 
-    def init {
+    def init() {
         val item: ItemMultiPart = new ItemMultiPart() {
             def createPart(world: World, pos: BlockPos, side: EnumFacing, hit: Vec3d, stack: ItemStack, player: EntityPlayer): IMultipart = {
-                null
+                new MachineryFrame
             }
         }
         registerItem(item, "machinery_frame")

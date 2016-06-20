@@ -49,7 +49,7 @@ object IntricateMachinery {
     @EventHandler
     def preInit(event : FMLPreInitializationEvent) {
         ConfigIM.config = new Configuration(new File(event.getModConfigurationDirectory, ModInfo.MOD_ID + ".cfg"))
-        ModBlocks.init
+        ModBlocks.init()
 
         MinecraftForge.EVENT_BUS.register(new EventManager)
         MinecraftForge.EVENT_BUS.register(proxy)

@@ -16,7 +16,6 @@
 package intricateengineers.intricatemachinery.api.module
 
 import javax.vecmath.Vector3f
-import mcmultipart.multipart.IMultipart
 import mcmultipart.multipart.MultipartHelper
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.Item
@@ -27,10 +26,11 @@ import net.minecraft.util.EnumHand
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import scala.collection.JavaConversions._
 
 class ModuleItem(val name: ResourceLocation) extends Item {
   override final def onItemUse(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
-    import scala.collection.JavaConversions._
+
     for (part <- MultipartHelper.getPartContainer(worldIn, pos).getParts) {
       if (part.isInstanceOf[MachineryFrame]) {
         val frame: MachineryFrame = part.asInstanceOf[MachineryFrame]
