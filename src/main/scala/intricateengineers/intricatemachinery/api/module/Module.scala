@@ -76,9 +76,9 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     debInfo += "Name" -> name.getResourcePath
 
     // Position in pixels in relation to current block
-    debInfo += "posX" -> posInFrame._1.toString
-    debInfo += "posY" -> posInFrame._2.toString
-    debInfo += "posZ" -> posInFrame._3.toString
+    debInfo += "posX" -> posX.toString
+    debInfo += "posY" -> posY.toString
+    debInfo += "posZ" -> posZ.toString
     debInfo += "rotation" -> rotation.toString
 
     return debInfo

@@ -35,6 +35,7 @@ import net.minecraftforge.common.property.IUnlistedProperty
 import javax.annotation.Nullable
 
 import intricateengineers.intricatemachinery.api.model.{BlockModel, Box}
+import intricateengineers.intricatemachinery.api.util.Logger
 import mcmultipart.MCMultiPartMod
 import mcmultipart.multipart.{INormallyOccludingPart, Multipart}
 import mcmultipart.raytrace.RayTraceUtils
@@ -87,7 +88,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
 
   def addSelectionBoxes(list: ListBuffer[AxisAlignedBB]) {
     FrameModel.boxes.foreach(box => list.add(box.aabb(0, 0, 0)))
-    modules.foreach(i => list.addAll(i.boundingBoxes))
+    modules.foreach(i => list.append(i.model.mainBox.aabb(0,0,0)))
   }
 
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
@@ -96,6 +97,8 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
     for (i <- this.modules.indices) {
       try {
         modules.setTag(String.valueOf(i), this.modules(i).serializeNBT)
+      } catch {
+        case e: Exception => Logger.warn("Couldn't write to NBT tag")
       }
     }
     tag.setTag("modules", modules)
@@ -109,7 +112,9 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
       try {
         modules.getCompoundTagAt(i)
         //TODO: Do stuff
-      }
+      } catch {
+      case e: Exception => Logger.warn("Couldn't read from NBT tag")
+    }
     }
   }
 
@@ -130,6 +135,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
     state.asInstanceOf[IExtendedBlockState].withProperty(FrameProperty, this)
   }
 
+  // TODO: Never gets called; investigate
   def addOcclusionBoxes(list: java.util.List[AxisAlignedBB]) {
     list.add(FrameModel.mainBox.aabb(0, 0, 0))
   }
