@@ -15,6 +15,9 @@
  */
 package intricateengineers.intricatemachinery.core
 
+import javax.annotation.Nullable
+
+import intricateengineers.intricatemachinery.api.client.FrameRenderer
 import intricateengineers.intricatemachinery.api.module.{FrameModel, MachineryFrame}
 import intricateengineers.intricatemachinery.client.event.DebugRenderHandler
 import intricateengineers.intricatemachinery.common.module.{DummyModel, FurnaceModel}
@@ -23,16 +26,11 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.block.model._
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.util.EnumFacing
-import net.minecraftforge.client.event.ModelBakeEvent
-import net.minecraftforge.client.event.TextureStitchEvent
+import net.minecraftforge.client.event.{ModelBakeEvent, TextureStitchEvent}
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent,
+FMLPreInitializationEvent}
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import javax.annotation.Nullable
-
-import intricateengineers.intricatemachinery.api.client.FrameRenderer
 
 object ClientProxy {
     var EMPTY_MODEL: IBakedModel = new IBakedModel() {
@@ -59,11 +57,8 @@ class ClientProxy extends CommonProxy {
     @SubscribeEvent
     def onTextureStitch(event: TextureStitchEvent.Pre) {
         FurnaceModel.quadHandler.initTextures()
-        FurnaceModel.init()
         DummyModel.quadHandler.initTextures()
-        DummyModel.init()
         FrameModel.bakedModel.initTextures()
-        FrameModel.init()
     }
 
     @SubscribeEvent

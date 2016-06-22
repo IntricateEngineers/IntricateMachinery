@@ -38,18 +38,13 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     tag
   }
 
-  // Getters and setters
-  def pos = _pos
-
   def writeNBT(tag: NBTTagCompound): NBTTagCompound = {
     val retrn: Any = null
     tag
   }
 
-  def pos_=(newPos: ModulePos) = {
-    _pos = newPos
-    onUpdate()
-  }
+  // Getters and setters
+  def pos = _pos
 
   def deserializeNBT(tag: NBTTagCompound) {
     val pos: NBTTagCompound = tag.getCompoundTag("module_pos")
@@ -59,14 +54,11 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     onUpdate()
   }
 
-  def rotation = _rotation
-
   def readNBT(tag: NBTTagCompound) {
   }
 
-  def rotation_=(rotation: Byte): Unit =
-  {
-    _rotation = rotation
+  def pos_=(newPos: ModulePos) = {
+    _pos = newPos
     onUpdate()
   }
 
@@ -74,18 +66,32 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     false
   }
 
+  def getCapability[T](capability: Capability[T], facing: EnumFacing): T = capability.asInstanceOf
+
+  def rotation = _rotation
+
+
+  def rotation_=(rotation: Byte): Unit =
+  {
+    _rotation = rotation
+    onUpdate()
+  }
+
+
+
   def onUpdate(): Unit =
   {
     debugInfo = initDebugInfo()
     boundingBoxes = initBoundingBoxes()
+    frame.moduleUpdated(this)
   }
 
-  def getCapability[T](capability: Capability[T], facing: EnumFacing): T = capability.asInstanceOf
+
 
   protected
 
   def initBoundingBoxes(): List[AxisAlignedBB] = {
-    model.boxes.map(_.aabb()).toList
+    model.boxes.map(_.aabb(pos.ints))
   }
 
   def initDebugInfo(): Map[String, String] = {
@@ -100,7 +106,7 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     debInfo += "posZ" -> pos.iZ.toString
     debInfo += "rotation" -> rotation.toString
 
-    return debInfo
+    debInfo
   }
 
 

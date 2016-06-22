@@ -16,17 +16,11 @@
 package intricateengineers.intricatemachinery.common.module
 
 import intricateengineers.intricatemachinery.api.client.util.UV
-import intricateengineers.intricatemachinery.api.model.ModuleModel
+import intricateengineers.intricatemachinery.api.model.{Box, ModuleModel}
 import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
 import intricateengineers.intricatemachinery.core.ModInfo
+import net.minecraft.util.EnumFacing.{DOWN, UP, _}
 import net.minecraft.util.ResourceLocation
-import net.minecraft.util.EnumFacing._
-import net.minecraft.util.EnumFacing.DOWN
-import net.minecraft.util.EnumFacing.UP
-
-//object DummyModule {
-//  final val Name =
-//}
 
 class DummyModule(val parentFrame: MachineryFrame) extends {
   val model = DummyModel
@@ -37,16 +31,14 @@ class DummyModule(val parentFrame: MachineryFrame) extends {
 
 object DummyModel extends ModuleModel {
 
-  private val texture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/dummy")
-
-  def init {
-    this.boxes.clear
-    +=((0, 0, 0), (8, 8, 8))
+  val boxes = List(
+    Box((0, 0, 0), (8, 8, 8))
       .face(NORTH, texture, UV.fill)
       .face(EAST, texture, UV.fill)
       .face(SOUTH, texture, UV.fill)
       .face(WEST, texture, UV.fill)
       .face(UP, texture, UV.fill)
       .face(DOWN, texture, UV.fill)
-  }
+  )
+  private val texture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/dummy")
 }
