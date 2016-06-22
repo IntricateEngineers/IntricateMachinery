@@ -15,35 +15,29 @@
  */
 package intricateengineers.intricatemachinery.api.module
 
-import intricateengineers.intricatemachinery.api.client.BakedModelFrame
-import intricateengineers.intricatemachinery.api.client.util.UV
-import intricateengineers.intricatemachinery.common.module.{DummyModule, FurnaceModule}
-import intricateengineers.intricatemachinery.core.ModInfo
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.state.BlockStateContainer
-import net.minecraft.block.state.IBlockState
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.nbt.NBTTagList
-import net.minecraft.network.PacketBuffer
-import net.minecraft.util.ResourceLocation
-import net.minecraft.util.math.AxisAlignedBB
-import net.minecraft.util.math.RayTraceResult
-import net.minecraft.util.math.Vec3d
-import net.minecraftforge.common.property.ExtendedBlockState
-import net.minecraftforge.common.property.IExtendedBlockState
-import net.minecraftforge.common.property.IUnlistedProperty
 import javax.annotation.Nullable
 
-import intricateengineers.intricatemachinery.api.model.{BlockModel, Box}
+import intricateengineers.intricatemachinery.api.client.BakedModelFrame
+import intricateengineers.intricatemachinery.api.client.util.UV
+import intricateengineers.intricatemachinery.api.model.BlockModel
 import intricateengineers.intricatemachinery.api.util.Logger
+import intricateengineers.intricatemachinery.common.module.{DummyModule, FurnaceModule}
+import intricateengineers.intricatemachinery.core.ModInfo
 import mcmultipart.MCMultiPartMod
 import mcmultipart.multipart.{INormallyOccludingPart, Multipart}
 import mcmultipart.raytrace.RayTraceUtils
+import net.minecraft.block.properties.IProperty
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
+import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraft.network.PacketBuffer
 import net.minecraft.util.EnumFacing._
+import net.minecraft.util.ResourceLocation
+import net.minecraft.util.math.{AxisAlignedBB, RayTraceResult, Vec3d}
+import net.minecraftforge.common.property.{ExtendedBlockState, IExtendedBlockState, IUnlistedProperty}
 
 import scala.collection.JavaConversions._
 import scala.collection._
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 
 object MachineryFrame {
   val NAME: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "machinery_frame")
@@ -51,15 +45,33 @@ object MachineryFrame {
 
 class MachineryFrame extends Multipart with INormallyOccludingPart {
 
-  final private val modulePositions: Array[Array[Array[Module]]] = null
-  var debugInfo: Map[String, String] = Map()
+  val modulePositions: Array[Array[ArrayBuffer[Module]]] = Array(Array(ArrayBuffer()))
   val selectionBoxes: ListBuffer[AxisAlignedBB] = ListBuffer()
-  val modules: ListBuffer[Module] = ListBuffer()
+  var debugInfo: Map[String, String] = Map()
+  var modules: List[Module] = List()
 
-  modules += new FurnaceModule(this)
-  //modules += new DummyModule(this)
+  addModule(new FurnaceModule(this)).pos = ModulePos(3d, 4d, 1d)
+  addModule(new DummyModule(this)).pos = ModulePos(4d, 6d, 2d)
 
-  def addModule(module: Module): Unit = modules += module
+  def addModule(module: Module): Module = {
+    val lb: mutable.Buffer[Module] = modules.toBuffer
+    lb += module
+    modules = lb.toList
+    module
+  }
+
+  def updateModulePositions(module: Module): Unit = {
+    modulePositions.foreach(_.foreach(_ -= module))
+    for (bb ← module.boundingBoxes) {
+      for (
+        x ← bb.minX until bb.maxX;
+        y ← bb.minY until bb.maxY;
+        z ← bb.minZ until bb.maxZ
+      ) {
+        modulePositions(x)(y)(z) = module
+      }
+    }
+  }
 
   override def getType: ResourceLocation = MachineryFrame.NAME
 
@@ -73,22 +85,23 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
     else new RayTraceUtils.AdvancedRayTraceResultPart(result, this)
   }
 
-  @Nullable def moduleHit(start: Vec3d, end: Vec3d): Module = {
+  def addSelectionBoxes(list: ListBuffer[AxisAlignedBB]) {
+    FrameModel.boxes.foreach(box => list.add(box.aabb(0, 0, 0)))
+    modules.foreach(i => list.append(i.model.mainBox.aabb(0, 0, 0)))
+  }
+
+  @Nullable
+  def moduleHit(start: Vec3d, end: Vec3d): Module = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
     for (module <- this.modules) {
       for (bounds: AxisAlignedBB <- module.boundingBoxes) {
-        val rt: RayTraceResult = bounds.offset(module.posX / 16f, module.posY / 16f, module.posZ / 16f).calculateIntercept(start.subtract(framePos), end.add(framePos))
+        val rt: RayTraceResult = bounds.offset(module.pos.dX, module.pos.dY, module.pos.dZ).calculateIntercept(start.subtract(framePos), end.add(framePos))
         if (rt != null) {
           return module
         }
       }
     }
-    return null
-  }
-
-  def addSelectionBoxes(list: ListBuffer[AxisAlignedBB]) {
-    FrameModel.boxes.foreach(box => list.add(box.aabb(0, 0, 0)))
-    modules.foreach(i => list.append(i.model.mainBox.aabb(0,0,0)))
+    null
   }
 
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {

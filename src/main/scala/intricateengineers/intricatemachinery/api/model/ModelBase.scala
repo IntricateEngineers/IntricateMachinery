@@ -1,24 +1,32 @@
 package intricateengineers.intricatemachinery.api.model
 
 import intricateengineers.intricatemachinery.api.client.util.UV
-import intricateengineers.intricatemachinery.api.util.VectorUtils
-import org.lwjgl.util.vector.Vector3f
-import net.minecraft.util.{EnumFacing, ResourceLocation}
-
-import scala.math.{max, min}
-import scala.collection.mutable.ArrayBuffer
+import intricateengineers.intricatemachinery.api.module.Module
 import intricateengineers.intricatemachinery.api.util.ImplicitVectors._
+import intricateengineers.intricatemachinery.api.util.VectorUtils
 import net.minecraft.client.renderer.block.model.BlockFaceUV
 import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.{EnumFacing, ResourceLocation}
+import org.lwjgl.util.vector.Vector3f
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
+import scala.math.{max, min}
 
 abstract class ModelBase {
+  lazy val mainBox = initMainBox()
   val boxes = ArrayBuffer[Box]()
 
-  lazy val mainBox = initMainBox()
+  init()
 
   def init()
+
+  def +=(from: (Double, Double, Double), to: (Double, Double, Double)): Box = {
+    val box = new Box((from._1, from._2, from._3),
+      (to._1, to._2, to._3))
+    boxes += box
+    return box
+  }
 
   protected def initMainBox() : Box = {
     var min = (32d, 32d, 32d)
@@ -28,13 +36,6 @@ abstract class ModelBase {
       max = VectorUtils.greatest(max, box.to)
     }
     new Box(min, max)
-  }
-
-  def += (from : (Double, Double, Double), to : (Double, Double, Double)): Box = {
-    val box = new Box((from._1, from._2, from._3),
-      (to._1, to._2, to._3))
-    boxes += box
-    return box
   }
 
 }
@@ -74,12 +75,12 @@ class Box(val from : (Double, Double, Double), val to : (Double, Double, Double)
 
   def aabb(pos: (Byte, Byte, Byte) = (0, 0, 0)): AxisAlignedBB = {
     new AxisAlignedBB(
-      (from.x + pos._1) / 16f,
-      (from.y + pos._2) / 16f,
-      (from.z + pos._3) / 16f,
-      (to.x + pos._1) / 16f,
-      (to.y + pos._2) / 16f,
-      (to.z + pos._3) / 16f
+      from.x + pos._1 / Module.GridSize,
+      from.y + pos._2 / Module.GridSize,
+      from.z + pos._3 / Module.GridSize,
+      to.x + pos._1 / Module.GridSize,
+      to.y + pos._2 / Module.GridSize,
+      to.z + pos._3 / Module.GridSize
     )
   }
 }

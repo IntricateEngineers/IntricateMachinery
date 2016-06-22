@@ -1,19 +1,14 @@
 package intricateengineers.intricatemachinery.api.client
 
-import net.minecraftforge.fml.relauncher.SideOnly
-import net.minecraft.client.renderer.block.model.FaceBakery
-import net.minecraftforge.fml.relauncher.Side
 import intricateengineers.intricatemachinery.api.model.ModelBase
+import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
+import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.block.model._
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats
+import net.minecraft.util.{EnumFacing, ResourceLocation}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.collection.mutable.ArrayBuffer
-import net.minecraft.client.renderer.block.model.BakedQuad
-import net.minecraft.util.{EnumFacing, ResourceLocation}
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.block.model.BlockPartFace
-import net.minecraft.client.renderer.block.model.ModelRotation
-import net.minecraft.client.renderer.block.model.BlockPartRotation
-import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 
 @SideOnly(Side.CLIENT)
 class QuadHandler(model : ModelBase) {
@@ -69,9 +64,9 @@ class QuadHandler(model : ModelBase) {
         val y = java.lang.Float.intBitsToFloat(vertexData(i + 1))
         val z = java.lang.Float.intBitsToFloat(vertexData(i + 2))
 
-        vertexData(i) = java.lang.Float.floatToRawIntBits(x + (module.posX / 16f))
-        vertexData(i + 1) = java.lang.Float.floatToRawIntBits(y + (module.posY / 16f))
-        vertexData(i + 2) = java.lang.Float.floatToRawIntBits(z + (module.posZ / 16f))
+        vertexData(i) = java.lang.Float.floatToRawIntBits(x + module.pos.dX.toFloat)
+        vertexData(i + 1) = java.lang.Float.floatToRawIntBits(y + module.pos.dY.toFloat)
+        vertexData(i + 2) = java.lang.Float.floatToRawIntBits(z + module.pos.dZ.toFloat)
       }
       quads1 += new BakedQuad(vertexData, quad.getTintIndex, quad.getFace, quad.getSprite, quad.shouldApplyDiffuseLighting, DefaultVertexFormats.ITEM)
     }

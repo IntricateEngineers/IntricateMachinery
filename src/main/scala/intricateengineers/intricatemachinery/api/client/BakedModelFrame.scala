@@ -15,22 +15,17 @@
  */
 package intricateengineers.intricatemachinery.api.client
 
+import javax.annotation.Nullable
+
+import intricateengineers.intricatemachinery.api.model.IMBakedModel
 import intricateengineers.intricatemachinery.api.module.{FrameModel, FrameProperty, MachineryFrame}
 import mcp.MethodsReturnNonnullByDefault
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.block.model.BakedQuad
-import net.minecraft.client.renderer.block.model.BlockPartFace
-import net.minecraft.client.renderer.block.model.BlockPartRotation
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms
-import net.minecraft.client.renderer.block.model.ItemOverrideList
-import net.minecraft.client.renderer.block.model.ModelRotation
+import net.minecraft.client.renderer.block.model._
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.common.property.IExtendedBlockState
-import javax.annotation.Nullable
-
-import intricateengineers.intricatemachinery.api.model.IMBakedModel
 import org.lwjgl.util.vector.Vector3f
 
 import scala.collection.JavaConversions._
@@ -38,7 +33,7 @@ import scala.collection.JavaConversions._
 class BakedModelFrame extends IMBakedModel {
   final protected val quads: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
 
-  def initQuads() {
+  override def initQuads(): Unit = {
     quads.clear()
     for (box <- FrameModel.boxes) {
       for (face <- EnumFacing.values) {
@@ -55,7 +50,7 @@ class BakedModelFrame extends IMBakedModel {
     }
   }
 
-  def initTextures() {
+  def initTextures(): Unit = {
     for (box <- FrameModel.boxes) {
       for (face <- EnumFacing.values) {
         if (box.faces.get(face) != null) {
