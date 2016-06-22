@@ -2,7 +2,7 @@
 
 ### Description
 ***
-Intricate Machinery is mod aimed at re-imagining the creation process of machinery in Minecraft.
+Intricate Machinery is mod aimed at re-imagining the creation process of machinery in minecraft.
 
 No longer single blocks, no longer multiblocks.
 The future is within....
