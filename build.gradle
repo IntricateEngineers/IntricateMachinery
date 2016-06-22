@@ -26,10 +26,12 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+plugins {
+      id 'org.ensime.gradle' version '0.2.8'
+}
+apply plugin: 'scala'
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 def parseprops(File cfg) {
     cfg.withReader {
@@ -92,8 +94,6 @@ processResources {
 	}
 	from(sourceSets.main.resources.srcDirs) {exclude 'mcmod.info'}
 }
-
-
 runClient {
     jvmArgs "-Xmx4G", "-Xms4G"
 }
