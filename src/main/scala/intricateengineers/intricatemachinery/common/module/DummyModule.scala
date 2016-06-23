@@ -31,6 +31,8 @@ class DummyModule(val parentFrame: MachineryFrame) extends {
 
 object DummyModel extends ModuleModel {
 
+  private val texture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/dummy")
+
   val boxes = List(
     Box((0, 0, 0), (8, 8, 8))
       .face(NORTH, texture, UV.fill)
@@ -40,5 +42,4 @@ object DummyModel extends ModuleModel {
       .face(UP, texture, UV.fill)
       .face(DOWN, texture, UV.fill)
   )
-  private val texture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/dummy")
 }

@@ -28,6 +28,7 @@ import mcmultipart.multipart.{INormallyOccludingPart, Multipart}
 import mcmultipart.raytrace.RayTraceUtils
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.{BlockStateContainer, IBlockState}
+import net.minecraft.client.renderer.block.model.BakedQuad
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.network.PacketBuffer
 import net.minecraft.util.EnumFacing._
@@ -46,6 +47,9 @@ object MachineryFrame {
 class MachineryFrame extends Multipart with INormallyOccludingPart {
 
   private val _modulePositions: ArrayBuffer[ArrayBuffer[ArrayBuffer[Module]]] = ArrayBuffer(ArrayBuffer(ArrayBuffer()))
+  var moduleQuads: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
+  var shouldUpdateQuads: Boolean = true
+
   var debugInfo: Map[String, String] = Map()
   var modules: List[Module] = List()
   private var _boundingBoxes: ListBuffer[AxisAlignedBB] = ListBuffer()

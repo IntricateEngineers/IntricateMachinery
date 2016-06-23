@@ -31,10 +31,10 @@ import org.lwjgl.util.vector.Vector3f
 import scala.collection.JavaConversions._
 
 class BakedModelFrame extends IMBakedModel {
-  final protected val quads: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
+  final protected val MFQuads: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
 
   override def initQuads(): Unit = {
-    quads.clear()
+    MFQuads.clear()
     for (box <- FrameModel.boxes) {
       for (face <- EnumFacing.values) {
         val vecs: (Vector3f, Vector3f) = box.faceVecs(face)
@@ -44,7 +44,7 @@ class BakedModelFrame extends IMBakedModel {
           val mr: ModelRotation = ModelRotation.X0_Y0
           val blockPartRotation: BlockPartRotation = null
           val quad: BakedQuad = QuadHandler.FaceBakery.makeBakedQuad(vecs._1, vecs._2, partFace, texture, face, mr, blockPartRotation, true, true)
-          quads.add(quad)
+          MFQuads.add(quad)
         }
       }
     }
@@ -53,7 +53,7 @@ class BakedModelFrame extends IMBakedModel {
   def initTextures(): Unit = {
     for (box <- FrameModel.boxes) {
       for (face <- EnumFacing.values) {
-        if (box.faces.get(face) != null) {
+        if (box.faces.get(face) != (null, null)) {
           Minecraft.getMinecraft.getTextureMapBlocks.registerSprite(box.faces.get(face).get._1)
         }
       }
@@ -62,21 +62,24 @@ class BakedModelFrame extends IMBakedModel {
 
   @MethodsReturnNonnullByDefault
   def getQuads(@Nullable state: IBlockState, @Nullable side: EnumFacing, rand: Long): java.util.List[BakedQuad] = {
+    // TODO: Move to MachineryFrame (since it accesses only fields from there anyway) + possibly make it a lambda
     if (side != null) {
       return new java.util.ArrayList[BakedQuad]
     }
-    if (state.isInstanceOf[IExtendedBlockState]) {
-      val frame: MachineryFrame = state.asInstanceOf[IExtendedBlockState].getValue(FrameProperty)
-      if (frame != null) {
-        // TODO: Why do all this? Just modify the array we already have
-        val quads1: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
-        quads1.addAll(quads)
-        frame.modules.foreach(module => quads1.addAll(module.model.quadHandler.quads(frame, module, rand)))
-        return quads1
-      }
-      return quads
+    state match {
+      case extendedState: IExtendedBlockState =>
+        val frame: MachineryFrame = extendedState.getValue(FrameProperty)
+        if (frame != null) {
+          if (frame.shouldUpdateQuads) {
+            frame.moduleQuads.addAll(MFQuads)
+            frame.modules.foreach(module => frame.moduleQuads.addAll(module.model.quadHandler.quads(frame, module, rand)))
+            frame.shouldUpdateQuads = false
+          }
+          return frame.moduleQuads
+        }
+      case _ =>
     }
-    else return new java.util.ArrayList[BakedQuad]
+    new java.util.ArrayList[BakedQuad]
   }
 
   def isAmbientOcclusion: Boolean = false

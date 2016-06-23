@@ -52,13 +52,13 @@ case class Box(from: (Double, Double, Double), to: (Double, Double, Double)) {
       case EnumFacing.EAST =>
         val k = max(from._1, to._1)
         ((k, from._2, from._3), (k, to._2, to._3))
-      case _ => (null,null)
+      case _ => (null, null)
     }
   }
 
   def face(face: EnumFacing, texture: ResourceLocation, uv: UV): Box = {
     faces(face) = (texture, uv.toBFUV(face, (from, to)))
-    return this
+    this
   }
 
   def aabb(pos: (Int, Int, Int) = (0, 0, 0)): AxisAlignedBB = {

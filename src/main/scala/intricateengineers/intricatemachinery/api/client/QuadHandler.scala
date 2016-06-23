@@ -20,7 +20,7 @@ class QuadHandler(model : ModelBase) {
     for (box <- model.boxes) {
       for (face <- EnumFacing.values) {
         val vecs = box.faceVecs(face)
-        if (vecs != null) {
+        if (vecs != (null, null)) {
           val texture = Minecraft.getMinecraft.getTextureMapBlocks
             .getAtlasSprite(box.faces(face)._1.toString)
           val partFace = new BlockPartFace(null, 0, "", box.faces(face)._2)
