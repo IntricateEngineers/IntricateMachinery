@@ -30,19 +30,20 @@ import org.lwjgl.opengl.GL11
 
 class FrameRenderer extends MultipartSpecialRenderer[MachineryFrame] {
   final private val mc: Minecraft = Minecraft.getMinecraft
-  private var baseState: IBlockState = null
+  final private val tessellator: Tessellator = Tessellator.getInstance
   private var renderer: BlockModelRenderer = null
+  private var baseState: IBlockState = null
 
   def renderMultipartAt(part: MachineryFrame, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
     mc.getTextureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
-    GlStateManager.pushMatrix
-    GlStateManager.disableLighting
+    GlStateManager.pushMatrix()
+    GlStateManager.disableLighting()
     val buffer: VertexBuffer = Tessellator.getInstance.getBuffer
     buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK)
     renderMultipartFast(part, x, y, z, partialTicks, destroyStage, buffer)
-    Tessellator.getInstance.draw
-    GlStateManager.enableLighting
-    GlStateManager.popMatrix
+    tessellator.draw()
+    GlStateManager.enableLighting()
+    GlStateManager.popMatrix()
   }
 
   override def renderMultipartFast(frame: MachineryFrame, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int, buffer: VertexBuffer) {
