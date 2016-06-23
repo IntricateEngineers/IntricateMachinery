@@ -177,89 +177,29 @@ object FrameModel extends BlockModel {
 
   val boxes = List(
     Box((0, 0, 0), (1, 16, 1))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16)),
+      .faceAll(frameTexture, UV.auto(16)),
     Box((0, 0, 15), (1, 16, 16))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16)),
+      .faceAll(frameTexture, UV.auto(16)),
     Box((15, 0, 0), (16, 16, 1))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16)),
+      .faceAll(frameTexture, UV.auto(16)),
     Box((15, 0, 15), (16, 16, 16))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16)),
+      .faceAll(frameTexture, UV.auto(16)),
     Box((1, 0, 0), (15, 1, 1))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16)),
+      .faceAll(frameTexture, UV.auto(16)),
     Box((1, 15, 0), (15, 16, 1))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16)),
+      .faceAll(frameTexture, UV.auto(16)),
     Box((0, 0, 1), (1, 1, 15))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16)),
+      .faceAll(frameTexture, UV.auto(16)),
     Box((0, 15, 1), (1, 16, 15))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16)),
+      .faceAll(frameTexture, UV.auto(16)),
     Box((15, 0, 1), (16, 1, 15))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16)),
+      .faceAll(frameTexture, UV.auto(16)),
     Box((15, 15, 1), (16, 16, 15))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16)),
+      .faceAll(frameTexture, UV.auto(16)),
     Box((1, 0, 15), (15, 1, 16))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16)),
+      .faceAll(frameTexture, UV.auto(16)),
     Box((1, 15, 15), (15, 16, 16))
-      .face(NORTH, frameTexture, UV.auto(16))
-      .face(EAST, frameTexture, UV.auto(16))
-      .face(SOUTH, frameTexture, UV.auto(16))
-      .face(WEST, frameTexture, UV.auto(16))
-      .face(UP, frameTexture, UV.auto(16))
-      .face(DOWN, frameTexture, UV.auto(16))
+      .faceAll(frameTexture, UV.auto(16))
   )
 
   def initBakedModel = new BakedModelFrame

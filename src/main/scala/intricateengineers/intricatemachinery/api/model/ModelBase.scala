@@ -61,6 +61,12 @@ case class Box(from: (Double, Double, Double), to: (Double, Double, Double)) {
     this
   }
 
+  def faceAll(texture: ResourceLocation, uv: UV): Box = {
+    for(face <- EnumFacing.values)
+      faces(face) = (texture, uv.toBFUV(face, (from, to)))
+    this
+  }
+
   def aabb(pos: (Int, Int, Int) = (0, 0, 0)): AxisAlignedBB = {
     new AxisAlignedBB(
       (from.x + pos._1) / Module.GridSize,

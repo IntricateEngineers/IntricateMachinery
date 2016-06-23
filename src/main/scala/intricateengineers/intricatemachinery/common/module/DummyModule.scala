@@ -35,11 +35,6 @@ object DummyModel extends ModuleModel {
 
   val boxes = List(
     Box((0, 0, 0), (8, 8, 8))
-      .face(NORTH, texture, UV.fill)
-      .face(EAST, texture, UV.fill)
-      .face(SOUTH, texture, UV.fill)
-      .face(WEST, texture, UV.fill)
-      .face(UP, texture, UV.fill)
-      .face(DOWN, texture, UV.fill)
+      .faceAll(texture, UV.fill)
   )
 }

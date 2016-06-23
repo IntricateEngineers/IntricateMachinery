@@ -46,89 +46,29 @@ object FurnaceModel extends ModuleModel {
       .face(UP, topTexture, UV.fill)
       .face(DOWN, topTexture, UV.fill),
     Box((0, 0, 0), (1, 6, 1))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6)),
+      .faceAll(frameTexture, UV.auto(6)),
     Box((0, 0, 5), (1, 6, 6))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6)),
+      .faceAll(frameTexture, UV.auto(6)),
     Box((5, 0, 0), (6, 6, 1))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6)),
+      .faceAll(frameTexture, UV.auto(6)),
     Box((5, 0, 5), (6, 6, 6))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6)),
+      .faceAll(frameTexture, UV.auto(6)),
     Box((1, 0, 0), (5, 1, 1))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6)),
+      .faceAll(frameTexture, UV.auto(6)),
     Box((1, 5, 0), (5, 6, 1))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6)),
+      .faceAll(frameTexture, UV.auto(6)),
     Box((0, 0, 1), (1, 1, 5))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6)),
+      .faceAll(frameTexture, UV.auto(6)),
     Box((0, 5, 1), (1, 6, 5))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6)),
+      .faceAll(frameTexture, UV.auto(6)),
     Box((5, 0, 1), (6, 1, 5))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6)),
+      .faceAll(frameTexture, UV.auto(6)),
     Box((5, 5, 1), (6, 6, 5))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6)),
+      .faceAll(frameTexture, UV.auto(6)),
     Box((1, 0, 5), (5, 1, 6))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6)),
+      .faceAll(frameTexture, UV.auto(6)),
     Box((1, 5, 5), (5, 6, 6))
-      .face(NORTH, frameTexture, UV.auto(6))
-      .face(EAST, frameTexture, UV.auto(6))
-      .face(SOUTH, frameTexture, UV.auto(6))
-      .face(WEST, frameTexture, UV.auto(6))
-      .face(UP, frameTexture, UV.auto(6))
-      .face(DOWN, frameTexture, UV.auto(6))
+      .faceAll(frameTexture, UV.auto(6))
   )
 }
 
