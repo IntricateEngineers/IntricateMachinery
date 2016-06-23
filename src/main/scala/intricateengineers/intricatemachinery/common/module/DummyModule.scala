@@ -16,7 +16,7 @@
 package intricateengineers.intricatemachinery.common.module
 
 import intricateengineers.intricatemachinery.api.client.util.UV
-import intricateengineers.intricatemachinery.api.model.{Box, ModuleModel}
+import intricateengineers.intricatemachinery.api.model.ModuleModel
 import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
 import intricateengineers.intricatemachinery.core.ModInfo
 import net.minecraft.util.EnumFacing.{DOWN, UP, _}
@@ -33,8 +33,14 @@ object DummyModel extends ModuleModel {
 
   private val texture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/dummy")
 
-  val boxes = List(
-    Box((0, 0, 0), (8, 8, 8))
-      .faceAll(texture, UV.fill)
-  )
+  define {
+    ||:(0, 0, 0)(8, 8, 8) {
+      |:(NORTH, texture, UV.fill)
+      |:(EAST, texture, UV.fill)
+      |:(SOUTH, texture, UV.fill)
+      |:(WEST, texture, UV.fill)
+      |:(UP, texture, UV.fill)
+      |:(DOWN, texture, UV.fill)
+    }
+  }
 }

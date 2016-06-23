@@ -19,8 +19,8 @@ import javax.annotation.Nullable
 
 import intricateengineers.intricatemachinery.api.client.BakedModelFrame
 import intricateengineers.intricatemachinery.api.client.util.UV
-import intricateengineers.intricatemachinery.api.model.{BlockModel, Box}
-import intricateengineers.intricatemachinery.api.util.Logger
+import intricateengineers.intricatemachinery.api.model.{BlockModel, Box, BoxFace}
+import intricateengineers.intricatemachinery.api.util.{Cache, IHasDebugInfo, Logger}
 import intricateengineers.intricatemachinery.common.module.{DummyModule, FurnaceModule}
 import intricateengineers.intricatemachinery.core.ModInfo
 import mcmultipart.MCMultiPartMod
@@ -35,24 +35,23 @@ import net.minecraft.util.EnumFacing._
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.{AxisAlignedBB, RayTraceResult, Vec3d}
 import net.minecraftforge.common.property.{ExtendedBlockState, IExtendedBlockState, IUnlistedProperty}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.collection.JavaConversions._
-import scala.collection._
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 object MachineryFrame {
   val NAME: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "machinery_frame")
 }
 
-class MachineryFrame extends Multipart with INormallyOccludingPart {
+class MachineryFrame extends Multipart
+  with INormallyOccludingPart
+  with IHasDebugInfo {
 
-  private val _modulePositions: ArrayBuffer[ArrayBuffer[ArrayBuffer[Module]]] = ArrayBuffer(ArrayBuffer(ArrayBuffer()))
-  var moduleQuads: java.util.List[BakedQuad] = new java.util.ArrayList[BakedQuad]
-  var shouldUpdateQuads: Boolean = true
-
-  var debugInfo: Map[String, String] = Map()
+  val quadCache: Cache[java.util.List[BakedQuad]] = Cache(updateQuads)
+  val bbCache: Cache[java.util.List[AxisAlignedBB]] = Cache(updateAABBs)
   var modules: List[Module] = List()
-  private var _boundingBoxes: ListBuffer[AxisAlignedBB] = ListBuffer()
 
   addModule(new FurnaceModule(this)).pos = ModulePos(3, 4, 1)
   addModule(new DummyModule(this)).pos = ModulePos(4, 6, 2)
@@ -64,33 +63,28 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
     module
   }
 
-  def updateModulePositions(module: Module): Unit = {
-    _modulePositions.foreach(_.foreach(_ -= module))
-    for (bb ← module.boundingBoxes) {
-      for (x ← bb.minX.toInt until bb.maxX.toInt;
-           y ← bb.minY.toInt until bb.maxY.toInt;
-           z ← bb.minZ.toInt until bb.maxZ.toInt) {
-        _modulePositions(x)(y)(z) = module
-      }
-    }
-  }
-
   def moduleUpdated(module: Module): Unit = {
     //updateModulePositions(module)
     updateAABBs()
   }
 
-  def updateAABBs(): Unit = {
-    _boundingBoxes.clear()
-    _boundingBoxes ++= modules.flatMap(_.boundingBoxes)
-    _boundingBoxes ++= FrameModel.aabbs
+  def updateAABBs(): java.util.List[AxisAlignedBB] = {
+    val bbs = ListBuffer[AxisAlignedBB]()
+    bbs ++= modules.flatMap(_.bbCache.get)
+    bbs ++= FrameModel.aabbs
+    bbs
+  }
+
+  override def updateDebugInfo(): Map[String, String] = {
+    // TODO: some kind of debugInfo
+    Map()
   }
 
   @Nullable
   def moduleHit(start: Vec3d, end: Vec3d): Module = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
     for (module <- this.modules) {
-      for (bounds: AxisAlignedBB <- module.boundingBoxes) {
+      for (bounds: AxisAlignedBB <- module.bbCache.get()) {
         val rt: RayTraceResult = bounds.calculateIntercept(start.subtract(framePos), end.add(framePos))
         if (rt != null) {
           return module
@@ -104,7 +98,7 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
 
   override def collisionRayTrace(start: Vec3d, end: Vec3d): RayTraceUtils.AdvancedRayTraceResultPart = {
     val result: RayTraceUtils.AdvancedRayTraceResult = RayTraceUtils.collisionRayTrace(getWorld, getPos, start, end,
-      _boundingBoxes)
+      bbCache.get())
     if (result == null) null
     else new RayTraceUtils.AdvancedRayTraceResultPart(result, this)
   }
@@ -131,8 +125,8 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
         modules.getCompoundTagAt(i)
         //TODO: Do stuff
       } catch {
-      case e: Exception => Logger.warn("Couldn't read from NBT tag")
-    }
+        case e: Exception => Logger.warn("Couldn't read from NBT tag")
+      }
     }
   }
 
@@ -143,7 +137,8 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
   }
 
   override def createBlockState: BlockStateContainer = {
-    new ExtendedBlockState(MCMultiPartMod.multipart, new Array[IProperty[_]](0), Array[IUnlistedProperty[_]](FrameProperty))
+    new ExtendedBlockState(MCMultiPartMod.multipart, new Array[IProperty[_]](0), Array[IUnlistedProperty[_]]
+      (FrameProperty))
   }
 
   override def getActualState(state: IBlockState): IBlockState = state
@@ -155,7 +150,14 @@ class MachineryFrame extends Multipart with INormallyOccludingPart {
   override def addOcclusionBoxes(list: java.util.List[AxisAlignedBB]): Unit = addSelectionBoxes(list)
 
   override def addSelectionBoxes(list: java.util.List[AxisAlignedBB]) {
-    list.appendAll(_boundingBoxes)
+    list.appendAll(bbCache.get())
+  }
+
+  private def updateQuads(): java.util.List[BakedQuad] = {
+    val buffer = ListBuffer[BakedQuad]()
+    buffer ++= FrameModel.boxes.flatMap(_.quads)
+    buffer ++= modules.flatMap(_.boxCache.get.flatMap(_.quads))
+    buffer
   }
 }
 
@@ -171,38 +173,129 @@ object FrameProperty extends IUnlistedProperty[MachineryFrame] {
 
 object FrameModel extends BlockModel {
 
-  lazy val aabbs = boxes.map(_.aabb())
-
+  lazy val aabbs = boxes.map(_.aabb)
+  @SideOnly(Side.CLIENT)
+  val bakedModel = BakedModelFrame
   val frameTexture: ResourceLocation = new ResourceLocation("minecraft", "blocks/furnace_top")
 
-  val boxes = List(
-    Box((0, 0, 0), (1, 16, 1))
-      .faceAll(frameTexture, UV.auto(16)),
-    Box((0, 0, 15), (1, 16, 16))
-      .faceAll(frameTexture, UV.auto(16)),
-    Box((15, 0, 0), (16, 16, 1))
-      .faceAll(frameTexture, UV.auto(16)),
-    Box((15, 0, 15), (16, 16, 16))
-      .faceAll(frameTexture, UV.auto(16)),
-    Box((1, 0, 0), (15, 1, 1))
-      .faceAll(frameTexture, UV.auto(16)),
-    Box((1, 15, 0), (15, 16, 1))
-      .faceAll(frameTexture, UV.auto(16)),
-    Box((0, 0, 1), (1, 1, 15))
-      .faceAll(frameTexture, UV.auto(16)),
-    Box((0, 15, 1), (1, 16, 15))
-      .faceAll(frameTexture, UV.auto(16)),
-    Box((15, 0, 1), (16, 1, 15))
-      .faceAll(frameTexture, UV.auto(16)),
-    Box((15, 15, 1), (16, 16, 15))
-      .faceAll(frameTexture, UV.auto(16)),
-    Box((1, 0, 15), (15, 1, 16))
-      .faceAll(frameTexture, UV.auto(16)),
-    Box((1, 15, 15), (15, 16, 16))
-      .faceAll(frameTexture, UV.auto(16))
-  )
 
-  def initBakedModel = new BakedModelFrame
+  define {
+    ||:(0, 0, 0)(1, 16, 1) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+    ||:(0, 0, 15)(1, 16, 16) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+    ||:(15, 0, 0)(16, 16, 1) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+    ||:(15, 0, 15)(16, 16, 16) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+    ||:(1, 0, 0)(15, 1, 1) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+    ||:(1, 15, 0)(15, 16, 1) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+    ||:(0, 0, 1)(1, 1, 15) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+    ||:(0, 15, 1)(1, 16, 15) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+    ||:(15, 0, 1)(16, 1, 15) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+    ||:(15, 15, 1)(16, 16, 15) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+    ||:(1, 0, 15)(15, 1, 16) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+    ||:(1, 15, 15)(15, 16, 16) {
+      |:(NORTH, frameTexture, UV.auto(16))
+      |:(EAST, frameTexture, UV.auto(16))
+      |:(SOUTH, frameTexture, UV.auto(16))
+      |:(WEST, frameTexture, UV.auto(16))
+      |:(UP, frameTexture, UV.auto(16))
+      |:(DOWN, frameTexture, UV.auto(16))
+    }
+  }
 }
 
+class ModuleList {
+  private val positions = mutable.Map[(Int, Int, Int), Module]()
 
+  def +=(m: Module): Unit = {
+    def addAndOffset(x: Int, y: Int, z: Int): Unit = {
+      positions((x + m.pos.iX, y + m.pos.iY, z + m.pos.iZ)) = m
+    }
+  }
+
+  private def forEachCoord(m: Module)(f: (Box, BoxFace, Int, Int, Int) ⇒ Unit): Unit = {
+    for (b ← m.model.boxes)
+      for (face ← b.faces) {
+        val (from, to) = b.vecs(face)
+        for (x ← from.x.toInt until to.x.toInt;
+             y ← from.y.toInt until to.y.toInt;
+             z ← from.z.toInt until to.z.toInt)
+          f(b, face, x, y, z)
+      }
+  }
+}

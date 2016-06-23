@@ -16,25 +16,22 @@
 
 package intricateengineers.intricatemachinery.core
 
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.common.config.Configuration
-import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.common.Mod.EventHandler
-import net.minecraftforge.fml.common.Mod.Instance
-import net.minecraftforge.fml.common.SidedProxy
-import net.minecraftforge.fml.common.event.FMLInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import java.io.File
 
 import intricateengineers.intricatemachinery.common.event.EventManager
 import intricateengineers.intricatemachinery.common.init.ModBlocks
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.common.config.Configuration
+import net.minecraftforge.fml.common.Mod.{EventHandler, Instance}
+import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent,
+FMLPreInitializationEvent}
+import net.minecraftforge.fml.common.{Mod, SidedProxy}
 
 
 @Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION, dependencies = IntricateMachinery.DEPENDENCIES, acceptableRemoteVersions = "*", modLanguage = "scala")
 object IntricateMachinery {
 
-    final val DEPENDENCIES = "required-after:Forge@[" + "12.17.0.1980" + ",);after:mcmultipart@[1.0.8,)"
+    final val DEPENDENCIES = "required-after:Forge@[" + "12.17.0.1968" + ",);after:mcmultipart@[1.0.8,)"
 
     @Instance(ModInfo.MOD_NAME)
     var instance = this

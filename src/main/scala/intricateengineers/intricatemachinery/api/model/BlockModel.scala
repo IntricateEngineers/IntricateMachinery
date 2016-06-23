@@ -1,18 +1,16 @@
 package intricateengineers.intricatemachinery.api.model
 
 import net.minecraft.client.renderer.block.model.IBakedModel
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 abstract class BlockModel extends ModelBase {
-  
-  lazy val bakedModel = this.initBakedModel
 
-  def initBakedModel : IMBakedModel
+  @SideOnly(Side.CLIENT)
+  val bakedModel: IMBakedModel
 
 }
 
 trait IMBakedModel extends IBakedModel {
-
-  def initQuads() : Unit
 
   def initTextures() : Unit
 
