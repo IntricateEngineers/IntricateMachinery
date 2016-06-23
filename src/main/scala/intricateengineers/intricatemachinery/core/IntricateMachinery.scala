@@ -28,38 +28,40 @@ FMLPreInitializationEvent}
 import net.minecraftforge.fml.common.{Mod, SidedProxy}
 
 
-@Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION, dependencies = IntricateMachinery.DEPENDENCIES, acceptableRemoteVersions = "*", modLanguage = "scala")
+@Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION, dependencies =
+  IntricateMachinery.DEPENDENCIES, acceptableRemoteVersions = "*", modLanguage = "scala")
 object IntricateMachinery {
 
-    final val DEPENDENCIES = "required-after:Forge@[" + "12.17.0.1968" + ",);after:mcmultipart@[1.0.8,)"
+  final val DEPENDENCIES = "required-after:Forge@[" + "12.17.0.1968" + ",);after:mcmultipart@[1.0.8,)"
 
-    @Instance(ModInfo.MOD_NAME)
-    var instance = this
+  @Instance(ModInfo.MOD_NAME)
+  var instance = this
 
-    @SidedProxy(serverSide = ModInfo.PROXY_COMMON, clientSide = ModInfo.PROXY_CLIENT)
-    var proxy : CommonProxy = null
+  @SidedProxy(serverSide = ModInfo.PROXY_COMMON, clientSide = ModInfo.PROXY_CLIENT)
+  var proxy: CommonProxy = null
 
-    @EventHandler
-    def preInit(event : FMLPreInitializationEvent) {
-        ConfigIM.config = new Configuration(new File(event.getModConfigurationDirectory, ModInfo.MOD_ID + ".cfg"))
-        ModBlocks.init()
-        println(DEPENDENCIES)
-        MinecraftForge.EVENT_BUS.register(new EventManager)
-        MinecraftForge.EVENT_BUS.register(proxy)
-        proxy.preInit(event)
-    }
+  @EventHandler
+  def preInit(event: FMLPreInitializationEvent) {
+    ConfigIM.config = new Configuration(new File(event.getModConfigurationDirectory, ModInfo.MOD_ID + ".cfg"))
+    ModBlocks.init()
+    println(DEPENDENCIES)
+    MinecraftForge.EVENT_BUS.register(new EventManager)
+    MinecraftForge.EVENT_BUS.register(proxy)
+    proxy.preInit(event)
+  }
 
-    @EventHandler
-    def init(event : FMLInitializationEvent) {
-        proxy.init(event)
-    }
+  @EventHandler
+  def init(event: FMLInitializationEvent) {
+    proxy.init(event)
+  }
 
-    @EventHandler
-    def postInit(event : FMLPostInitializationEvent) {
-        proxy.postInit(event)
-    }
+  @EventHandler
+  def postInit(event: FMLPostInitializationEvent) {
+    proxy.postInit(event)
+  }
 
-    object ConfigIM {
-        var config : Configuration = null
-    }
+  object ConfigIM {
+    var config: Configuration = null
+  }
+
 }
