@@ -1,6 +1,7 @@
 package intricateengineers.intricatemachinery.api.module
 
-import intricateengineers.intricatemachinery.api.model.ModuleModel
+import intricateengineers.intricatemachinery.api.model.{Box, ModuleModel}
+import intricateengineers.intricatemachinery.api.util.{Cache, IHasDebugInfo}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.{EnumFacing, ResourceLocation}
@@ -8,25 +9,45 @@ import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializab
 
 import scala.util.Random
 
-abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound] {
+abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound]
+  with IHasDebugInfo {
 
   val name: ResourceLocation
   val model: ModuleModel
-
-  // TODO: Do these need to be updated in onUpdate or can they just be vals?
-  // TODO: Also possibly make them ListBuffers
-  var boundingBoxes: List[AxisAlignedBB] = List()
-  var debugInfo: Map[String, String] = null
-
+  val boxCache: Cache[List[Box]] = Cache(() ⇒ model.boxes.map(_.offset(pos.ints)))
+  val bbCache: Cache[List[AxisAlignedBB]] = Cache(() ⇒ boxCache.get.map(_.aabb))
   // Temporary hardcoded values
-  private var _pos: ModulePos = ModulePos(8, 3, 5)
-
-  // Temporary hardcoded value
+  private var _pos: ModulePos = ModulePos(0, 0, 0)
   private var _rotation: Byte = Random.nextInt(3).toByte
 
-  onUpdate()
+  override def updateDebugInfo(): Map[String, String] = {
+    Map[String, String](
+      "Name" -> name.getResourcePath,
 
-  def serializeNBT: NBTTagCompound = {
+      "posX" -> pos.iX.toString,
+      "posY" -> pos.iY.toString,
+      "posZ" -> pos.iZ.toString,
+      "rotation" -> rotation.toString
+    )
+  }
+
+  // Getters and setters
+  def pos = _pos
+
+  def pos_=(newPos: ModulePos) = {
+    _pos = newPos
+    boxCache.invalidate()
+    bbCache.invalidate()
+    debugInfo.invalidate()
+  }
+
+  def invalidateAllCaches(): Unit = {
+    boxCache.invalidate()
+    bbCache.invalidate()
+    debugInfo.invalidate()
+  }
+
+  override def serializeNBT: NBTTagCompound = {
     val tag: NBTTagCompound = new NBTTagCompound
     val pos: NBTTagCompound = new NBTTagCompound
     pos.setInteger("x", _pos.iX)
@@ -38,78 +59,31 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     tag
   }
 
-  def writeNBT(tag: NBTTagCompound): NBTTagCompound = {
-    val retrn: Any = null
-    tag
+  def rotation = _rotation
+
+  def rotation_=(rotation: Byte): Unit = {
+    _rotation = rotation
+    boxCache.invalidate()
+    bbCache.invalidate()
+    debugInfo.invalidate()
   }
 
-  // Getters and setters
-  def pos = _pos
+  def writeNBT(tag: NBTTagCompound): NBTTagCompound = tag
 
-  def deserializeNBT(tag: NBTTagCompound) {
+  override def deserializeNBT(tag: NBTTagCompound) {
     val pos: NBTTagCompound = tag.getCompoundTag("module_pos")
     _pos = ModulePos(pos.getInteger("x"), pos.getInteger("y"), pos.getInteger("z"))
     _rotation = pos.getByte("rot")
     readNBT(tag)
-    onUpdate()
   }
 
-  def readNBT(tag: NBTTagCompound) {
-  }
+  def readNBT(tag: NBTTagCompound): Unit = {}
 
-  def pos_=(newPos: ModulePos) = {
-    _pos = newPos
-    onUpdate()
-  }
-
-  def hasCapability(capability: Capability[_], facing: EnumFacing): Boolean = {
+  override def hasCapability(capability: Capability[_], facing: EnumFacing): Boolean = {
     false
   }
 
-  def getCapability[T](capability: Capability[T], facing: EnumFacing): T = capability.asInstanceOf
-
-  def rotation = _rotation
-
-
-  def rotation_=(rotation: Byte): Unit =
-  {
-    _rotation = rotation
-    onUpdate()
-  }
-
-
-
-  def onUpdate(): Unit =
-  {
-    debugInfo = initDebugInfo()
-    boundingBoxes = initBoundingBoxes()
-    frame.moduleUpdated(this)
-  }
-
-
-
-  protected
-
-  def initBoundingBoxes(): List[AxisAlignedBB] = {
-    model.boxes.map(_.aabb(pos.ints))
-  }
-
-  def initDebugInfo(): Map[String, String] = {
-    var debInfo: Map[String, String] = Map()
-
-    // Name of the module
-    debInfo += "Name" -> name.getResourcePath
-
-    // Position in pixels in relation to current block
-    debInfo += "posX" -> pos.iX.toString
-    debInfo += "posY" -> pos.iY.toString
-    debInfo += "posZ" -> pos.iZ.toString
-    debInfo += "rotation" -> rotation.toString
-
-    debInfo
-  }
-
-
+  override def getCapability[T](capability: Capability[T], facing: EnumFacing): T = capability.asInstanceOf
 }
 
 object Module {

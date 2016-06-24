@@ -15,17 +15,14 @@
  */
 package intricateengineers.intricatemachinery.client.event
 
-import intricateengineers.intricatemachinery.api.module.MachineryFrame
-import intricateengineers.intricatemachinery.api.module.Module
+import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
 import mcmultipart.raytrace.PartMOP
 import net.minecraft.client.Minecraft
-import net.minecraft.util.math.RayTraceResult
-import net.minecraft.util.math.Vec3d
+import net.minecraft.util.math.{RayTraceResult, Vec3d}
 import net.minecraft.util.text.TextFormatting
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.relauncher.Side
-import net.minecraftforge.fml.relauncher.SideOnly
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 object DebugRenderHandler {
     var instance: DebugRenderHandler = new DebugRenderHandler
@@ -47,7 +44,7 @@ class DebugRenderHandler {
                         val eyes: Vec3d = mc.thePlayer.getPositionEyes(1)
                         val module: Module = multipartHit.moduleHit(eyes, eyes.add(mc.thePlayer.getLookVec))
                         if (module != null) {
-                            for (entry <- module.debugInfo) {
+                          for (entry <- module.debugInfo.get()) {
                                 ev.getLeft.add(entry._1 + ": " + TextFormatting.GREEN + entry._2)
                             }
                         }
