@@ -13,22 +13,35 @@ abstract class ModelBase {
   private val boxBuffer: ListBuffer[Box] = ListBuffer()
   private var _boxes: List[Box] = List()
 
-  // Model definition stuff
 
+  /* ------======================------
+        START Model Definition code
+     ------======================------ */
+
+  // Starts the definition of a Box. Everything else for this box should go to the "u" parameter.
   def |#|:(x1: Int, y1: Int, z1: Int)(x2: Int, y2: Int, z2: Int)(u: ⇒ Unit): Unit = {
     u
     boxBuffer += new Box((x1, y1, z1), (x2, y2, z2), faceBuffer.toList)
     faceBuffer.clear()
   }
 
+  // The functions below are supposed to be passed as arguments to the above function's "u" parameter
+
+  // Adds a texture and a UV to a given face
   def |-(face: EnumFacing, texture: ResourceLocation, uv: UV = UV.auto(16)): Unit = {
     faceBuffer += BoxFace(face, texture, uv)
   }
 
+  // Adds a texture and a UV, to all faces of the box that haven't been assigned anything yet
   def |*(texture: ResourceLocation, uv: UV = UV.auto(16)): Unit = {
-    EnumFacing.values.filterNot(face => faceBuffer.exists(_.side == face)).
-            foreach(unfilledFace => faceBuffer += BoxFace(unfilledFace, texture, uv))
+    EnumFacing.values.filterNot(face ⇒ faceBuffer.exists(_.side == face)).           // Get all faces that aren't filled in yet
+            foreach(unfilledFace ⇒ faceBuffer += BoxFace(unfilledFace, texture, uv)) // Fill them up with the appropriate arguments
   }
+
+  /* ------======================------
+         END Model Definition code
+     ------======================------ */
+
 
   protected def initMainBox() : Box = {
     var min = (32d, 32d, 32d)
