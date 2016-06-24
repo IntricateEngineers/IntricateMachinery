@@ -15,13 +15,13 @@ abstract class ModelBase {
 
   // Model definition stuff
 
-  def ||:(x1: Int, y1: Int, z1: Int)(x2: Int, y2: Int, z2: Int)(u: ⇒ Unit): Unit = {
+  def |#|:(x1: Int, y1: Int, z1: Int)(x2: Int, y2: Int, z2: Int)(u: ⇒ Unit): Unit = {
     u
     boxBuffer += new Box((x1, y1, z1), (x2, y2, z2), faceBuffer.toList)
     faceBuffer.clear()
   }
 
-  def |:(face: EnumFacing, texture: ResourceLocation, uv: UV = UV.auto(16)): Unit = {
+  def |-(face: EnumFacing, texture: ResourceLocation, uv: UV = UV.auto(16)): Unit = {
     faceBuffer += BoxFace(face, texture, uv)
   }
 

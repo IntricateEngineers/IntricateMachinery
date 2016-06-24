@@ -34,13 +34,13 @@ object DummyModel extends ModuleModel {
   private val texture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/dummy")
 
   define {
-    ||:(0, 0, 0)(8, 8, 8) {
-      |:(NORTH, texture, UV.fill)
-      |:(EAST, texture, UV.fill)
-      |:(SOUTH, texture, UV.fill)
-      |:(WEST, texture, UV.fill)
-      |:(UP, texture, UV.fill)
-      |:(DOWN, texture, UV.fill)
+    |#|:(0, 0, 0)(8, 8, 8) {
+      |-(NORTH, texture, UV.fill)
+      |-(EAST, texture, UV.fill)
+      |-(SOUTH, texture, UV.fill)
+      |-(WEST, texture, UV.fill)
+      |-(UP, texture, UV.fill)
+      |-(DOWN, texture, UV.fill)
     }
   }
 }

@@ -180,101 +180,101 @@ object FrameModel extends BlockModel {
 
 
   define {
-    ||:(0, 0, 0)(1, 16, 1) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(0, 0, 0)(1, 16, 1) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
-    ||:(0, 0, 15)(1, 16, 16) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(0, 0, 15)(1, 16, 16) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
-    ||:(15, 0, 0)(16, 16, 1) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(15, 0, 0)(16, 16, 1) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
-    ||:(15, 0, 15)(16, 16, 16) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(15, 0, 15)(16, 16, 16) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
-    ||:(1, 0, 0)(15, 1, 1) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(1, 0, 0)(15, 1, 1) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
-    ||:(1, 15, 0)(15, 16, 1) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(1, 15, 0)(15, 16, 1) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
-    ||:(0, 0, 1)(1, 1, 15) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(0, 0, 1)(1, 1, 15) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
-    ||:(0, 15, 1)(1, 16, 15) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(0, 15, 1)(1, 16, 15) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
-    ||:(15, 0, 1)(16, 1, 15) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(15, 0, 1)(16, 1, 15) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
-    ||:(15, 15, 1)(16, 16, 15) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(15, 15, 1)(16, 16, 15) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
-    ||:(1, 0, 15)(15, 1, 16) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(1, 0, 15)(15, 1, 16) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
-    ||:(1, 15, 15)(15, 16, 16) {
-      |:(NORTH, frameTexture, UV.auto(16))
-      |:(EAST, frameTexture, UV.auto(16))
-      |:(SOUTH, frameTexture, UV.auto(16))
-      |:(WEST, frameTexture, UV.auto(16))
-      |:(UP, frameTexture, UV.auto(16))
-      |:(DOWN, frameTexture, UV.auto(16))
+    |#|:(1, 15, 15)(15, 16, 16) {
+      |-(NORTH, frameTexture, UV.auto(16))
+      |-(EAST, frameTexture, UV.auto(16))
+      |-(SOUTH, frameTexture, UV.auto(16))
+      |-(WEST, frameTexture, UV.auto(16))
+      |-(UP, frameTexture, UV.auto(16))
+      |-(DOWN, frameTexture, UV.auto(16))
     }
   }
 }
