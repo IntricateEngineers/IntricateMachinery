@@ -25,6 +25,11 @@ abstract class ModelBase {
     faceBuffer += BoxFace(face, texture, uv)
   }
 
+  def |*(texture: ResourceLocation, uv: UV = UV.auto(16)): Unit = {
+    EnumFacing.values.filterNot(face => faceBuffer.exists(_.side == face)).
+            foreach(unfilledFace => faceBuffer += BoxFace(unfilledFace, texture, uv))
+  }
+
   protected def initMainBox() : Box = {
     var min = (32d, 32d, 32d)
     var max = (-16d, -16d, -16d)

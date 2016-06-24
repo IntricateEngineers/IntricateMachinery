@@ -53,8 +53,8 @@ class MachineryFrame extends Multipart
   val bbCache: Cache[java.util.List[AxisAlignedBB]] = Cache(updateAABBs)
   var modules: List[Module] = List()
 
-  addModule(new FurnaceModule(this)).pos = ModulePos(3, 4, 1)
-  addModule(new DummyModule(this)).pos = ModulePos(4, 6, 2)
+  addModule(new FurnaceModule(this)).pos = ModulePos(8, 8, 8)
+  addModule(new DummyModule(this)).pos = ModulePos(0, 0, 0)
 
   def addModule(module: Module): Module = {
     val lb: ListBuffer[Module] = modules.to[ListBuffer]
@@ -156,7 +156,7 @@ class MachineryFrame extends Multipart
   private def updateQuads(): java.util.List[BakedQuad] = {
     val buffer = ListBuffer[BakedQuad]()
     buffer ++= FrameModel.boxes.flatMap(_.quads)
-    buffer ++= modules.flatMap(_.boxCache.get.flatMap(_.quads))
+    buffer ++= modules.flatMap(_.boxCache.get().flatMap(_.quads))
     buffer
   }
 }
@@ -181,100 +181,40 @@ object FrameModel extends BlockModel {
 
   define {
     |#|:(0, 0, 0)(1, 16, 1) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
     |#|:(0, 0, 15)(1, 16, 16) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
     |#|:(15, 0, 0)(16, 16, 1) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
     |#|:(15, 0, 15)(16, 16, 16) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
     |#|:(1, 0, 0)(15, 1, 1) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
     |#|:(1, 15, 0)(15, 16, 1) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
     |#|:(0, 0, 1)(1, 1, 15) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
     |#|:(0, 15, 1)(1, 16, 15) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
     |#|:(15, 0, 1)(16, 1, 15) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
     |#|:(15, 15, 1)(16, 16, 15) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
     |#|:(1, 0, 15)(15, 1, 16) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
     |#|:(1, 15, 15)(15, 16, 16) {
-      |-(NORTH, frameTexture, UV.auto(16))
-      |-(EAST, frameTexture, UV.auto(16))
-      |-(SOUTH, frameTexture, UV.auto(16))
-      |-(WEST, frameTexture, UV.auto(16))
-      |-(UP, frameTexture, UV.auto(16))
-      |-(DOWN, frameTexture, UV.auto(16))
+      |*(frameTexture, UV.auto(16))
     }
   }
 }

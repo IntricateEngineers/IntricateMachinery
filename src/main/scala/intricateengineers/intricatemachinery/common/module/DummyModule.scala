@@ -35,12 +35,7 @@ object DummyModel extends ModuleModel {
 
   define {
     |#|:(0, 0, 0)(8, 8, 8) {
-      |-(NORTH, texture, UV.fill)
-      |-(EAST, texture, UV.fill)
-      |-(SOUTH, texture, UV.fill)
-      |-(WEST, texture, UV.fill)
-      |-(UP, texture, UV.fill)
-      |-(DOWN, texture, UV.fill)
+      |*(texture, UV.fill)
     }
   }
 }

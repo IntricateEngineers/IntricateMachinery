@@ -95,18 +95,4 @@ case class BoxFace(side: EnumFacing, texture: ResourceLocation, uv: UV) {
       true,
       true)
   }
-
-}
-
-object BoxFace {
-  def all(texture: ResourceLocation, uv: UV = UV.auto(16)): List[BoxFace] = {
-    List(
-      BoxFace(UP, texture, uv),
-      BoxFace(DOWN, texture, uv),
-      BoxFace(NORTH, texture, uv),
-      BoxFace(SOUTH, texture, uv),
-      BoxFace(WEST, texture, uv),
-      BoxFace(EAST, texture, uv)
-    )
-  }
 }

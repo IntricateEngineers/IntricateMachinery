@@ -7,27 +7,27 @@ import org.lwjgl.util.vector.Vector3f
 
 object UV {
   def uv(u1: Double, v1: Double, u2: Double, v2: Double): UV = {
-    return new UV(u1, v1, u2, v2)
+    new UV(u1, v1, u2, v2)
   }
 
   def auto(scale: Double): UV = {
-    return new UV(false, scale)
+    new UV(false, scale)
   }
 
   def auto: UV = {
-    return new UV(false, 16)
+    new UV(false, 16)
   }
 
   def reset(scale: Double): UV = {
-    return new UV(true, scale)
+    new UV(true, scale)
   }
 
   def reset: UV = {
-    return new UV(true, 16)
+    new UV(true, 16)
   }
 
   def fill: UV = {
-    return new UV(0, 0, 16, 16)
+    new UV(0, 0, 16, 16)
   }
 }
 
@@ -64,7 +64,7 @@ class UV {
 
   def toBFUV(face: EnumFacing, vecs: (Vector3f, Vector3f)): BlockFaceUV = {
     if (!this.auto) {
-      return new BlockFaceUV(Array[Float](u1.toFloat, v1.toFloat, u2.toFloat, v2.toFloat), 0)
+      new BlockFaceUV(Array[Float](u1.toFloat, v1.toFloat, u2.toFloat, v2.toFloat), 0)
     }
     else {
       var x1: Double = .0
@@ -113,7 +113,7 @@ class UV {
       }
       val factor: Float = (16f / scale).toFloat
       val floats: Array[Float] = Array(x1 * factor, y1 * factor, x2 * factor, y2 * factor).map(_.toFloat)
-      return new BlockFaceUV(floats, 0)
+      new BlockFaceUV(floats, 0)
     }
   }
 }
