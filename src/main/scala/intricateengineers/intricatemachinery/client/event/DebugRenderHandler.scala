@@ -42,7 +42,7 @@ class DebugRenderHandler {
                     case multipartHit: MachineryFrame =>
                         ev.getLeft.add(TextFormatting.BOLD.toString + TextFormatting.GREEN + "[Intricate Machinery]")
                         val eyes: Vec3d = mc.thePlayer.getPositionEyes(1)
-                        val module: Module = multipartHit.moduleHit(eyes, eyes.add(mc.thePlayer.getLookVec))
+                        val module: Module = multipartHit.moduleHit(eyes, eyes.add(mc.thePlayer.getLookVec.scale(5))) // the range that AABBs get highlighted (in blocks)
                         if (module != null) {
                           for (entry <- module.debugInfo.get()) {
                                 ev.getLeft.add(entry._1 + ": " + TextFormatting.GREEN + entry._2)

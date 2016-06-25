@@ -85,7 +85,7 @@ class MachineryFrame extends Multipart
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
     for (module <- this.modules) {
       for (bounds: AxisAlignedBB <- module.bbCache.get()) {
-        val rt: RayTraceResult = bounds.calculateIntercept(start.subtract(framePos), end.add(framePos))
+        val rt: RayTraceResult = bounds.calculateIntercept(start.subtract(framePos), end.subtract(framePos))
         if (rt != null) {
           return module
         }
