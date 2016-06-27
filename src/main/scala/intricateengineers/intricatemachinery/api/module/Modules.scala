@@ -5,20 +5,14 @@ import net.minecraft.util.ResourceLocation
 import scala.collection.mutable
 
 object Modules {
-  private val registry: mutable.Map[ResourceLocation, Function[MachineryFrame, Module]] = mutable.Map()
+  private val moduleRegistry: mutable.Map[ResourceLocation, (MachineryFrame) => Module] = mutable.Map()
+  private val itemRegistry: mutable.Map[ModuleItem, (MachineryFrame) => Module] = mutable.Map()
 
-  def registerModule(name: ResourceLocation, newModule: Function[MachineryFrame, Module]) {
-    registry(name) = newModule
+  def registerModule(name: ResourceLocation, moduleConstructor: (MachineryFrame) => Module) {
+    moduleRegistry(name) = moduleConstructor
   }
 
-  def newModule(name: ResourceLocation, frame: MachineryFrame): Module = {
-    try {
-      return registry.get(name).get(frame)
-    }
-    catch {
-      case e: Exception => {
-        return null
-      }
-    }
+  def registerModuleItem(item: ModuleItem, moduleConstructor: (MachineryFrame) => Module) {
+    itemRegistry(item) = moduleConstructor
   }
 }
