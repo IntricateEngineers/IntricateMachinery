@@ -3,12 +3,11 @@ package intricateengineers.intricatemachinery.core
 import java.io.File
 
 import intricateengineers.intricatemachinery.common.event.EventManager
-import intricateengineers.intricatemachinery.common.init.ModBlocks
+import intricateengineers.intricatemachinery.common.init.{ModBlocks, ModItems, ModModules}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.config.Configuration
 import net.minecraftforge.fml.common.Mod.{EventHandler, Instance}
-import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent,
-FMLPreInitializationEvent}
+import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import net.minecraftforge.fml.common.{Mod, SidedProxy}
 
 
@@ -28,6 +27,8 @@ object IntricateMachinery {
   def preInit(event: FMLPreInitializationEvent) {
     ConfigIM.config = new Configuration(new File(event.getModConfigurationDirectory, ModInfo.MOD_ID + ".cfg"))
     ModBlocks.init()
+    ModModules.init()
+    ModItems.init()
     println(DEPENDENCIES)
     MinecraftForge.EVENT_BUS.register(new EventManager)
     MinecraftForge.EVENT_BUS.register(proxy)

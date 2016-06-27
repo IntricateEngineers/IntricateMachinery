@@ -6,6 +6,6 @@ import net.minecraft.util.ResourceLocation
 
 object IMRL {
   def apply(st: String) = {
-    new ResourceLocation(ModInfo.MOD_ID.toLowerCase, st)
+    new ResourceLocation(ModInfo.mod_id, st)
   }
 }
