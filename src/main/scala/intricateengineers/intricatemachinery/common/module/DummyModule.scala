@@ -18,20 +18,20 @@ package intricateengineers.intricatemachinery.common.module
 import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.api.model.ModuleModel
 import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
-import intricateengineers.intricatemachinery.core.ModInfo
-import net.minecraft.util.EnumFacing.{DOWN, UP, _}
-import net.minecraft.util.ResourceLocation
+import intricateengineers.intricatemachinery.common.util.IMRL
 
 class DummyModule(val parentFrame: MachineryFrame) extends {
   val model = DummyModel
-  val name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "dummy")
+  val name = DummyModel.Name
 } with Module(parentFrame) {
 
 }
 
 object DummyModel extends ModuleModel {
 
-  private val texture: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/dummy")
+  val Name = IMRL("dummy")
+
+  private val texture = IMRL("blocks/dummy")
 
   define {
     |#|:(0, 0, 0)(8, 8, 8) {

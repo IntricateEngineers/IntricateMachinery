@@ -18,24 +18,24 @@ package intricateengineers.intricatemachinery.common.module
 import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.api.model.ModuleModel
 import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
-import intricateengineers.intricatemachinery.core.ModInfo
+import intricateengineers.intricatemachinery.common.util.IMRL
 import net.minecraft.util.EnumFacing._
-import net.minecraft.util.ResourceLocation
-
 
 class FurnaceModule(val parentFrame: MachineryFrame) extends {
   val model = FurnaceModel
-  val name = new ResourceLocation(ModInfo.MOD_ID.toLowerCase(), "furnace")
+  val name = FurnaceModel.Name
 } with Module(parentFrame) {
 
 }
 
 object FurnaceModel extends ModuleModel {
 
-  val topTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_top")
-  val sideTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_side")
-  val frontTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_front_on")
-  val frameTexture = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "blocks/furnace_top")
+  val Name = IMRL("furnace")
+
+  val topTexture = IMRL("blocks/furnace_top")
+  val sideTexture = IMRL("blocks/furnace_side")
+  val frontTexture = IMRL("blocks/furnace_front_on")
+  val frameTexture = IMRL("blocks/furnace_top")
 
   define {
     |#|:(1, 1, 1)(5, 5, 5) {

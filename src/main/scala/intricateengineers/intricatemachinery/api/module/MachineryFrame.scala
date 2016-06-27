@@ -22,7 +22,7 @@ import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.api.model.{BlockModel, Box, BoxFace}
 import intricateengineers.intricatemachinery.api.util.{Cache, IHasDebugInfo, Logger}
 import intricateengineers.intricatemachinery.common.module.{DummyModule, FurnaceModule}
-import intricateengineers.intricatemachinery.core.ModInfo
+import intricateengineers.intricatemachinery.common.util.IMRL
 import mcmultipart.MCMultiPartMod
 import mcmultipart.multipart.{INormallyOccludingPart, Multipart}
 import mcmultipart.raytrace.RayTraceUtils
@@ -42,7 +42,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 object MachineryFrame {
-  val NAME: ResourceLocation = new ResourceLocation(ModInfo.MOD_ID.toLowerCase, "machinery_frame")
+  val NAME = IMRL("machinery_frame")
 }
 
 class MachineryFrame extends Multipart
