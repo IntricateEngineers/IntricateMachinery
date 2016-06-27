@@ -20,7 +20,6 @@ build
 run
 
 # other (srsly, do you need this stuff here? Add it to your IDE's ignore list! :)
-gradlew*
 libs/*.jar
 gradlew-jar.bat
 gradlew-cleanCache.bat

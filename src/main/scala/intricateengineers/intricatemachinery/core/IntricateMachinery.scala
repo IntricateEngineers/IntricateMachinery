@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.{Mod, SidedProxy}
 
 
 @Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION, dependencies =
-  IntricateMachinery.DEPENDENCIES, acceptableRemoteVersions = "*", modLanguage = "scala")
+  IntricateMachinery.DEPENDENCIES, modLanguage = "scala")
 object IntricateMachinery {
 
   final val DEPENDENCIES = "required-after:Forge@[" + "12.17.0.1968" + ",);after:mcmultipart@[1.0.8,)"
