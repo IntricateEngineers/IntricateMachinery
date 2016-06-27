@@ -6,26 +6,37 @@ import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand, ResourceLocation}
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-
 import org.lwjgl.util.vector.Vector3f
 
 import scala.collection.JavaConversions._
 
-class ModuleItem(val name: ResourceLocation) extends Item {
+class ModuleItem(val name: ResourceLocation, val createModule: (MachineryFrame) => Module) extends Item {
   override final def onItemUse(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
+    val container = Option(MultipartHelper.getPartContainer(worldIn, pos))
 
-    for (part <- MultipartHelper.getPartContainer(worldIn, pos).getParts) {
-      part match {
-        case frame: MachineryFrame ⇒
-          if (this.placeInFrame(frame, stack, playerIn, hand, facing, new Vector3f(hitX, hitY, hitZ))) return EnumActionResult.SUCCESS
+    container match {
+      case Some(cont) => {    // Container is non-null (not a block and an actual MultipartContainer)
+        for (part <- container.get.getParts) {
+          part match {
+            case frame: MachineryFrame =>
+              if (this.placeInFrame(frame, stack, playerIn, hand, facing, new Vector3f(hitX, hitY, hitZ)))
+                EnumActionResult.SUCCESS
+          }
+        }
+        EnumActionResult.FAIL
       }
+      case None => EnumActionResult.PASS
     }
-    EnumActionResult.PASS
   }
 
   def placeInFrame(frame: MachineryFrame, stack: ItemStack, player: EntityPlayer, hand: EnumHand, facing: EnumFacing, hit: Vector3f): Boolean = {
     try {
-      frame.modules += Modules.newModule(name, frame)
+      frame.modules += createModule(frame)
+
+      // Until Topi fixes ModuleList
+      frame.bbCache.invalidate()
+      frame.quadCache.invalidate()
+
       return true
     }
     catch {

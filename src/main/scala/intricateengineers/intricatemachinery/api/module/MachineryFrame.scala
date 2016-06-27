@@ -38,13 +38,8 @@ class MachineryFrame extends Multipart
   val bbCache: Cache[java.util.List[AxisAlignedBB]] = Cache(updateAABBs)
   val modules = new ModuleList()
 
-  (modules += new FurnaceModule(this)).pos = ModulePos(8, 8, 8)
-  (modules += new DummyModule(this)).pos = ModulePos(0, 0, 0)
-
-  def moduleUpdated(module: Module): Unit = {
-    //updateModulePositions(module)
-    updateAABBs()
-  }
+  //(modules += new FurnaceModule(this)).pos = ModulePos(8, 8, 8)
+  //(modules += new DummyModule(this)).pos = ModulePos(0, 0, 0)
 
   def updateAABBs(): java.util.List[AxisAlignedBB] = {
     val bbs = ListBuffer[AxisAlignedBB]()
