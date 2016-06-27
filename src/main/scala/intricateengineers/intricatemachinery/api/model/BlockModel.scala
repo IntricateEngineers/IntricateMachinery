@@ -5,7 +5,6 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 abstract class BlockModel extends ModelBase {
 
-  @SideOnly(Side.CLIENT)
   val bakedModel: IMBakedModel
 
 }

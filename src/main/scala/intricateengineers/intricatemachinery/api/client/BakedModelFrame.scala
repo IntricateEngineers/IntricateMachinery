@@ -41,7 +41,7 @@ object BakedModelFrame extends IMBakedModel {
       case extendedState: IExtendedBlockState =>
         val frame: MachineryFrame = extendedState.getValue(FrameProperty)
         if (frame != null) {
-          return frame.quadCache.get
+          return frame.quadCache()
         }
     }
     new java.util.ArrayList[BakedQuad]

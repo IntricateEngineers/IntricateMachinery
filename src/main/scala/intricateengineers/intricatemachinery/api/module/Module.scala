@@ -16,7 +16,7 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
   val name: ResourceLocation
   val model: ModuleModel
   val boxCache: Cache[List[Box]] = Cache(() ⇒ model.boxes.map(_.offset(pos.ints)))
-  val bbCache: Cache[List[AxisAlignedBB]] = Cache(() ⇒ boxCache.get.map(_.aabb))
+  val bbCache: Cache[List[AxisAlignedBB]] = Cache(() ⇒ boxCache().map(_.aabb))
   // Temporary hardcoded values
   private var _pos: ModulePos = ModulePos(0, 0, 0)
   private var _rotation: Byte = Random.nextInt(3).toByte

@@ -51,17 +51,10 @@ class MachineryFrame extends Multipart
 
   val quadCache: Cache[java.util.List[BakedQuad]] = Cache(updateQuads)
   val bbCache: Cache[java.util.List[AxisAlignedBB]] = Cache(updateAABBs)
-  var modules: List[Module] = List()
+  val modules = new ModuleList()
 
-  addModule(new FurnaceModule(this)).pos = ModulePos(8, 8, 8)
-  addModule(new DummyModule(this)).pos = ModulePos(0, 0, 0)
-
-  def addModule(module: Module): Module = {
-    val lb: ListBuffer[Module] = modules.to[ListBuffer]
-    lb += module
-    modules = lb.toList
-    module
-  }
+  (modules += new FurnaceModule(this)).pos = ModulePos(8, 8, 8)
+  (modules += new DummyModule(this)).pos = ModulePos(0, 0, 0)
 
   def moduleUpdated(module: Module): Unit = {
     //updateModulePositions(module)
@@ -70,22 +63,22 @@ class MachineryFrame extends Multipart
 
   def updateAABBs(): java.util.List[AxisAlignedBB] = {
     val bbs = ListBuffer[AxisAlignedBB]()
-    bbs ++= modules.flatMap(_.bbCache.get)
+    bbs ++= modules.flatMap(_.bbCache())
     bbs ++= FrameModel.aabbs
     bbs
   }
 
   override def updateDebugInfo(): ListMap[String, String] = {
     ListMap[String, String](
-      "Modules" -> modules.length.toString
+      "Modules" -> modules.toList.length.toString
     )
   }
 
   @Nullable
   def moduleHit(start: Vec3d, end: Vec3d): Module = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
-    for (module <- this.modules) {
-      for (bounds: AxisAlignedBB <- module.bbCache.get) {
+    for (module: Module <- this.modules) {
+      for (bounds: AxisAlignedBB <- module.bbCache()) {
         val rt: RayTraceResult = bounds.calculateIntercept(start.subtract(framePos), end.subtract(framePos))
         if (rt != null) {
           return module
@@ -99,7 +92,7 @@ class MachineryFrame extends Multipart
 
   override def collisionRayTrace(start: Vec3d, end: Vec3d): RayTraceUtils.AdvancedRayTraceResultPart = {
     val result: RayTraceUtils.AdvancedRayTraceResult = RayTraceUtils.collisionRayTrace(getWorld, getPos, start, end,
-      bbCache.get)
+      bbCache())
     if (result == null) null
     else new RayTraceUtils.AdvancedRayTraceResultPart(result, this)
   }
@@ -107,7 +100,7 @@ class MachineryFrame extends Multipart
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
     super.writeToNBT(tag)
     val modules: NBTTagCompound = new NBTTagCompound
-    for (i <- this.modules.indices) {
+    for (i <- this.modules.toList.indices) {
       try {
         modules.setTag(String.valueOf(i), this.modules(i).serializeNBT)
       } catch {
@@ -151,13 +144,13 @@ class MachineryFrame extends Multipart
   override def addOcclusionBoxes(list: java.util.List[AxisAlignedBB]): Unit = addSelectionBoxes(list)
 
   override def addSelectionBoxes(list: java.util.List[AxisAlignedBB]) {
-    list.appendAll(bbCache.get)
+    list.appendAll(bbCache())
   }
 
   private def updateQuads(): java.util.List[BakedQuad] = {
     val buffer = ListBuffer[BakedQuad]()
     buffer ++= FrameModel.boxes.flatMap(_.quads)
-    buffer ++= modules.flatMap(_.boxCache.get.flatMap(_.quads))
+    buffer ++= modules.flatMap(_.boxCache().flatMap(_.quads))
     buffer
   }
 }
@@ -220,16 +213,24 @@ object FrameModel extends BlockModel {
   }
 }
 
-class ModuleList {
-  private val positions = mutable.Map[(Int, Int, Int), Module]()
 
-  def +=(m: Module): Unit = {
-    def addAndOffset(x: Int, y: Int, z: Int): Unit = {
-      positions((x + m.pos.iX, y + m.pos.iY, z + m.pos.iZ)) = m
-    }
+class ModuleList extends Traversable[Module] {
+  private val positions = mutable.Map[(Int, Int, Int), Module]()
+  private val modules = ListBuffer[Module]()
+  private val list = Cache[List[Module]](() => modules.toList)
+
+  def apply(i: Int): Module = {
+    modules(i)
+  }
+  def +=(m: Module): Module = {
+    modules += m
+    forEachCoord(m, (b, f, x, y, z) => 
+      positions((x + m.pos.iX, y + m.pos.iY, z + m.pos.iZ)) = m)
+    list.invalidate()
+    m
   }
 
-  private def forEachCoord(m: Module)(f: (Box, BoxFace, Int, Int, Int) ⇒ Unit): Unit = {
+  def forEachCoord(m: Module, f: (Box, BoxFace, Int, Int, Int) ⇒ Unit): Unit = {
     for (b ← m.model.boxes)
       for (face ← b.faces) {
         val (from, to) = b.vecs(face)
@@ -239,4 +240,9 @@ class ModuleList {
           f(b, face, x, y, z)
       }
   }
+
+  override def foreach[U](f: (Module) => U) = modules.foreach(f)
+
+  override def toList(): List[Module] = list()
 }
+

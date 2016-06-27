@@ -48,13 +48,13 @@ class DebugRenderHandler {
 
             // Machine Frame debug info
             ev.getLeft.add(TextFormatting.GOLD + "Frame:")
-            for (entry <- multipartHit.debugInfo.get)
+            for (entry <- multipartHit.debugInfo())
               ev.getLeft.add("  " + entry._1 + ": " + TextFormatting.GREEN + entry._2)
 
             // Module debug info
             ev.getLeft.add(TextFormatting.GOLD + "Module:")
             if (module != null)
-              for (entry <- module.debugInfo.get)
+              for (entry <- module.debugInfo())
                 ev.getLeft.add("  " + entry._1 + ": " + TextFormatting.GREEN + entry._2)
             case _ =>
           }

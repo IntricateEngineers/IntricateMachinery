@@ -18,7 +18,7 @@ class Cache[A >: Null](function: () ⇒ A) {
     *
     * @return the valid cache value
     */
-  def get: A = {
+  def apply(): A = {
     if(!valid) {
       update()
     }
