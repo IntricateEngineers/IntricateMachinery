@@ -29,31 +29,38 @@ object DebugRenderHandler {
 }
 
 class DebugRenderHandler {
-    final private val mc: Minecraft = Minecraft.getMinecraft
+  final private val mc: Minecraft = Minecraft.getMinecraft
 
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT) def onRenderGameOverlayEvent(event: RenderGameOverlayEvent) {
-        if ((event.getType eq RenderGameOverlayEvent.ElementType.TEXT) && event.isInstanceOf[RenderGameOverlayEvent.Text] && mc.gameSettings.showDebugInfo) {
-            val ev: RenderGameOverlayEvent.Text = event.asInstanceOf[RenderGameOverlayEvent.Text]
-            val hit: RayTraceResult = mc.objectMouseOver
-            try {
-                val mop: PartMOP = hit.asInstanceOf[PartMOP]
-                mop.partHit match {
-                    case multipartHit: MachineryFrame =>
-                        ev.getLeft.add(TextFormatting.BOLD.toString + TextFormatting.GREEN + "[Intricate Machinery]")
-                        val eyes: Vec3d = mc.thePlayer.getPositionEyes(1)
-                        val module: Module = multipartHit.moduleHit(eyes, eyes.add(mc.thePlayer.getLookVec.scale(5))) // the range that AABBs get highlighted (in blocks)
-                        if (module != null) {
-                          for (entry <- module.debugInfo.get()) {
-                                ev.getLeft.add(entry._1 + ": " + TextFormatting.GREEN + entry._2)
-                            }
-                        }
-                    case _ =>
-                }
-            }
-            catch {
-                case e: ClassCastException =>
-            }
-        }
+  @SubscribeEvent
+  @SideOnly(Side.CLIENT)
+  def onRenderGameOverlayEvent(event: RenderGameOverlayEvent) {
+    if ((event.getType eq RenderGameOverlayEvent.ElementType.TEXT) && event.isInstanceOf[RenderGameOverlayEvent.Text] && mc.gameSettings.showDebugInfo) {
+      val ev: RenderGameOverlayEvent.Text = event.asInstanceOf[RenderGameOverlayEvent.Text]
+      val hit: RayTraceResult = mc.objectMouseOver
+      try {
+        val mop: PartMOP = hit.asInstanceOf[PartMOP]
+        mop.partHit match {
+          case multipartHit: MachineryFrame =>
+            ev.getLeft.add(TextFormatting.BOLD.toString + TextFormatting.GREEN + "[Intricate Machinery]")
+            val eyes: Vec3d = mc.thePlayer.getPositionEyes(1)
+            val module: Module = multipartHit.moduleHit(eyes, eyes.add(mc.thePlayer.getLookVec.scale(5))) // the range that AABBs get highlighted (in blocks)
+
+            // Machine Frame debug info
+            ev.getLeft.add(TextFormatting.GOLD + "Frame:")
+            for (entry <- multipartHit.debugInfo.get())
+              ev.getLeft.add("  " + entry._1 + ": " + TextFormatting.GREEN + entry._2)
+
+            // Module debug info
+            ev.getLeft.add(TextFormatting.GOLD + "Module:")
+            if (module != null)
+              for (entry <- module.debugInfo.get())
+                ev.getLeft.add("  " + entry._1 + ": " + TextFormatting.GREEN + entry._2)
+            case _ =>
+          }
+      }
+      catch {
+          case e: ClassCastException =>
+      }
     }
+  }
 }

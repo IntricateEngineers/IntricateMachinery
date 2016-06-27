@@ -7,6 +7,7 @@ import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializable}
 
+import scala.collection.immutable.ListMap
 import scala.util.Random
 
 abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound]
@@ -20,10 +21,9 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
   private var _pos: ModulePos = ModulePos(0, 0, 0)
   private var _rotation: Byte = Random.nextInt(3).toByte
 
-  override def updateDebugInfo(): Map[String, String] = {
-    Map[String, String](
-      "Name" -> name.getResourcePath,
-
+  override def updateDebugInfo(): ListMap[String, String] = {
+    ListMap[String, String](
+      "Type" -> name.toString,
       "posX" -> pos.iX.toString,
       "posY" -> pos.iY.toString,
       "posZ" -> pos.iZ.toString,

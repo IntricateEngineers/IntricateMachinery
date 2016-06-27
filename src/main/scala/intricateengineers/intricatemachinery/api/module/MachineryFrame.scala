@@ -31,13 +31,13 @@ import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.client.renderer.block.model.BakedQuad
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.network.PacketBuffer
-import net.minecraft.util.EnumFacing._
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.{AxisAlignedBB, RayTraceResult, Vec3d}
 import net.minecraftforge.common.property.{ExtendedBlockState, IExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.collection.JavaConversions._
+import scala.collection.immutable.ListMap
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
@@ -75,9 +75,10 @@ class MachineryFrame extends Multipart
     bbs
   }
 
-  override def updateDebugInfo(): Map[String, String] = {
-    // TODO: some kind of debugInfo
-    Map()
+  override def updateDebugInfo(): ListMap[String, String] = {
+    ListMap[String, String](
+      "Modules" -> modules.length.toString
+    )
   }
 
   @Nullable
