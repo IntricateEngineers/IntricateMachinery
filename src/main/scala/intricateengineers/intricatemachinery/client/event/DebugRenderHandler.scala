@@ -41,19 +41,20 @@ class DebugRenderHandler {
         val mop: PartMOP = hit.asInstanceOf[PartMOP]
         mop.partHit match {
           case multipartHit: MachineryFrame =>
+            ev.getLeft.add("")
             ev.getLeft.add(TextFormatting.BOLD.toString + TextFormatting.GREEN + "[Intricate Machinery]")
             val eyes: Vec3d = mc.thePlayer.getPositionEyes(1)
             val module: Module = multipartHit.moduleHit(eyes, eyes.add(mc.thePlayer.getLookVec.scale(5))) // the range that AABBs get highlighted (in blocks)
 
             // Machine Frame debug info
             ev.getLeft.add(TextFormatting.GOLD + "Frame:")
-            for (entry <- multipartHit.debugInfo.get())
+            for (entry <- multipartHit.debugInfo.get)
               ev.getLeft.add("  " + entry._1 + ": " + TextFormatting.GREEN + entry._2)
 
             // Module debug info
             ev.getLeft.add(TextFormatting.GOLD + "Module:")
             if (module != null)
-              for (entry <- module.debugInfo.get())
+              for (entry <- module.debugInfo.get)
                 ev.getLeft.add("  " + entry._1 + ": " + TextFormatting.GREEN + entry._2)
             case _ =>
           }

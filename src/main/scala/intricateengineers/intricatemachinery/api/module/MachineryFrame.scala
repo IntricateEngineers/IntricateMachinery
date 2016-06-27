@@ -85,7 +85,7 @@ class MachineryFrame extends Multipart
   def moduleHit(start: Vec3d, end: Vec3d): Module = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
     for (module <- this.modules) {
-      for (bounds: AxisAlignedBB <- module.bbCache.get()) {
+      for (bounds: AxisAlignedBB <- module.bbCache.get) {
         val rt: RayTraceResult = bounds.calculateIntercept(start.subtract(framePos), end.subtract(framePos))
         if (rt != null) {
           return module
@@ -99,7 +99,7 @@ class MachineryFrame extends Multipart
 
   override def collisionRayTrace(start: Vec3d, end: Vec3d): RayTraceUtils.AdvancedRayTraceResultPart = {
     val result: RayTraceUtils.AdvancedRayTraceResult = RayTraceUtils.collisionRayTrace(getWorld, getPos, start, end,
-      bbCache.get())
+      bbCache.get)
     if (result == null) null
     else new RayTraceUtils.AdvancedRayTraceResultPart(result, this)
   }
@@ -151,13 +151,13 @@ class MachineryFrame extends Multipart
   override def addOcclusionBoxes(list: java.util.List[AxisAlignedBB]): Unit = addSelectionBoxes(list)
 
   override def addSelectionBoxes(list: java.util.List[AxisAlignedBB]) {
-    list.appendAll(bbCache.get())
+    list.appendAll(bbCache.get)
   }
 
   private def updateQuads(): java.util.List[BakedQuad] = {
     val buffer = ListBuffer[BakedQuad]()
     buffer ++= FrameModel.boxes.flatMap(_.quads)
-    buffer ++= modules.flatMap(_.boxCache.get().flatMap(_.quads))
+    buffer ++= modules.flatMap(_.boxCache.get.flatMap(_.quads))
     buffer
   }
 }

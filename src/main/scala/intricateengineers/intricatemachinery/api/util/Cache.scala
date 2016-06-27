@@ -18,18 +18,26 @@ class Cache[A >: Null](function: () ⇒ A) {
     *
     * @return the valid cache value
     */
-  def get(): A = {
-    update()
+  def get: A = {
+    if(!valid) {
+      update()
+    }
     cached
   }
 
   /**
-    * Recalculate the value in the cache if it is invalid
-    *
-    * @param force if true, the value will be recalculated even if the cache is valid.
+    * Recalculate the value in the cache
     */
-  def update(force: Boolean = false): Unit = {
-    if (!valid || force) {
+  def update(): Unit = {
+      cached = function()
+      valid = true
+  }
+
+  /**
+    * Recalculate the value in the cache only if it is invalid
+    */
+  def updateIfInvalid(): Unit = {
+    if (!valid) {
       cached = function()
       valid = true
     }
