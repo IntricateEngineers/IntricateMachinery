@@ -37,8 +37,8 @@ class MachineryFrame extends Multipart
   val quadCache: Cache[java.util.List[BakedQuad]] = Cache(updateQuads)
   val bbCache: Cache[java.util.List[AxisAlignedBB]] = Cache(updateAABBs)
 
-  (ModuleList += new FurnaceModule(this)).pos = ModulePos(8, 8, 8)
-  (ModuleList += new DummyModule(this)).pos = ModulePos(0, 0, 0)
+  //(ModuleList += new FurnaceModule(this)).pos = ModulePos(9, 8, 9)
+  //(ModuleList += new DummyModule(this)).pos = ModulePos(1, 0, 1)
 
   @Nullable
   def moduleHit(start: Vec3d, end: Vec3d): Module = {
@@ -82,10 +82,10 @@ class MachineryFrame extends Multipart
 
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
     super.writeToNBT(tag)
-    val modules: NBTTagCompound = new NBTTagCompound
-    for (i <- this.ModuleList.toList.indices) {
+    val modules: NBTTagList = new NBTTagList
+    for (i <- this.ModuleList.toList().indices) {
       try {
-        modules.setTag(String.valueOf(i), this.ModuleList(i).serializeNBT)
+        modules.appendTag(this.ModuleList(i).serializeNBT)
       } catch {
         case e: Exception => Logger.warn("Couldn't write to NBT tag")
       }
@@ -96,12 +96,12 @@ class MachineryFrame extends Multipart
 
   override def readFromNBT(tag: NBTTagCompound) {
     super.readFromNBT(tag)
-    val modules: NBTTagList = tag.getTagList("modules", 0)
+    val modules: NBTTagList = tag.getTagList("modules", 10)
     for (i <- 0 until modules.tagCount) {
       try {
         val mTag = modules.getCompoundTagAt(i)
         val mType = new ResourceLocation(mTag.getString("module_type"))
-        (ModuleList += /* TODO: Modules.createModule(mType) */).deserializeNBT(mTag)
+        (ModuleList += Modules.createModule(mType)(this)).deserializeNBT(mTag)
       } catch {
         case e: Exception => Logger.warn("Couldn't read from NBT tag")
       }

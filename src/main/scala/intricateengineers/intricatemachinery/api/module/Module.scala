@@ -48,8 +48,8 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
   }
 
   override def serializeNBT: NBTTagCompound = {
-    val tag: NBTTagCompound = new NBTTagCompound
-    val pos: NBTTagCompound = new NBTTagCompound
+    val tag = new NBTTagCompound
+    val pos = new NBTTagCompound
     pos.setInteger("x", _pos.iX)
     pos.setInteger("y", _pos.iY)
     pos.setInteger("z", _pos.iZ)
