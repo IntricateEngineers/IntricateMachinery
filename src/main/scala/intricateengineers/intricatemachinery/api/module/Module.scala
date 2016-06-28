@@ -54,6 +54,7 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     pos.setInteger("y", _pos.iY)
     pos.setInteger("z", _pos.iZ)
     pos.setByte("rot", rotation)
+    tag.setString("module_type", name.toString)
     tag.setTag("module_pos", pos)
     this.writeNBT(tag)
     tag

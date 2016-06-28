@@ -99,8 +99,9 @@ class MachineryFrame extends Multipart
     val modules: NBTTagList = tag.getTagList("modules", 0)
     for (i <- 0 until modules.tagCount) {
       try {
-        modules.getCompoundTagAt(i)
-        //TODO: Do stuff
+        val mTag = modules.getCompoundTagAt(i)
+        val mType = new ResourceLocation(mTag.getString("module_type"))
+        (ModuleList += /* TODO: Modules.createModule(mType) */).deserializeNBT(mTag)
       } catch {
         case e: Exception => Logger.warn("Couldn't read from NBT tag")
       }
