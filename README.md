@@ -21,8 +21,9 @@ Hope you all enjoy this project in the future!
 
 ### Discord Server
 ***
-You'll most likely find us [here](https://discord.gg/011RjqztHhDI3jcWE).
+One day we'll have one, but no point till we release
 
 ### License
 ***
-###### Intricate Machinery is Licenced under the **GNU - General Public Licence**
+###### Intricate Machinery is Licenced under our custom **IntricateEngineers Public License**.
+See [LICENSE](https://github.com/IntricateEngineers/IntricateMachinery/blob/master/LICENSE) for more information
