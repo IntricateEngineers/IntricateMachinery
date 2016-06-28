@@ -54,11 +54,46 @@ repositories {
         // MCMultipart
         url "http://maven.amadornes.com"
     }
+    maven {
+        name = "mojang"
+        url = "https://libraries.minecraft.net/"
+    }
 }
 
 dependencies {
     compile "net.darkhax.tesla:Tesla:1.9.4-1.1.0.24"
     deobfCompile "MCMultiPart:MCMultiPart-experimental:1.2.0_71:deobf"
+    compile "org.scala-lang:scala-library:2.11.8"
+
+    // Topi needs this shit
+    compile "oshi-project:oshi-core:1.1"
+    compile "net.java.dev.jna:jna:3.4.0"
+    compile "net.java.dev.jna:platform:3.4.0"
+    compile "com.ibm.icu:icu4j-core-mojang:51.2"
+    compile "net.sf.jopt-simple:jopt-simple:4.6"
+    compile "com.paulscode:codecjorbis:20101023"
+    compile "com.paulscode:codecwav:20101023"
+    compile "com.paulscode:libraryjavasound:20101123"
+    compile "com.paulscode:librarylwjglopenal:20100824"
+    compile "com.paulscode:soundsystem:20120107"
+    compile "io.netty:netty-all:4.0.23.Final"
+    compile "com.google.guava:guava:17.0"
+    compile "org.apache.commons:commons-lang3:3.3.2"
+    compile "commons-io:commons-io:2.4"
+    compile "commons-codec:commons-codec:1.9"
+    compile "net.java.jinput:jinput:2.0.5"
+    compile "net.java.jutils:jutils:1.0.0"
+    compile "com.google.code.gson:gson:2.2.4"
+    compile "com.mojang:authlib:1.5.22"
+    compile "com.mojang:realms:1.8.19"
+    compile "org.apache.commons:commons-compress:1.8.1"
+    compile "org.apache.httpcomponents:httpclient:4.3.3"
+    compile "commons-logging:commons-logging:1.1.3"
+    compile "org.apache.httpcomponents:httpcore:4.3.2"
+    compile "it.unimi.dsi:fastutil:7.0.12_mojang"
+    compile "org.apache.logging.log4j:log4j-api:2.0-beta9"
+    compile "org.lwjgl.lwjgl:lwjgl:2.9.4-nightly-20150209"
+    compile "org.lwjgl.lwjgl:lwjgl_util:2.9.4-nightly-20150209"
 }
 
 processResources {
