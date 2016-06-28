@@ -210,17 +210,17 @@ class ModuleList extends Traversable[Module] {
     m
   }
 
-  def forEachCoord(m: Module, f: (Box, BoxFace, Int, Int, Int) ⇒ Unit): Unit = {
-    for (b ← m.boxCache())
+  def forEachCoord(m: Module, f: (Box, BoxFace, Int, Int, Int) => Unit): Unit = {
+    for (b <- m.boxCache())
       forEachCoord(b, (face, x, y, z) => f(b, face, x, y, z))
   }
 
   def forEachCoord(b: Box, f: (BoxFace, Int, Int, Int) => Unit): Unit = {
-      for (face ← b.faces) {
+      for (face <- b.faces) {
         val (from, to) = b.vecs(face)
-        for (x ← from.x.toInt until to.x.toInt;
-             y ← from.y.toInt until to.y.toInt;
-             z ← from.z.toInt until to.z.toInt)
+        for (x <- from.x.toInt until to.x.toInt;
+             y <- from.y.toInt until to.y.toInt;
+             z <- from.z.toInt until to.z.toInt)
           f(face, x, y, z)
       }
   }

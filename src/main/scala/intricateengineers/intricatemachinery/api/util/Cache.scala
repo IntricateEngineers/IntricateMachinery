@@ -7,7 +7,7 @@ package intricateengineers.intricatemachinery.api.util
   * @param function used to refill the cache if it was invalidated
   * @author topisani
   */
-class Cache[A >: Null](function: () ⇒ A) {
+class Cache[A >: Null](function: () => A) {
 
   private var cached: A = null
   private var valid = false
@@ -55,7 +55,7 @@ class Cache[A >: Null](function: () ⇒ A) {
 }
 
 object Cache {
-  def apply[A >: Null](f: () ⇒ A): Cache[A] = {
+  def apply[A >: Null](f: () => A): Cache[A] = {
     new Cache[A](f)
   }
 }

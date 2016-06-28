@@ -19,7 +19,7 @@ abstract class ModelBase {
      ------======================------ */
 
   // Starts the definition of a Box. Everything else for this box should go to the "u" parameter.
-  def |#|:(x1: Int, y1: Int, z1: Int)(x2: Int, y2: Int, z2: Int)(u: ⇒ Unit): Unit = {
+  def |#|:(x1: Int, y1: Int, z1: Int)(x2: Int, y2: Int, z2: Int)(u: => Unit): Unit = {
     u
     boxBuffer += new Box((x1, y1, z1), (x2, y2, z2), faceBuffer.toList)
     faceBuffer.clear()
@@ -34,8 +34,8 @@ abstract class ModelBase {
 
   // Adds a texture and a UV, to all faces of the box that haven't been assigned anything yet
   def |*(texture: ResourceLocation, uv: UV = UV.auto(16)): Unit = {
-    EnumFacing.values.filterNot(face ⇒ faceBuffer.exists(_.side == face)).           // Get all faces that aren't filled in yet
-            foreach(unfilledFace ⇒ faceBuffer += BoxFace(unfilledFace, texture, uv)) // Fill them up with the appropriate arguments
+    EnumFacing.values.filterNot(face => faceBuffer.exists(_.side == face)).           // Get all faces that aren't filled in yet
+            foreach(unfilledFace => faceBuffer += BoxFace(unfilledFace, texture, uv)) // Fill them up with the appropriate arguments
   }
 
   /* ------======================------
@@ -55,7 +55,7 @@ abstract class ModelBase {
 
   def boxes = _boxes
 
-  protected def define(f: ⇒ Unit): Unit = {
+  protected def define(f: => Unit): Unit = {
     boxBuffer.clear()
     f
     _boxes = boxBuffer.toList

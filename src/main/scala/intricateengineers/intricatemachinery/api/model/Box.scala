@@ -54,7 +54,7 @@ case class Box(from: (Double, Double, Double), to: (Double, Double, Double), fac
   def quads = _quads
 
   def initTextures() = {
-    for (face ← faces) {
+    for (face <- faces) {
       Minecraft.getMinecraft.getTextureMapBlocks
         .registerSprite(face.texture)
     }
@@ -71,7 +71,7 @@ case class Box(from: (Double, Double, Double), to: (Double, Double, Double), fac
     try {
       _quads = faces.map(_.quad(this))
     } catch {
-      case _: NullPointerException ⇒
+      case _: NullPointerException =>
     }
   }
 }
