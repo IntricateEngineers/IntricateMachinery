@@ -31,12 +31,7 @@ class ModuleItem(val name: ResourceLocation, val createModule: (MachineryFrame) 
 
   def placeInFrame(frame: MachineryFrame, stack: ItemStack, player: EntityPlayer, hand: EnumHand, facing: EnumFacing, hit: Vector3f): Boolean = {
     try {
-      frame.modules += createModule(frame)
-
-      // Until Topi fixes ModuleList
-      frame.bbCache.invalidate()
-      frame.quadCache.invalidate()
-
+      frame.ModuleList += createModule(frame)
       return true
     }
     catch {
