@@ -1,9 +1,11 @@
 package intricateengineers.intricatemachinery.api.module
 
 import mcmultipart.multipart.MultipartHelper
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{Item, ItemStack}
-import net.minecraft.util.{EnumActionResult, EnumFacing, EnumHand, ResourceLocation}
+import net.minecraft.init.SoundEvents
+import net.minecraft.item.{EnumAction, Item, ItemStack}
+import net.minecraft.util._
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import org.lwjgl.util.vector.Vector3f
@@ -19,8 +21,11 @@ class ModuleItem(val name: ResourceLocation, val createModule: (MachineryFrame) 
         for (part <- container.get.getParts) {
           part match {
             case frame: MachineryFrame =>
-              if (this.placeInFrame(frame, stack, playerIn, hand, facing, new Vector3f(hitX, hitY, hitZ)))
+              if (this.placeInFrame(frame, stack, playerIn, hand, facing, new Vector3f(hitX, hitY, hitZ))) {
+                playerIn.swingArm(EnumHand.MAIN_HAND)
+                worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 EnumActionResult.SUCCESS
+              }
           }
         }
         EnumActionResult.FAIL
@@ -32,6 +37,7 @@ class ModuleItem(val name: ResourceLocation, val createModule: (MachineryFrame) 
   def placeInFrame(frame: MachineryFrame, stack: ItemStack, player: EntityPlayer, hand: EnumHand, facing: EnumFacing, hit: Vector3f): Boolean = {
     try {
       frame.ModuleList += createModule(frame)
+      //(frame.ModuleList += createModule(frame)).pos = ModulePos(Random.nextInt%7, Random.nextInt%7, Random.nextInt%7)
       return true
     }
     catch {
@@ -41,4 +47,8 @@ class ModuleItem(val name: ResourceLocation, val createModule: (MachineryFrame) 
     }
     false
   }
+
+  override def onEntitySwing(entityLiving: EntityLivingBase, stack: ItemStack): Boolean = false
+
+  override def getItemUseAction(stack: ItemStack): EnumAction = EnumAction.BLOCK
 }
