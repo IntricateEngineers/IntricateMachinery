@@ -33,8 +33,8 @@ object ModItems {
 
   private def registerItem[T <: Item](item: T, name: String): T = {
     item.setCreativeTab(IMCreativeTab.INSTANCE)
-    item.setUnlocalizedName(ModInfo.unlocalizedPrefix + name)
-    item.setRegistryName(ModInfo.mod_id, name)
+    item.setUnlocalizedName(ModInfo.UNLOCALIZED_PREFIX + name)
+    item.setRegistryName(ModInfo.MOD_ID_LOWERCASE, name)
     GameRegistry.register(item)
     return item
   }
@@ -43,8 +43,8 @@ object ModItems {
     val name = item.moduleObject.Name.getResourcePath
 
     item.setCreativeTab(IMCreativeTab.INSTANCE)
-    item.setUnlocalizedName(ModInfo.unlocalizedPrefix + name)
-    item.setRegistryName(ModInfo.mod_id, name)
+    item.setUnlocalizedName(ModInfo.UNLOCALIZED_PREFIX + name)
+    item.setRegistryName(ModInfo.MOD_ID_LOWERCASE, name)
     GameRegistry.register(item)
 
     Modules.registerModuleItem(item, item.createModule)

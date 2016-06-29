@@ -7,6 +7,6 @@ object ModInfo {
     final val PROXY_COMMON = "intricateengineers.intricatemachinery.core.CommonProxy"
     final val PROXY_CLIENT = "intricateengineers.intricatemachinery.core.ClientProxy"
 
-    final val mod_id = "intricatemachinery"
-    final val unlocalizedPrefix = mod_id + "."
+    final val MOD_ID_LOWERCASE = "intricatemachinery"
+    final val UNLOCALIZED_PREFIX = MOD_ID_LOWERCASE + "."
 }

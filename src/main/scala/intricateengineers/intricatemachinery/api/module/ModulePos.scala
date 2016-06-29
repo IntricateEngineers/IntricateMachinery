@@ -6,7 +6,7 @@ package intricateengineers.intricatemachinery.api.module
 class ModulePos(val int: Int) {
 
   val ints: (Int, Int, Int) = ((int & 0xF00) >> 8, (int & 0x0F0) >> 4, int & 0x00F)
-  val doubles: (Double, Double, Double) = (ints._1 / Module.GridSize, ints._2 / Module.GridSize, ints._3 / Module.GridSize)
+  val doubles: (Double, Double, Double) = (ints._1 / Module.GRID_SIZE, ints._2 / Module.GRID_SIZE, ints._3 / Module.GRID_SIZE)
 
   val (dX, dY, dZ) = doubles
   val (iX, iY, iZ) = ints
@@ -15,7 +15,7 @@ class ModulePos(val int: Int) {
 object ModulePos {
 
   def apply(x: Double, y: Double, z: Double): ModulePos = {
-    ModulePos((x * Module.GridSize).toInt, (y * Module.GridSize).toInt, (z * Module.GridSize).toInt)
+    ModulePos((x * Module.GRID_SIZE).toInt, (y * Module.GRID_SIZE).toInt, (z * Module.GRID_SIZE).toInt)
   }
 
   def apply(x: Int, y: Int, z: Int): ModulePos = {

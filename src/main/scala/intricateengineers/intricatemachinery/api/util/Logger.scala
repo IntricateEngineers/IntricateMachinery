@@ -15,7 +15,7 @@ object Logger {
   }
 
   def warn(format: String, data: Any*) {
-    FMLLog.log(Level.WARN, "[RTG-WARN] " + format, data)
+    FMLLog.log(Level.WARN, "[IM-WARN] " + format, data)
   }
 
   def error(format: String, data: Any*) {

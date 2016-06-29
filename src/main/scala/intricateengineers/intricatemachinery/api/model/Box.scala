@@ -19,12 +19,12 @@ import scala.math._
 case class Box(from: (Double, Double, Double), to: (Double, Double, Double), faces: List[BoxFace] = List()) {
   val size = Vector3f.sub(to, from, new Vector3f)
   val aabb = new AxisAlignedBB(
-    from._1 / Module.GridSize,
-    from._2 / Module.GridSize,
-    from._3 / Module.GridSize,
-    to._1 / Module.GridSize,
-    to._2 / Module.GridSize,
-    to._3 / Module.GridSize)
+    from._1 / Module.GRID_SIZE,
+    from._2 / Module.GRID_SIZE,
+    from._3 / Module.GRID_SIZE,
+    to._1 / Module.GRID_SIZE,
+    to._2 / Module.GRID_SIZE,
+    to._3 / Module.GRID_SIZE)
   private var _quads: List[BakedQuad] = List()
 
   def vecs(face: BoxFace): (Vector3f, Vector3f) = {
