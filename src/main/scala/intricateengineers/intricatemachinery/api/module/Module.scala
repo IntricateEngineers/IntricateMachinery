@@ -32,9 +32,9 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
   }
 
   // Getters and setters
-  def pos = _pos
+  def pos: ModulePos = _pos
 
-  def pos_=(newPos: ModulePos) = {
+  def pos_=(newPos: ModulePos): Unit = {
     _pos = newPos
     boxCache.invalidate()
     bbCache.invalidate()
@@ -73,7 +73,7 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
 
   override def deserializeNBT(tag: NBTTagCompound) {
     val pos: NBTTagCompound = tag.getCompoundTag("module_pos")
-    _pos = ModulePos(pos.getInteger("x"), pos.getInteger("y"), pos.getInteger("z"))
+    pos_=(ModulePos(pos.getInteger("x"), pos.getInteger("y"), pos.getInteger("z")))
     _rotation = pos.getByte("rot")
     readNBT(tag)
   }

@@ -11,6 +11,7 @@ import net.minecraft.world.World
 import org.lwjgl.util.vector.Vector3f
 
 import scala.collection.JavaConversions._
+import scala.util.Random
 
 class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (MachineryFrame) => Module) extends Item {
   final val name = moduleObject.Name
@@ -38,8 +39,9 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
 
   def placeInFrame(frame: MachineryFrame, stack: ItemStack, player: EntityPlayer, hand: EnumHand, facing: EnumFacing, hit: Vector3f): Boolean = {
     try {
-      frame.ModuleList += createModule(frame)
-      //(frame.ModuleList += createModule(frame)).pos = ModulePos(Random.nextInt%7, Random.nextInt%7, Random.nextInt%7)
+      //frame.ModuleList += createModule(frame)
+      (frame.ModuleList += createModule(frame)).pos = ModulePos(Random.nextInt%7, Random.nextInt%7, Random.nextInt%7)
+
       return true
     }
     catch {
