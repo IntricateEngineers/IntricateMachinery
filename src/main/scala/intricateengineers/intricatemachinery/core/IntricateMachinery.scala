@@ -29,7 +29,6 @@ object IntricateMachinery {
     ModBlocks.init()
     ModModules.init()
     ModItems.init()
-    println(DEPENDENCIES)
     MinecraftForge.EVENT_BUS.register(new EventManager)
     MinecraftForge.EVENT_BUS.register(proxy)
     proxy.preInit(event)

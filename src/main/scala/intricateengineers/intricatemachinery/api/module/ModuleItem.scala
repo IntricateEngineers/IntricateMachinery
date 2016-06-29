@@ -12,7 +12,9 @@ import org.lwjgl.util.vector.Vector3f
 
 import scala.collection.JavaConversions._
 
-class ModuleItem(val name: ResourceLocation, val createModule: (MachineryFrame) => Module) extends Item {
+class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (MachineryFrame) => Module) extends Item {
+  final val name = moduleObject.Name
+
   override final def onItemUse(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
     val container = Option(MultipartHelper.getPartContainer(worldIn, pos))
 
@@ -23,7 +25,7 @@ class ModuleItem(val name: ResourceLocation, val createModule: (MachineryFrame) 
             case frame: MachineryFrame =>
               if (this.placeInFrame(frame, stack, playerIn, hand, facing, new Vector3f(hitX, hitY, hitZ))) {
                 playerIn.swingArm(EnumHand.MAIN_HAND)
-                worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F)
                 EnumActionResult.SUCCESS
               }
           }

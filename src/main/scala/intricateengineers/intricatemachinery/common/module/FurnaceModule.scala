@@ -2,20 +2,22 @@ package intricateengineers.intricatemachinery.common.module
 
 import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.api.model.ModuleModel
-import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
+import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module, ModuleCompanion}
 import intricateengineers.intricatemachinery.common.util.IMRL
 import net.minecraft.util.EnumFacing._
 
 class FurnaceModule(val parentFrame: MachineryFrame) extends {
   val model = FurnaceModel
-  val name = FurnaceModel.Name
+  val name = FurnaceModule.Name
 } with Module(parentFrame) {
 
 }
 
-object FurnaceModel extends ModuleModel {
-
+object FurnaceModule extends ModuleCompanion {
   val Name = IMRL("furnace")
+}
+
+object FurnaceModel extends ModuleModel {
 
   val topTexture = IMRL("blocks/furnace_top")
   val sideTexture = IMRL("blocks/furnace_side")

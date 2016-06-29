@@ -1,7 +1,7 @@
 package intricateengineers.intricatemachinery.common.init
 
-import intricateengineers.intricatemachinery.api.module.{MachineryFrame, ModuleItem, Modules}
-import intricateengineers.intricatemachinery.common.module.{DummyModel, DummyModule, FurnaceModel, FurnaceModule}
+import intricateengineers.intricatemachinery.api.module.{MachineryFrame, ModuleCompanion, ModuleItem, Modules}
+import intricateengineers.intricatemachinery.common.module._
 import intricateengineers.intricatemachinery.common.util.gui.IMCreativeTab
 import intricateengineers.intricatemachinery.core.ModInfo
 import mcmultipart.item.ItemMultiPart
@@ -26,12 +26,9 @@ object ModItems {
     // Machinery Frame item
     registerItem(itemMachineFrame, "machinery_frame")
 
-    // TODO(velocity): Clean up registering module items
     // Module items
-    val dummyItem = registerModuleItem(new ModuleItem(DummyModel.Name, new DummyModule(_)), DummyModel.Name.getResourcePath)
-    val furnaceItem = registerModuleItem(new ModuleItem(FurnaceModel.Name, new FurnaceModule(_)), FurnaceModel.Name.getResourcePath)
-    Modules.registerModuleItem(dummyItem, (frame) => new DummyModule(frame))
-    Modules.registerModuleItem(furnaceItem, (frame) => new FurnaceModule(frame))
+    registerModuleItem(new ModuleItem(DummyModule, new DummyModule(_)))
+    registerModuleItem(new ModuleItem(FurnaceModule, new FurnaceModule(_)))
   }
 
   private def registerItem[T <: Item](item: T, name: String): T = {
@@ -42,11 +39,14 @@ object ModItems {
     return item
   }
 
-  private def registerModuleItem[T <: ModuleItem](item: T, name: String): T = {
+  private def registerModuleItem(item: ModuleItem[ModuleCompanion]): ModuleItem[ModuleCompanion] = {
+    val name = item.moduleObject.Name.getResourcePath
+
     item.setCreativeTab(IMCreativeTab.INSTANCE)
     item.setUnlocalizedName(ModInfo.unlocalizedPrefix + name)
     item.setRegistryName(ModInfo.mod_id, name)
     GameRegistry.register(item)
+
     Modules.registerModuleItem(item, item.createModule)
     return item
   }

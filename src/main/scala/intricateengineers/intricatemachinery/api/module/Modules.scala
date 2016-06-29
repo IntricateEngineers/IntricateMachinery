@@ -7,13 +7,13 @@ import scala.collection.mutable
 // Modules Registry
 object Modules {
   private val moduleRegistry: mutable.Map[ResourceLocation, (MachineryFrame) => Module] = mutable.Map()
-  private val itemRegistry: mutable.Map[ModuleItem, (MachineryFrame) => Module] = mutable.Map()
+  private val itemRegistry: mutable.Map[ModuleItem[ModuleCompanion], (MachineryFrame) => Module] = mutable.Map()
 
-  def registerModule(name: ResourceLocation, moduleConstructor: (MachineryFrame) => Module) {
-    moduleRegistry(name) = moduleConstructor
+  def registerModule(moduleObject: ModuleCompanion, moduleConstructor: (MachineryFrame) => Module) {
+    moduleRegistry(moduleObject.Name) = moduleConstructor
   }
 
-  def registerModuleItem(item: ModuleItem, moduleConstructor: (MachineryFrame) => Module) {
+  def registerModuleItem(item: ModuleItem[ModuleCompanion], moduleConstructor: (MachineryFrame) => Module) {
     itemRegistry(item) = moduleConstructor
   }
 

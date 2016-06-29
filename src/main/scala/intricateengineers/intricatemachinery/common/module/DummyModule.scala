@@ -2,19 +2,21 @@ package intricateengineers.intricatemachinery.common.module
 
 import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.api.model.ModuleModel
-import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module}
+import intricateengineers.intricatemachinery.api.module.{MachineryFrame, Module, ModuleCompanion}
 import intricateengineers.intricatemachinery.common.util.IMRL
 
 class DummyModule(val parentFrame: MachineryFrame) extends {
   val model = DummyModel
-  val name = DummyModel.Name
+  val name = DummyModule.Name
 } with Module(parentFrame) {
 
 }
 
-object DummyModel extends ModuleModel {
-
+object DummyModule extends ModuleCompanion {
   val Name = IMRL("dummy")
+}
+
+object DummyModel extends ModuleModel {
 
   private val texture = IMRL("blocks/dummy")
 
