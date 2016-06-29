@@ -176,16 +176,16 @@ class MachineryFrame extends Multipart
       }
     }
 
-    def forEachAdjecant(b: Box, f: (BoxFace, Int, Int, Int) => Unit): Unit = {
+    def forEachAdjacent(b: Box, f: (BoxFace, Int, Int, Int) => Unit): Unit = {
       forEachCoord(b, (face, x, y, z) => {
         val offset = face.side.getDirectionVec
         f(face, x + offset.getX, y + offset.getY, z + offset.getZ)
       })
     }
 
-    def forEachAdjecant(m: Module, f: (Box, BoxFace, Int, Int, Int) => Unit): Unit = {
+    def forEachAdjacent(m: Module, f: (Box, BoxFace, Int, Int, Int) => Unit): Unit = {
       for (b <- m.boxCache())
-        forEachAdjecant(b, (face, x, y, z) => f(b, face, x, y, z))
+        forEachAdjacent(b, (face, x, y, z) => f(b, face, x, y, z))
     }
 
     override def foreach[U](f: (Module) => U) = modules.foreach(f)
