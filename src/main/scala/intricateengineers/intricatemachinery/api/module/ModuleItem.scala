@@ -1,6 +1,6 @@
 package intricateengineers.intricatemachinery.api.module
 
-import mcmultipart.multipart.MultipartHelper
+import mcmultipart.multipart.{IMultipart, IMultipartContainer, MultipartHelper}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.SoundEvents
@@ -17,19 +17,18 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
   final val name = moduleObject.Name
 
   override final def onItemUse(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
+
+    // BlockPos facing the block that was right clicked
+    val posFacing = pos.add(facing.getDirectionVec)
+
     val container = Option(MultipartHelper.getPartContainer(worldIn, pos))
 
-    container match {
-      case Some(cont) => {    // Container is non-null (not a block and an actual MultipartContainer)
-        for (part <- container.get.getParts) {
-          part match {
-            case frame: MachineryFrame =>
-              if (this.placeInFrame(frame, stack, playerIn, hand, facing, new Vector3f(hitX, hitY, hitZ))) {
-                playerIn.swingArm(EnumHand.MAIN_HAND)
-                worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F)
-                EnumActionResult.SUCCESS
-              }
-          }
+    isContainerAMachineryFrame(container) match {
+      case Some(frame) => {
+        if (this.placeInFrame(frame, stack, playerIn, hand, facing, new Vector3f(hitX, hitY, hitZ))) {
+          playerIn.swingArm(EnumHand.MAIN_HAND)
+          worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F)
+          EnumActionResult.SUCCESS
         }
         EnumActionResult.FAIL
       }
@@ -40,7 +39,8 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
   def placeInFrame(frame: MachineryFrame, stack: ItemStack, player: EntityPlayer, hand: EnumHand, facing: EnumFacing, hit: Vector3f): Boolean = {
     try {
       //frame.ModuleList += createModule(frame)
-      (frame.ModuleList += createModule(frame)).pos = ModulePos(Random.nextInt%7, Random.nextInt%7, Random.nextInt%7)
+      (frame.ModuleList += createModule(frame)).pos =
+              ModulePos(Random.nextDouble.abs%1, Random.nextDouble.abs%1, Random.nextDouble.abs%1)
 
       return true
     }
@@ -55,4 +55,10 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
   override def onEntitySwing(entityLiving: EntityLivingBase, stack: ItemStack): Boolean = false
 
   override def getItemUseAction(stack: ItemStack): EnumAction = EnumAction.BLOCK
+
+  def isContainerAMachineryFrame(iMultipartContainer: Option[IMultipartContainer]): Option[MachineryFrame] = {
+    iMultipartContainer
+                    .map(_.getParts.find(_.isInstanceOf[MachineryFrame]))   // Search for an MF in the parts of the container
+                    .map(_.get.asInstanceOf[MachineryFrame])   // If we found an MF, cast it to one and return it
+  }
 }
