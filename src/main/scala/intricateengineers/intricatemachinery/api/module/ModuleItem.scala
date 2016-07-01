@@ -62,12 +62,15 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
           modulePos.setX(1 - modulePos.x - moduleSizeNormalized.x)
         case EnumFacing.DOWN =>
           modulePos.setY(1 - modulePos.y - moduleSizeNormalized.y)
+        case _ =>
       }
       facing.getAxis match {
         case EnumFacing.Axis.X =>
           modulePos.setZ(modulePos.z - moduleSizeNormalized.z / 2)
+          modulePos.setY(modulePos.y - moduleSizeNormalized.y / 2)
         case EnumFacing.Axis.Z =>
           modulePos.setX(modulePos.x - moduleSizeNormalized.x / 2)
+          modulePos.setY(modulePos.y - moduleSizeNormalized.y / 2)
         case EnumFacing.Axis.Y =>
           modulePos.setZ(modulePos.z - moduleSizeNormalized.z / 2)
           modulePos.setX(modulePos.x - moduleSizeNormalized.x / 2)
