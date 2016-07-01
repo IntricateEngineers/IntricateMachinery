@@ -22,6 +22,7 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
     val posFacing = pos.add(facing.getDirectionVec)
 
     val container = Option(MultipartHelper.getPartContainer(worldIn, pos))
+    val containerFacing = Option(MultipartHelper.getPartContainer(worldIn, posFacing))
 
     isContainerAMachineryFrame(container) match {
       case Some(frame) => {
@@ -34,7 +35,20 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
       }
       case None => EnumActionResult.PASS
     }
+
+    isContainerAMachineryFrame(containerFacing) match {
+      case Some(frame) => {
+        if (this.placeInFrame(frame, stack, playerIn, hand, facing, new Vector3f(hitX, hitY, hitZ))) {
+          playerIn.swingArm(EnumHand.MAIN_HAND)
+          worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F)
+          EnumActionResult.SUCCESS
+        }
+        EnumActionResult.FAIL
+      }
+      case None => EnumActionResult.PASS
+    }
   }
+
 
   def placeInFrame(frame: MachineryFrame, stack: ItemStack, player: EntityPlayer, hand: EnumHand, facing: EnumFacing, hit: Vector3f): Boolean = {
     try {
