@@ -88,5 +88,5 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
 }
 
 object Module {
-  final val GRID_SIZE: Double = 16
+  final val GRID_SIZE: Int = 16
 }

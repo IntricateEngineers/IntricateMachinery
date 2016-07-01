@@ -17,7 +17,7 @@ import scala.math._
   * Created by topisani on 23/06/16.
   */
 case class Box(from: (Double, Double, Double), to: (Double, Double, Double), faces: List[BoxFace] = List()) {
-  val size = Vector3f.sub(to, from, new Vector3f)
+  val size = Vector3f.sub(to, from, null)
   val aabb = new AxisAlignedBB(
     from._1 / Module.GRID_SIZE,
     from._2 / Module.GRID_SIZE,

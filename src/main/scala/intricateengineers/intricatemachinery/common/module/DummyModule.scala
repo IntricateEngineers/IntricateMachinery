@@ -21,7 +21,7 @@ object DummyModel extends ModuleModel {
   private val texture = IMRL("blocks/dummy")
 
   define {
-    |#|:(0, 0, 0)(8, 8, 8) {
+    |#|:(0, 0, 0)(7, 7, 7) {
       |*(texture, UV.fill)
     }
   }

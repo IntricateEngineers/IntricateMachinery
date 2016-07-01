@@ -1,5 +1,7 @@
 package intricateengineers.intricatemachinery.api.module
 
+import org.lwjgl.util.vector.Vector3f
+
 /**
   * A representation of the position of a module. Useful for many weird things.
   */
@@ -20,6 +22,10 @@ object ModulePos {
 
   def apply(x: Int, y: Int, z: Int): ModulePos = {
     new ModulePos(((x << 8) | (y << 4)) | z)
+  }
+
+  def apply(vec: Vector3f): ModulePos = {
+    apply(vec.x, vec.y, vec.z)
   }
 
 }
