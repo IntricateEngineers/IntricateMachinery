@@ -56,7 +56,6 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     pos.setByte("rot", rotation)
     tag.setString("module_type", name.toString)
     tag.setTag("module_pos", pos)
-    this.writeNBT(tag)
     tag
   }
 
@@ -69,16 +68,11 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     debugInfo.invalidate()
   }
 
-  def writeNBT(tag: NBTTagCompound): NBTTagCompound = tag
-
   override def deserializeNBT(tag: NBTTagCompound) {
     val pos: NBTTagCompound = tag.getCompoundTag("module_pos")
     pos_=(ModulePos(pos.getInteger("x"), pos.getInteger("y"), pos.getInteger("z")))
     _rotation = pos.getByte("rot")
-    readNBT(tag)
   }
-
-  def readNBT(tag: NBTTagCompound): Unit = {}
 
   override def hasCapability(capability: Capability[_], facing: EnumFacing): Boolean = {
     false
