@@ -16,16 +16,16 @@ class ModulePos(val int: Int) {
 
 object ModulePos {
 
-  def apply(x: Double, y: Double, z: Double): ModulePos = {
-    ModulePos((x * Module.GRID_SIZE).toInt, (y * Module.GRID_SIZE).toInt, (z * Module.GRID_SIZE).toInt)
-  }
-
   def apply(x: Int, y: Int, z: Int): ModulePos = {
     new ModulePos(((x << 8) | (y << 4)) | z)
   }
 
+  def apply(x: Double, y: Double, z: Double): ModulePos = {
+    ModulePos((x * Module.GRID_SIZE).toInt, (y * Module.GRID_SIZE).toInt, (z * Module.GRID_SIZE).toInt)
+  }
+
   def apply(vec: Vector3f): ModulePos = {
-    apply(vec.x, vec.y, vec.z)
+    ModulePos(vec.x, vec.y, vec.z)
   }
 
 }

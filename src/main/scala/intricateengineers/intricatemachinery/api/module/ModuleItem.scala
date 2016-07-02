@@ -1,6 +1,6 @@
 package intricateengineers.intricatemachinery.api.module
 
-import mcmultipart.multipart.{IMultipart, IMultipartContainer, MultipartHelper}
+import mcmultipart.multipart.{IMultipartContainer, MultipartHelper}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.SoundEvents
@@ -11,7 +11,6 @@ import net.minecraft.world.World
 import org.lwjgl.util.vector.Vector3f
 
 import scala.collection.JavaConversions._
-import scala.util.Random
 
 class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (MachineryFrame) => Module) extends Item {
   final val name = moduleObject.Name
@@ -45,46 +44,45 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
   }
 
   def placeInFrameBlockFace(frame: MachineryFrame, stack: ItemStack, player: EntityPlayer, hand: EnumHand, facing: EnumFacing, hit: Vector3f): Boolean = {
-    try {
-      //(frame.ModuleList += createModule(frame)).pos =
-      //        ModulePos(Random.nextDouble.abs%1, Random.nextDouble.abs%1, Random.nextDouble.abs%1)
 
       val newModule = createModule(frame)
-      val box = newModule.model.mainBox
-      val moduleSizeNormalized = new Vector3f(box.size.x/Module.GRID_SIZE,box.size.y/Module.GRID_SIZE,box.size.z/Module.GRID_SIZE)
+      val mainBox = newModule.model.mainBox
+      val moduleSizeNormalized = new Vector3f(mainBox.size.x/Module.GRID_SIZE, mainBox.size.y/Module.GRID_SIZE, mainBox.size.z/Module.GRID_SIZE)
 
-      val modulePos: Vector3f = hit
+      val modulePosVec: Vector3f = hit
 
       facing match {
         case EnumFacing.NORTH =>
-          modulePos.setZ(1 - modulePos.z - moduleSizeNormalized.z)
+          modulePosVec.setZ(1 - modulePosVec.z - moduleSizeNormalized.z)
         case EnumFacing.WEST =>
-          modulePos.setX(1 - modulePos.x - moduleSizeNormalized.x)
+          modulePosVec.setX(1 - modulePosVec.x - moduleSizeNormalized.x)
         case EnumFacing.DOWN =>
-          modulePos.setY(1 - modulePos.y - moduleSizeNormalized.y)
+          modulePosVec.setY(1 - modulePosVec.y - moduleSizeNormalized.y)
         case _ =>
       }
       facing.getAxis match {
         case EnumFacing.Axis.X =>
-          modulePos.setZ(modulePos.z - moduleSizeNormalized.z / 2)
-          modulePos.setY(modulePos.y - moduleSizeNormalized.y / 2)
+          modulePosVec.setZ((modulePosVec.z - moduleSizeNormalized.z / 2).max(0))
+          modulePosVec.setY((modulePosVec.y - moduleSizeNormalized.y / 2).max(0))
         case EnumFacing.Axis.Z =>
-          modulePos.setX(modulePos.x - moduleSizeNormalized.x / 2)
-          modulePos.setY(modulePos.y - moduleSizeNormalized.y / 2)
+          modulePosVec.setX((modulePosVec.x - moduleSizeNormalized.x / 2).max(0))
+          modulePosVec.setY((modulePosVec.y - moduleSizeNormalized.y / 2).max(0))
         case EnumFacing.Axis.Y =>
-          modulePos.setZ(modulePos.z - moduleSizeNormalized.z / 2)
-          modulePos.setX(modulePos.x - moduleSizeNormalized.x / 2)
+          modulePosVec.setZ((modulePosVec.z - moduleSizeNormalized.z / 2).max(0))
+          modulePosVec.setX((modulePosVec.x - moduleSizeNormalized.x / 2).max(0))
       }
-      newModule.pos = ModulePos(modulePos)
+      newModule.pos = correctBounds(modulePosVec, moduleSizeNormalized)
       frame.ModuleList += newModule
 
       return true
-    }
-    catch {
-      case e: Exception =>
-        e.printStackTrace()
-    }
-    false
+  }
+
+  def correctBounds(pos: Vector3f, mainBoxSize: Vector3f): ModulePos = {
+    ModulePos(
+      pos.x.max(pos.x.min(1 - mainBoxSize.x)),
+      pos.y.max(pos.y.min(1 - mainBoxSize.y)),
+      pos.z.max(pos.z.min(1 - mainBoxSize.z))
+    )
   }
 
   override def onEntitySwing(entityLiving: EntityLivingBase, stack: ItemStack): Boolean = false
