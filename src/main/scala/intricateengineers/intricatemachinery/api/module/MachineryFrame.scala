@@ -6,14 +6,15 @@ import intricateengineers.intricatemachinery.api.client.BakedModelFrame
 import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.api.model.{BlockModel, Box, BoxFace}
 import intricateengineers.intricatemachinery.api.util.{Cache, IHasDebugInfo, Logger}
-import intricateengineers.intricatemachinery.common.module.{DummyModule, FurnaceModule}
 import intricateengineers.intricatemachinery.common.util.IMRL
 import mcmultipart.MCMultiPartMod
 import mcmultipart.multipart.{INormallyOccludingPart, Multipart}
-import mcmultipart.raytrace.RayTraceUtils
+import mcmultipart.raytrace.{PartMOP, RayTraceUtils}
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.{BlockStateContainer, IBlockState}
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.BakedQuad
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.network.PacketBuffer
 import net.minecraft.util.ResourceLocation
@@ -37,9 +38,6 @@ class MachineryFrame extends Multipart
   val quadCache: Cache[java.util.List[BakedQuad]] = Cache(updateQuads)
   val bbCache: Cache[java.util.List[AxisAlignedBB]] = Cache(updateAABBs)
 
-  //(ModuleList += new FurnaceModule(this)).pos = ModulePos(9, 8, 9)
-  //(ModuleList += new DummyModule(this)).pos = ModulePos(1, 0, 1)
-
   @Nullable
   def moduleHit(start: Vec3d, end: Vec3d): Module = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
@@ -54,7 +52,7 @@ class MachineryFrame extends Multipart
     null
   }
 
-  def hasUpdated(): Unit = {
+  def wasUpdated(): Unit = {
     ModuleList.invalidate()
   }
 
@@ -64,6 +62,17 @@ class MachineryFrame extends Multipart
     bbs ++= FrameModel.aabbs
     bbs
   }
+
+  private def updateQuads(): java.util.List[BakedQuad] = {
+    val buffer = ListBuffer[BakedQuad]()
+    buffer ++= FrameModel.boxes.flatMap(_.quads)
+    buffer ++= ModuleList.flatMap(_.boxCache().flatMap(_.quads))
+    buffer
+  }
+
+  /* ------======================------
+               OVERRIDES
+     ------======================------ */
 
   override def updateDebugInfo(): ListMap[String, String] = {
     ListMap[String, String](
@@ -129,13 +138,6 @@ class MachineryFrame extends Multipart
 
   override def addSelectionBoxes(list: java.util.List[AxisAlignedBB]) {
     list.appendAll(bbCache())
-  }
-
-  private def updateQuads(): java.util.List[BakedQuad] = {
-    val buffer = ListBuffer[BakedQuad]()
-    buffer ++= FrameModel.boxes.flatMap(_.quads)
-    buffer ++= ModuleList.flatMap(_.boxCache().flatMap(_.quads))
-    buffer
   }
 
   object ModuleList extends Traversable[Module] {

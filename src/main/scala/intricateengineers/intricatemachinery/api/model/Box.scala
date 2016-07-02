@@ -27,6 +27,8 @@ case class Box(from: (Double, Double, Double), to: (Double, Double, Double), fac
     to._3 / Module.GRID_SIZE)
   private var _quads: List[BakedQuad] = List()
 
+  def quads = _quads
+
   def vecs(face: BoxFace): (Vector3f, Vector3f) = {
     face.side match {
       case UP =>
@@ -50,8 +52,6 @@ case class Box(from: (Double, Double, Double), to: (Double, Double, Double), fac
       case _ => (null, null)
     }
   }
-
-  def quads = _quads
 
   def initTextures() = {
     for (face <- faces) {

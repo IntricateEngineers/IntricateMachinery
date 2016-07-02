@@ -21,17 +21,10 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
   private var _pos: ModulePos = ModulePos(0, 0, 0)
   private var _rotation: Byte = Random.nextInt(3).toByte
 
-  override def updateDebugInfo(): ListMap[String, String] = {
-    ListMap[String, String](
-      "Type" -> name.toString,
-      "posX" -> pos.iX.toString,
-      "posY" -> pos.iY.toString,
-      "posZ" -> pos.iZ.toString,
-      "rotation" -> rotation.toString
-    )
-  }
+  /* ------======================------
+           START Getters/Setters
+     ------======================------ */
 
-  // Getters and setters
   def pos: ModulePos = _pos
 
   def pos_=(newPos: ModulePos): Unit = {
@@ -41,10 +34,37 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     debugInfo.invalidate()
   }
 
+  def rotation = _rotation
+
+  def rotation_=(rotation: Byte): Unit = {
+    _rotation = rotation
+    boxCache.invalidate()
+    bbCache.invalidate()
+    debugInfo.invalidate()
+  }
+
+  /* ------======================------
+           END Getters/Setters
+     ------======================------ */
+
   def invalidateAllCaches(): Unit = {
     boxCache.invalidate()
     bbCache.invalidate()
     debugInfo.invalidate()
+  }
+
+  /* ------======================------
+                 OVERRIDES
+     ------======================------ */
+
+  override def updateDebugInfo(): ListMap[String, String] = {
+    ListMap[String, String](
+      "Type" -> name.toString,
+      "posX" -> pos.iX.toString,
+      "posY" -> pos.iY.toString,
+      "posZ" -> pos.iZ.toString,
+      "rotation" -> rotation.toString
+    )
   }
 
   override def serializeNBT: NBTTagCompound = {
@@ -57,15 +77,6 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     tag.setString("module_type", name.toString)
     tag.setTag("module_pos", pos)
     tag
-  }
-
-  def rotation = _rotation
-
-  def rotation_=(rotation: Byte): Unit = {
-    _rotation = rotation
-    boxCache.invalidate()
-    bbCache.invalidate()
-    debugInfo.invalidate()
   }
 
   override def deserializeNBT(tag: NBTTagCompound) {
