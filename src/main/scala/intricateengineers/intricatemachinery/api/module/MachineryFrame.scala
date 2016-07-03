@@ -1,7 +1,5 @@
 package intricateengineers.intricatemachinery.api.module
 
-import javax.annotation.Nullable
-
 import intricateengineers.intricatemachinery.api.client.BakedModelFrame
 import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.api.model.{BlockModel, Box, BoxFace}
@@ -38,18 +36,25 @@ class MachineryFrame extends Multipart
   val quadCache: Cache[java.util.List[BakedQuad]] = Cache(updateQuads)
   val bbCache: Cache[java.util.List[AxisAlignedBB]] = Cache(updateAABBs)
 
-  @Nullable
-  def moduleHit(start: Vec3d, end: Vec3d): Module = {
+  def moduleHit(start: Vec3d, end: Vec3d): Option[Module] = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
     for (module: Module <- this.ModuleList) {
       for (bounds: AxisAlignedBB <- module.bbCache()) {
-        val rt: RayTraceResult = bounds.calculateIntercept(start.subtract(framePos), end.subtract(framePos))
+      val rt: RayTraceResult = bounds.calculateIntercept(start.subtract(framePos), end.subtract(framePos))
         if (rt != null) {
-          return module
+          return Option(module)
         }
       }
     }
-    null
+    None
+  }
+
+  def moduleHitFromEyes(): Option[Module] = {
+    val mc = Minecraft.getMinecraft
+    val eyes: Vec3d = mc.thePlayer.getPositionEyes(1)
+
+    // 5 is the range that AABBs get highlighted (in blocks)
+    moduleHit(eyes, eyes.add(mc.thePlayer.getLookVec.scale(5)))
   }
 
   def wasUpdated(): Unit = {
@@ -60,33 +65,52 @@ class MachineryFrame extends Multipart
     val bbs = ListBuffer[AxisAlignedBB]()
     bbs ++= ModuleList.flatMap(_.bbCache())
     bbs ++= FrameModel.aabbs
-    bbs
   }
 
   private def updateQuads(): java.util.List[BakedQuad] = {
     val buffer = ListBuffer[BakedQuad]()
     buffer ++= FrameModel.boxes.flatMap(_.quads)
+    ModuleList.foreach(_.boxCache.invalidate())
+    bbCache.invalidate()
     buffer ++= ModuleList.flatMap(_.boxCache().flatMap(_.quads))
     buffer
+  }
+
+  private def breakModule(module: Option[Module]): Unit = {
+    if(module.isEmpty) println("Couldn't find module")
+    module.foreach(m =>
+      ModuleList -= m)
   }
 
   /* ------======================------
                OVERRIDES
      ------======================------ */
 
-  override def updateDebugInfo(): ListMap[String, String] = {
-    ListMap[String, String](
-      "Modules" -> ModuleList.toList.length.toString
-    )
-  }
-
   override def getType: ResourceLocation = MachineryFrame.NAME
+
+  override def onRemoved(): Unit = {}
+
+  override def harvest(player: EntityPlayer, hit: PartMOP) = {
+    val maybeModule = moduleHitFromEyes()
+    maybeModule match {
+      case Some(module) =>
+        breakModule(maybeModule)
+      case None =>
+        super.harvest(player, hit)
+    }
+  }
 
   override def collisionRayTrace(start: Vec3d, end: Vec3d): RayTraceUtils.AdvancedRayTraceResultPart = {
     val result: RayTraceUtils.AdvancedRayTraceResult = RayTraceUtils.collisionRayTrace(getWorld, getPos, start, end,
       bbCache())
     if (result == null) null
     else new RayTraceUtils.AdvancedRayTraceResultPart(result, this)
+  }
+
+  override def updateDebugInfo(): ListMap[String, String] = {
+    ListMap[String, String](
+      "Modules" -> ModuleList.toList.length.toString
+    )
   }
 
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
@@ -154,6 +178,15 @@ class MachineryFrame extends Multipart
         positions((x + m.pos.iX, y + m.pos.iY, z + m.pos.iZ)) = m)
       invalidate()
       m
+    }
+
+    def -=(m: Module): Unit = {
+      modules -= m
+      invalidate()
+      list.update()
+      bbCache.update()
+      quadCache.update()
+      debugInfo.update()
     }
 
     def invalidate(): Unit = {
