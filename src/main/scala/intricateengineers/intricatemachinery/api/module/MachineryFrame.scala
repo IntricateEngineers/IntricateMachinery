@@ -130,6 +130,7 @@ class MachineryFrame extends Multipart
   override def readFromNBT(tag: NBTTagCompound) {
     super.readFromNBT(tag)
     val modules: NBTTagList = tag.getTagList("modules", 10)
+    ModuleList.clear()
     for (i <- 0 until modules.tagCount) {
       try {
         val mTag = modules.getCompoundTagAt(i)
@@ -142,9 +143,12 @@ class MachineryFrame extends Multipart
   }
 
   override def writeUpdatePacket(buf: PacketBuffer) {
+    val tag = new NBTTagCompound
+    buf.writeNBTTagCompoundToBuffer(writeToNBT(tag))
   }
 
   override def readUpdatePacket(buf: PacketBuffer) {
+    readFromNBT(buf.readNBTTagCompoundFromBuffer())
   }
 
   override def createBlockState: BlockStateContainer = {
@@ -172,6 +176,7 @@ class MachineryFrame extends Multipart
     def apply(i: Int): Module = {
       modules(i)
     }
+
     def +=(m: Module): Module = {
       modules += m
       forEachCoord(m, (b, f, x, y, z) =>
@@ -183,10 +188,10 @@ class MachineryFrame extends Multipart
     def -=(m: Module): Unit = {
       modules -= m
       invalidate()
-      list.update()
-      bbCache.update()
-      quadCache.update()
-      debugInfo.update()
+    }
+
+    def clear(): Unit = {
+      modules.clear()
     }
 
     def invalidate(): Unit = {
@@ -194,6 +199,7 @@ class MachineryFrame extends Multipart
       bbCache.invalidate()
       quadCache.invalidate()
       debugInfo.invalidate()
+      sendUpdatePacket()
     }
 
     def forEachCoord(m: Module, f: (Box, BoxFace, Int, Int, Int) => Unit): Unit = {
