@@ -72,7 +72,7 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
           modulePosVec.setX((modulePosVec.x - moduleSizeNormalized.x / 2).max(0))
       }
       newModule.pos = correctBounds(modulePosVec, moduleSizeNormalized)
-      frame.ModuleList += newModule
+      frame.modules += newModule
 
       return true
   }

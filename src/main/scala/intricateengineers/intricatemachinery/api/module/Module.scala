@@ -2,12 +2,14 @@ package intricateengineers.intricatemachinery.api.module
 
 import intricateengineers.intricatemachinery.api.model.{Box, ModuleModel}
 import intricateengineers.intricatemachinery.api.util.{Cache, IHasDebugInfo}
+import main.scala.intricateengineers.intricatemachinery.api.module.ModuleCapability
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.AxisAlignedBB
 import net.minecraft.util.{EnumFacing, ResourceLocation}
 import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializable}
 
 import scala.collection.immutable.ListMap
+import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
 abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBTTagCompound]
@@ -20,6 +22,24 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
   // Temporary hardcoded values
   private var _pos: ModulePos = ModulePos(0, 0, 0)
   private var _rotation: Byte = Random.nextInt(3).toByte
+
+  val capabilities = new Traversable[ModuleCapability] {
+    private val listBuf = ListBuffer[ModuleCapability]()
+
+    def += (cap: ModuleCapability): Unit = {
+      listBuf += cap
+      frame.modules.invalidate()
+    }
+
+    def -= (cap: ModuleCapability): Unit = {
+      listBuf -= cap
+      frame.modules.invalidate()
+    }
+
+    def toList(): List[ModuleCapability] = listBuf.toList
+
+    override def foreach[U](f: (ModuleCapability) => U) = listBuf.foreach(f)
+  }
 
   /* ------======================------
            START Getters/Setters

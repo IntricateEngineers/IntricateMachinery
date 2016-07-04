@@ -5,6 +5,7 @@ import intricateengineers.intricatemachinery.api.client.util.UV
 import intricateengineers.intricatemachinery.api.model.{BlockModel, Box, BoxFace}
 import intricateengineers.intricatemachinery.api.util.{Cache, IHasDebugInfo, Logger}
 import intricateengineers.intricatemachinery.common.util.IMRL
+import main.scala.intricateengineers.intricatemachinery.api.module.ModuleCapability
 import mcmultipart.MCMultiPartMod
 import mcmultipart.multipart.{INormallyOccludingPart, Multipart}
 import mcmultipart.raytrace.{PartMOP, RayTraceUtils}
@@ -38,7 +39,7 @@ class MachineryFrame extends Multipart
 
   def moduleHit(start: Vec3d, end: Vec3d): Option[Module] = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
-    for (module: Module <- this.ModuleList) {
+    for (module: Module <- this.modules) {
       for (bounds: AxisAlignedBB <- module.bbCache()) {
       val rt: RayTraceResult = bounds.calculateIntercept(start.subtract(framePos), end.subtract(framePos))
         if (rt != null) {
@@ -49,6 +50,7 @@ class MachineryFrame extends Multipart
     None
   }
 
+  @SideOnly(Side.CLIENT)
   def moduleHitFromEyes(): Option[Module] = {
     val mc = Minecraft.getMinecraft
     val eyes: Vec3d = mc.thePlayer.getPositionEyes(1)
@@ -58,28 +60,28 @@ class MachineryFrame extends Multipart
   }
 
   def wasUpdated(): Unit = {
-    ModuleList.invalidate()
+    modules.invalidate()
   }
 
   def updateAABBs(): java.util.List[AxisAlignedBB] = {
     val bbs = ListBuffer[AxisAlignedBB]()
-    bbs ++= ModuleList.flatMap(_.bbCache())
+    bbs ++= modules.flatMap(_.bbCache())
     bbs ++= FrameModel.aabbs
   }
 
   private def updateQuads(): java.util.List[BakedQuad] = {
     val buffer = ListBuffer[BakedQuad]()
     buffer ++= FrameModel.boxes.flatMap(_.quads)
-    ModuleList.foreach(_.boxCache.invalidate())
+    modules.foreach(_.boxCache.invalidate())
     bbCache.invalidate()
-    buffer ++= ModuleList.flatMap(_.boxCache().flatMap(_.quads))
+    buffer ++= modules.flatMap(_.boxCache().flatMap(_.quads))
     buffer
   }
 
   private def breakModule(module: Option[Module]): Unit = {
     if(module.isEmpty) println("Couldn't find module")
     module.foreach(m =>
-      ModuleList -= m)
+      modules -= m)
   }
 
   /* ------======================------
@@ -109,16 +111,16 @@ class MachineryFrame extends Multipart
 
   override def updateDebugInfo(): ListMap[String, String] = {
     ListMap[String, String](
-      "Modules" -> ModuleList.toList.length.toString
+      "Modules" -> modules.toList.length.toString
     )
   }
 
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
     super.writeToNBT(tag)
     val modules: NBTTagList = new NBTTagList
-    for (i <- this.ModuleList.toList().indices) {
+    for (i <- this.modules.toList().indices) {
       try {
-        modules.appendTag(this.ModuleList(i).serializeNBT)
+        modules.appendTag(this.modules(i).serializeNBT)
       } catch {
         case e: Exception => Logger.warn("Couldn't write to NBT tag")
       }
@@ -129,13 +131,13 @@ class MachineryFrame extends Multipart
 
   override def readFromNBT(tag: NBTTagCompound) {
     super.readFromNBT(tag)
-    val modules: NBTTagList = tag.getTagList("modules", 10)
-    ModuleList.clear()
-    for (i <- 0 until modules.tagCount) {
+    val moduleTag: NBTTagList = tag.getTagList("modules", 10)
+    modules.clear()
+    for (i <- 0 until moduleTag.tagCount) {
       try {
-        val mTag = modules.getCompoundTagAt(i)
+        val mTag = moduleTag.getCompoundTagAt(i)
         val mType = new ResourceLocation(mTag.getString("module_type"))
-        (ModuleList += Modules.createModule(mType)(this)).deserializeNBT(mTag)
+        (modules += Modules.createModule(mType)(this)).deserializeNBT(mTag)
       } catch {
         case e: Exception => Logger.warn("Couldn't read from NBT tag")
       }
@@ -168,10 +170,10 @@ class MachineryFrame extends Multipart
     list.appendAll(bbCache())
   }
 
-  object ModuleList extends Traversable[Module] {
+  val modules = new Traversable[Module] {
     private val positions = mutable.Map[(Int, Int, Int), Module]()
+    private val capabilities = mutable.Map[(Int, Int, Int), ModuleCapability]()
     private val modules = ListBuffer[Module]()
-    private val list = Cache[List[Module]](() => modules.toList)
 
     def apply(i: Int): Module = {
       modules(i)
@@ -195,7 +197,6 @@ class MachineryFrame extends Multipart
     }
 
     def invalidate(): Unit = {
-      list.invalidate()
       bbCache.invalidate()
       quadCache.invalidate()
       debugInfo.invalidate()
@@ -231,7 +232,7 @@ class MachineryFrame extends Multipart
 
     override def foreach[U](f: (Module) => U) = modules.foreach(f)
 
-    override def toList(): List[Module] = list()
+    override def toList(): List[Module] = modules.toList
   }
 }
 
