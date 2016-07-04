@@ -79,11 +79,14 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
 
   def correctBounds(pos: Vector3f, mainBoxSize: Vector3f): ModulePos = {
     ModulePos(
-      pos.x.max(pos.x.min(1 - mainBoxSize.x)),
-      pos.y.max(pos.y.min(1 - mainBoxSize.y)),
-      pos.z.max(pos.z.min(1 - mainBoxSize.z))
+      limit(pos.x % 1, 0f, 1f - mainBoxSize.x),
+      limit(pos.y % 1, 0f, 1f - mainBoxSize.y),
+      limit(pos.z % 1, 0f, 1f - mainBoxSize.z)
     )
   }
+
+  def limit(x: Double, min: Double, max: Double): Double =
+    if (x < min) min else if (x > max) max else x
 
   override def onEntitySwing(entityLiving: EntityLivingBase, stack: ItemStack): Boolean = false
 
