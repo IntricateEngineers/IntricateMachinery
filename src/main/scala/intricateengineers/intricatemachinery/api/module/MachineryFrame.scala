@@ -39,16 +39,22 @@ class MachineryFrame extends Multipart
 
   def moduleHit(start: Vec3d, end: Vec3d): Option[Module] = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
-    for (module: Module <- this.modules) {
-      for (bounds: AxisAlignedBB <- module.bbCache()) {
-      val rt: RayTraceResult = bounds.calculateIntercept(start.subtract(framePos), end.subtract(framePos))
-        if (rt != null) {
-          return Option(module)
-        }
-      }
-    }
-    None
+
+    // Gather all hit vectors (positions of the hit) for every module (in the current MF) our eye can raytrace
+    // Add them with the associated Module in a Tuple, so that we know to pick the closest one later
+    val modulesHit: Map[Vec3d, Module] =
+      modules.flatMap(module =>
+        module.bbCache().map(bounds =>
+          Option(     // At times like this I wish Forge was in Scala
+            bounds.calculateIntercept(start.subtract(framePos), end.subtract(framePos)))
+                  .map(rayTraceResult => (rayTraceResult.hitVec, module))
+      )
+    ).flatten.toMap[Vec3d, Module]
+
+    // Get the module for which the associated hit vector is closest
+    modulesHit get modulesHit.keys.minBy(_.distanceTo(start))
   }
+
 
   @SideOnly(Side.CLIENT)
   def moduleHitFromEyes(): Option[Module] = {
@@ -69,6 +75,7 @@ class MachineryFrame extends Multipart
     bbs ++= FrameModel.aabbs
   }
 
+  @SideOnly(Side.CLIENT)
   private def updateQuads(): java.util.List[BakedQuad] = {
     val buffer = ListBuffer[BakedQuad]()
     buffer ++= FrameModel.boxes.flatMap(_.quads)
@@ -79,7 +86,7 @@ class MachineryFrame extends Multipart
   }
 
   private def breakModule(module: Option[Module]): Unit = {
-    if(module.isEmpty) println("Couldn't find module")
+    if(module.isEmpty) Logger.warn("Couldn't find module")
     module.foreach(m =>
       modules -= m)
   }

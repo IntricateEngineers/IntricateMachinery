@@ -18,8 +18,8 @@ object VectorUtils {
     new Vector3f(Math.max(v1.getX, v2.getX), Math.max(v1.getY, v2.getY), Math.max(v1.getZ, v2.getZ))
   }
 
-  def modulus(vec: Vec3d, mod: Double): Vec3d = {
-    new Vec3d(vec.xCoord % mod, vec.yCoord % mod, vec.zCoord % mod)
+  def modulus(vec: Vector3f, mod: Float): Vector3f = {
+    new Vector3f(vec.x % mod, vec.y % mod, vec.y % mod)
   }
 }
 
