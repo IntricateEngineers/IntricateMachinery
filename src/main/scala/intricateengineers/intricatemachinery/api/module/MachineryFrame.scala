@@ -90,6 +90,7 @@ class MachineryFrame extends Multipart
 
   private def breakModule(module: Option[Module]): Unit = {
     if(module.isEmpty) Logger.warn("Couldn't find module")
+    // TODO: Add particle effect
     module.foreach(m =>
       modules -= m)
   }

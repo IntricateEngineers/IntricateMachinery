@@ -36,7 +36,7 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
       frame.modules.invalidate()
     }
 
-    def toList(): List[ModuleCapability] = listBuf.toList
+    override def toList(): List[ModuleCapability] = listBuf.toList
 
     override def foreach[U](f: (ModuleCapability) => U) = listBuf.foreach(f)
   }

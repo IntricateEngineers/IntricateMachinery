@@ -23,59 +23,72 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
     val container = Option(MultipartHelper.getPartContainer(worldIn, pos))
     val containerFacing = Option(MultipartHelper.getPartContainer(worldIn, posFacing))
 
-    isContainerAMachineryFrame(container) match {
-      case Some(frame) => {
-        EnumActionResult.FAIL
-      }
-      case None => EnumActionResult.PASS
-    }
+    val hitVec = new Vector3f(hitX, hitY, hitZ)
 
-    isContainerAMachineryFrame(containerFacing) match {
-      case Some(frame) => {
-        if (this.placeInFrameBlockFace(frame, stack, playerIn, hand, facing, new Vector3f(hitX, hitY, hitZ))) {
-          playerIn.swingArm(EnumHand.MAIN_HAND)
-          worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F)
-          EnumActionResult.SUCCESS
-        }
-        EnumActionResult.FAIL
-      }
-      case None => EnumActionResult.PASS
-    }
+    // Was the player looking at the MF itself or a Module inside it?
+    isContainerAMachineryFrame(container).map(maybeFrame =>
+      placeWrapper(placeInFrameModuleFace, maybeFrame, playerIn, pos, worldIn, facing, hitVec)
+    ).getOrElse(EnumActionResult.PASS)
+
+    // Was the player looking at a Block next to the MF?
+    isContainerAMachineryFrame(containerFacing).map(maybeFrame =>
+      placeWrapper(placeInFrameBlockFace, maybeFrame, playerIn, pos, worldIn, facing, hitVec)
+    ).getOrElse(EnumActionResult.PASS)
   }
 
-  def placeInFrameBlockFace(frame: MachineryFrame, stack: ItemStack, player: EntityPlayer, hand: EnumHand, facing: EnumFacing, hit: Vector3f): Boolean = {
-
-      val newModule = createModule(frame)
-      val mainBox = newModule.model.mainBox
-      val moduleSizeNormalized = new Vector3f(mainBox.size.x/Module.GRID_SIZE, mainBox.size.y/Module.GRID_SIZE, mainBox.size.z/Module.GRID_SIZE)
-
-      val modulePosVec: Vector3f = hit
-
-      facing match {
-        case EnumFacing.NORTH =>
-          modulePosVec.setZ(1 - modulePosVec.z - moduleSizeNormalized.z)
-        case EnumFacing.WEST =>
-          modulePosVec.setX(1 - modulePosVec.x - moduleSizeNormalized.x)
-        case EnumFacing.DOWN =>
-          modulePosVec.setY(1 - modulePosVec.y - moduleSizeNormalized.y)
-        case _ =>
-      }
-      facing.getAxis match {
-        case EnumFacing.Axis.X =>
-          modulePosVec.setZ((modulePosVec.z - moduleSizeNormalized.z / 2).max(0))
-          modulePosVec.setY((modulePosVec.y - moduleSizeNormalized.y / 2).max(0))
-        case EnumFacing.Axis.Z =>
-          modulePosVec.setX((modulePosVec.x - moduleSizeNormalized.x / 2).max(0))
-          modulePosVec.setY((modulePosVec.y - moduleSizeNormalized.y / 2).max(0))
-        case EnumFacing.Axis.Y =>
-          modulePosVec.setZ((modulePosVec.z - moduleSizeNormalized.z / 2).max(0))
-          modulePosVec.setX((modulePosVec.x - moduleSizeNormalized.x / 2).max(0))
-      }
-      newModule.pos = correctBounds(modulePosVec, moduleSizeNormalized)
-      frame.modules += newModule
-
-      return true
+  @inline
+  def placeWrapper(placeFunction: (MachineryFrame, EnumFacing, Vector3f) => Boolean,
+                   frame: MachineryFrame, playerIn: EntityPlayer, pos: BlockPos, worldIn: World, facing: EnumFacing, hitVec: Vector3f): EnumActionResult = {
+    if (placeFunction(frame, facing, hitVec)) {
+      playerIn.swingArm(EnumHand.MAIN_HAND)
+      worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F)
+      EnumActionResult.SUCCESS
+    }
+    EnumActionResult.FAIL
   }
+
+  // Place when the player was looking at a Block next to the MF
+  @inline
+  def placeInFrameBlockFace(frame: MachineryFrame, facing: EnumFacing, hit: Vector3f): Boolean = {
+
+    val newModule = createModule(frame)
+    val mainBox = newModule.model.mainBox
+    val moduleSizeNormalized = new Vector3f(mainBox.size.x / Module.GRID_SIZE, mainBox.size.y / Module.GRID_SIZE, mainBox.size.z / Module.GRID_SIZE)
+
+    val modulePosVec: Vector3f = hit
+
+    facing match {
+      case EnumFacing.NORTH =>
+        modulePosVec.setZ(1 - modulePosVec.z - moduleSizeNormalized.z)
+      case EnumFacing.WEST =>
+        modulePosVec.setX(1 - modulePosVec.x - moduleSizeNormalized.x)
+      case EnumFacing.DOWN =>
+        modulePosVec.setY(1 - modulePosVec.y - moduleSizeNormalized.y)
+      case _ =>
+    }
+    facing.getAxis match {
+      case EnumFacing.Axis.X =>
+        modulePosVec.setZ((modulePosVec.z - moduleSizeNormalized.z / 2).max(0))
+        modulePosVec.setY((modulePosVec.y - moduleSizeNormalized.y / 2).max(0))
+      case EnumFacing.Axis.Z =>
+        modulePosVec.setX((modulePosVec.x - moduleSizeNormalized.x / 2).max(0))
+        modulePosVec.setY((modulePosVec.y - moduleSizeNormalized.y / 2).max(0))
+      case EnumFacing.Axis.Y =>
+        modulePosVec.setZ((modulePosVec.z - moduleSizeNormalized.z / 2).max(0))
+        modulePosVec.setX((modulePosVec.x - moduleSizeNormalized.x / 2).max(0))
+    }
+    newModule.pos = correctBounds(modulePosVec, moduleSizeNormalized)
+    frame.modules += newModule
+
+    return true
+  }
+
+  // Place when the player was looking at a Module inside the MF
+  @inline
+  def placeInFrameModuleFace(frame: MachineryFrame, facing: EnumFacing, hit: Vector3f): Boolean = {
+    ???
+  }
+
 
   def correctBounds(pos: Vector3f, mainBoxSize: Vector3f): ModulePos = {
     ModulePos(
