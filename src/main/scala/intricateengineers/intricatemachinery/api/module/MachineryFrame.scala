@@ -51,6 +51,9 @@ class MachineryFrame extends Multipart
       )
     ).flatten.toMap[Vec3d, Module]
 
+    // The ray has hit the frame itself
+    if(modulesHit.isEmpty) return None
+
     // Get the module for which the associated hit vector is closest
     modulesHit get modulesHit.keys.minBy(_.distanceTo(start))
   }
