@@ -6,8 +6,8 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.SoundEvents
 import net.minecraft.item.{EnumAction, Item, ItemStack}
-import net.minecraft.util._
-import net.minecraft.util.math.BlockPos
+import net.minecraft.util.{EnumActionResult, _}
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.World
 import org.lwjgl.util.vector.Vector3f
 
@@ -28,13 +28,21 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
     val hitVec = new Vector3f(hitX, hitY, hitZ)
 
     // Was the player looking at the MF itself or a Module inside it?
-    isContainerAMachineryFrame(container).map(maybeFrame =>
-      placeInFrame(maybeFrame, playerIn, worldIn, pos, facing, hitVec, isFromBlockFace = false)
+    isContainerAMachineryFrame(container).map(maybeFrame => {
+      if(placeInFrame(maybeFrame, playerIn, worldIn, pos, facing, hitVec, isFromBlockFace = false))
+        EnumActionResult.SUCCESS
+      else
+        EnumActionResult.FAIL
+    }
     )
 
     // Was the player looking at a Block next to the MF?
-    isContainerAMachineryFrame(containerFacing).map(maybeFrame =>
-      placeInFrame(maybeFrame, playerIn, worldIn, pos, facing, hitVec, isFromBlockFace = true)
+    isContainerAMachineryFrame(containerFacing).map(maybeFrame => {
+      if (placeInFrame(maybeFrame, playerIn, worldIn, pos, facing, hitVec, isFromBlockFace = true))
+        EnumActionResult.SUCCESS
+      else
+        EnumActionResult.FAIL
+    }
     )
 
     EnumActionResult.PASS
@@ -43,7 +51,7 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
   // Place when the player was looking at a Block next to the MF
   @inline
   private def placeInFrame(frame: MachineryFrame, playerIn: EntityPlayer, worldIn: World, pos: BlockPos,
-                           facing: EnumFacing, hit: Vector3f, isFromBlockFace: Boolean): Option[EnumActionResult] = {
+                           facing: EnumFacing, hit: Vector3f, isFromBlockFace: Boolean): Boolean = {
 
     val newModule = createModule(frame)
     val mainBox = newModule.model.mainBox
@@ -86,13 +94,17 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
         modulePosVec.setX((modulePosVec.x - moduleSizeNormalized.x / 2).max(0))
     }
     newModule.pos = correctBounds(modulePosVec, moduleSizeNormalized)
+
+    if(isModuleObstructed(frame, newModule)) {
+      return false
+    }
+
     frame.modules += newModule
 
     playerIn.swingArm(EnumHand.MAIN_HAND)
     worldIn.playSound(playerIn, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F)
-    Some(EnumActionResult.SUCCESS)
+    return true
   }
-  //EnumActionResult.FAIL
 
   private def correctBounds(pos: Vector3f, boxSize: Vector3f): ModulePos = {
     ModulePos(
@@ -100,6 +112,14 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
       limit(pos.y % 1, 0f, 1f - boxSize.y),
       limit(pos.z % 1, 0f, 1f - boxSize.z)
     )
+  }
+
+  def isModuleObstructed(frame: MachineryFrame, newModule: Module): Boolean = {
+    val moduleAABB = newModule.model.mainBox.aabb.offset(newModule.pos.dX, newModule.pos.dY, newModule.pos.dZ)
+    println(moduleAABB)
+    //frame.bbCache().foreach(println)
+    frame.bbCache().exists(_.intersectsWith(moduleAABB))
+
   }
 
   private def normalizeModuleSize(moduleBox: Box) = {
