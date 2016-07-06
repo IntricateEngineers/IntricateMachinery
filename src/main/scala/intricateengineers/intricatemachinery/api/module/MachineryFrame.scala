@@ -55,7 +55,7 @@ class MachineryFrame extends Multipart
     if(modulesHit.isEmpty) return None
 
     // Get the module for which the associated hit vector is closest
-    modulesHit get modulesHit.keys.minBy(_.distanceTo(start))
+    modulesHit get modulesHit.keys.minBy(_.distanceTo(start.subtract(framePos)))
   }
 
 
