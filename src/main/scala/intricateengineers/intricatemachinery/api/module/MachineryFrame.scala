@@ -14,10 +14,11 @@ import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.BakedQuad
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.network.PacketBuffer
-import net.minecraft.util.ResourceLocation
-import net.minecraft.util.math.{AxisAlignedBB, RayTraceResult, Vec3d}
+import net.minecraft.util.{EnumHand, ResourceLocation}
+import net.minecraft.util.math.{AxisAlignedBB, Vec3d}
 import net.minecraftforge.common.property.{ExtendedBlockState, IExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -39,16 +40,25 @@ class MachineryFrame extends Multipart
 
   def moduleHit(start: Vec3d, end: Vec3d): Option[Module] = {
     val framePos: Vec3d = new Vec3d(this.getPos.getX, this.getPos.getY, this.getPos.getZ)
-    for (module: Module <- this.modules) {
-      for (bounds: AxisAlignedBB <- module.bbCache()) {
-      val rt: RayTraceResult = bounds.calculateIntercept(start.subtract(framePos), end.subtract(framePos))
-        if (rt != null) {
-          return Option(module)
-        }
-      }
-    }
-    None
+
+    // Gather all hit vectors (positions of the hit) for every module (in the current MF) our eye can raytrace
+    // Add them with the associated Module in a Tuple, so that we know to pick the closest one later
+    val modulesHit: Map[Vec3d, Module] =
+      modules.flatMap(module =>
+        module.bbCache().map(bounds =>
+          Option(     // At times like this I wish Forge was in Scala
+            bounds.calculateIntercept(start.subtract(framePos), end.subtract(framePos)))
+                  .map(rayTraceResult => (rayTraceResult.hitVec, module))
+      )
+    ).flatten.toMap[Vec3d, Module]
+
+    // The ray has hit the frame itself
+    if(modulesHit.isEmpty) return None
+
+    // Get the module for which the associated hit vector is closest
+    modulesHit get modulesHit.keys.minBy(_.distanceTo(start.subtract(framePos)))
   }
+
 
   @SideOnly(Side.CLIENT)
   def moduleHitFromEyes(): Option[Module] = {
@@ -69,6 +79,7 @@ class MachineryFrame extends Multipart
     bbs ++= FrameModel.aabbs
   }
 
+  @SideOnly(Side.CLIENT)
   private def updateQuads(): java.util.List[BakedQuad] = {
     val buffer = ListBuffer[BakedQuad]()
     buffer ++= FrameModel.boxes.flatMap(_.quads)
@@ -79,7 +90,8 @@ class MachineryFrame extends Multipart
   }
 
   private def breakModule(module: Option[Module]): Unit = {
-    if(module.isEmpty) println("Couldn't find module")
+    if(module.isEmpty) Logger.warn("Couldn't find module")
+    // TODO: Add particle effect
     module.foreach(m =>
       modules -= m)
   }
@@ -114,6 +126,19 @@ class MachineryFrame extends Multipart
       "Modules" -> modules.toList.length.toString
     )
   }
+
+  override def onActivated(player: EntityPlayer, hand: EnumHand, heldItem: ItemStack, hit: PartMOP): Boolean = {
+    moduleHitFromEyes().exists(_.onActivated(player, hand, heldItem))
+  }
+
+  override def getPickBlock(player: EntityPlayer, hit: PartMOP):  ItemStack = {
+    moduleHitFromEyes().map(m => m.getPickBlock(player)).orNull
+  }
+
+  override def getDrops: java.util.List[ItemStack] = {
+    List(moduleHitFromEyes().map(maybeModule => new ItemStack(Modules.getModuleItem(maybeModule))).orNull)
+  }
+
 
   override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
     super.writeToNBT(tag)

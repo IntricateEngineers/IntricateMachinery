@@ -8,7 +8,7 @@ import org.lwjgl.util.vector.Vector3f
 class ModulePos(val int: Int) {
 
   val ints: (Int, Int, Int) = ((int & 0xF00) >> 8, (int & 0x0F0) >> 4, int & 0x00F)
-  val doubles: (Double, Double, Double) = (ints._1 / Module.GRID_SIZE, ints._2 / Module.GRID_SIZE, ints._3 / Module.GRID_SIZE)
+  val doubles: (Double, Double, Double) = (ints._1 / Module.GRID_SIZE.toDouble, ints._2 / Module.GRID_SIZE.toDouble, ints._3 / Module.GRID_SIZE.toDouble)
 
   val (dX, dY, dZ) = doubles
   val (iX, iY, iZ) = ints
