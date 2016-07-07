@@ -3,9 +3,11 @@ package intricateengineers.intricatemachinery.api.module
 import intricateengineers.intricatemachinery.api.model.{Box, ModuleModel}
 import intricateengineers.intricatemachinery.api.util.{Cache, IHasDebugInfo}
 import main.scala.intricateengineers.intricatemachinery.api.module.ModuleCapability
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.math.AxisAlignedBB
-import net.minecraft.util.{EnumFacing, ResourceLocation}
+import net.minecraft.util.{EnumFacing, EnumHand, ResourceLocation}
 import net.minecraftforge.common.capabilities.{Capability, ICapabilitySerializable}
 
 import scala.collection.immutable.ListMap
@@ -72,6 +74,18 @@ abstract class Module(frame: MachineryFrame) extends ICapabilitySerializable[NBT
     bbCache.invalidate()
     debugInfo.invalidate()
   }
+
+  /**
+    * Called when a player right-clicks this Module. Return true to play the right-click animation.
+    */
+  def onActivated(player: EntityPlayer, hand: EnumHand, heldItem: ItemStack): Boolean = false
+
+  //def getDrops: java.util.List[ItemStack]
+
+  /**
+    * Gets the block that will be obtained by creative players when they middle-click this Module.
+    */
+  def getPickBlock(player: EntityPlayer):  ItemStack = null
 
   /* ------======================------
                  OVERRIDES

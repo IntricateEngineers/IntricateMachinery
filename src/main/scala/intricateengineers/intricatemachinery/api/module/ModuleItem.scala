@@ -96,6 +96,7 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
     newModule.pos = correctBounds(modulePosVec, moduleSizeNormalized)
 
     if(isModuleObstructed(frame, newModule)) {
+      //TODO: Maybe try to snap it based on the Module next to it that was clicked
       return false
     }
 
@@ -116,10 +117,7 @@ class ModuleItem[T <: ModuleCompanion](val moduleObject: T, val createModule: (M
 
   def isModuleObstructed(frame: MachineryFrame, newModule: Module): Boolean = {
     val moduleAABB = newModule.model.mainBox.aabb.offset(newModule.pos.dX, newModule.pos.dY, newModule.pos.dZ)
-    println(moduleAABB)
-    //frame.bbCache().foreach(println)
     frame.bbCache().exists(_.intersectsWith(moduleAABB))
-
   }
 
   private def normalizeModuleSize(moduleBox: Box) = {
